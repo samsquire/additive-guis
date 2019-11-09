@@ -45,5 +45,5 @@ This prototype example (layout/layouter.py) uses constraint programming library 
  predicates = [
     "errors.lastName above form.fields.lastName",  
  ]
- From the errors code you should receive the form.fields.lastName as an input. And from the fields object, you should be able to access the current error. It's cyclical.
  ```
+ From the errors code you should receive the form.fields.lastName as an input. And from the fields object, you should be able to access the current error. It's cyclical.
