@@ -1,6 +1,8 @@
 # additive-guis
 
-GUIs could be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/).
+GUIs could be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the  code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output.
+
+Each rule is relative to every other rule. The rules produce an emergent layout.
 
 # Example
 
@@ -40,12 +42,26 @@ This prototype example (layout/layouter.py) uses constraint programming library 
  * **Predicate join** If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of join on the UI generation code for those two pieces of data. This is because you are generating two child widgets, each from their respect mapping a collection.
  
  This is an example, you have a form object with fields inside and you have an errors object with errors for each field. To join them together, you could use a predicate like this:
+ 
  ```
  predicates = [
     "errors.lastName above form.fields.lastName",
-    "errors.lastName on:click my.form.fields.*.focus()
+    "errors.lastName on:click my.form.fields.lastName.focus()
  ]
  ```
-From the errors code you should receive the form.fields.lastName as an input. And from the fields object, you should be able to access the current error. It's cyclical.
+From the errors predicates you have available the form.fields.lastName context from errors.lastName predicates due to the above predicate. And from the fields object, you should be able to access the current error. It's cyclical. How errors.lastName and form.fields.lastName renders is dependent on that react widget.
 
-How errors.lastName and form.fields.lastName renders is dependent on that react widget.
+# Customizing your desktop
+
+Adding an icon to your desktop operating system should be really simple.
+
+```
+predicates = [
+    "icon inside systemTray",
+    "icon on:click menu.show()",
+    "menu is hidden",
+    "openGithub inside menu"
+]
+```
+
+
