@@ -8,7 +8,6 @@ You have this set of predicates - a bit like N3 tuples.
 
 ```
 predicates = [
-    "LoginButton centered screen",
     "bottomLinks below pagebody",
     "pagebody centered screen",
     "HeroText centered screen",
