@@ -21,5 +21,5 @@ predicates = [
 ]
 ```
 
-![]()
+![example-layout](additive-gui-1.png)
 
