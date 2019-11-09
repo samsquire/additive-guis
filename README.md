@@ -39,7 +39,7 @@ This prototype example (layout/layouter.py) uses constraint programming library 
  * Each predicate changes the tree where rendered HTML will be placed.
  * Widget HTML is produced through mapping and filtering collections as per a React GUI.
  * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
- * **Predicate join** If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of join on the UI generation code for those two pieces of data. This is because you are generating two child widgets, each from their respect mapping a collection.
+ * **Predicate join** If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of join on the UI generation code for those two pieces of data. This is because you are generating two child widgets, each from their respect a mapping of a collection.
  
  This is an example, you have a form object with fields inside and you have an errors object with errors for each field. To join them together, you could use a predicate like this:
  
@@ -53,7 +53,7 @@ From the errors predicates you have available the form.fields.lastName context f
 
 # Customizing your desktop
 
-Adding an icon to your desktop operating system should be really simple.
+Adding an icon to your desktop operating system system tray should be really simple.
 
 ```
 predicates = [
