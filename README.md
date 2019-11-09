@@ -43,8 +43,9 @@ This prototype example (layout/layouter.py) uses constraint programming library 
  ```
  predicates = [
     "errors.lastName above form.fields.lastName",
+    "errors.lastName on:click my.form.fields.*.focus()
  ]
  ```
 From the errors code you should receive the form.fields.lastName as an input. And from the fields object, you should be able to access the current error. It's cyclical.
 
-How errors.lastName renders is dependent on that react widget.
+How errors.lastName and form.fields.lastName renders is dependent on that react widget.
