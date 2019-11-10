@@ -15,7 +15,7 @@ predicates = [
     "UsernameBox hasSize 2",
     "PasswordBox hasSize 2",
     "UsernameBox below UserArea",
-	"PasswordBox rightOf UsernameBox",
+    "PasswordBox rightOf UsernameBox",
     "PasswordBox sameRowAs UsernameBox",
     "UsernameBox withinSpace:1 PasswordBox",
     "UsernameBox leftOf UserArea",
