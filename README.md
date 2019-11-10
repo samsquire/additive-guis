@@ -27,6 +27,9 @@ predicates = [
     "UsernameBox withinSpace:3 UserArea",
     "LoginButton below PasswordBox",
     "bottomLinks below pagebody",
+    "UserArea rightOf screen",
+    "PasswordBox rightOf screen",
+    "UsernameBox rightOf screen",
     "pagebody centered screen",
     "HeroText centered screen", 
     "sidemenu leftOf HeroText",
@@ -41,11 +44,9 @@ predicates = [
 ]
 ```
 
-This should produce a layout a bit like this. The centered predicate doesn't quite work just yet.
+From these tuples, I want the layout engine to display some thing like this:
 
-![example-layout](additive-gui-1.png)
-
-This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid. It's not very good just yet.
+![goal](goal.png)
 
 # The dream - Build GUIs with microblogging (or twitter tweets)
 
@@ -65,6 +66,14 @@ This prototype example (layout/layouter.py) uses constraint programming library 
  ]
  ```
 From the errors predicates you have available the form.fields.lastName context from errors.lastName predicates due to the above predicate. And from the fields object, you should be able to access the current error. It's cyclical. How errors.lastName and form.fields.lastName renders is dependent on that react widget.
+
+
+This should produce a layout a bit like this. The centered predicate doesn't quite work just yet.
+
+![example-layout](additive-gui-1.png)
+
+This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid. It's not very good just yet.
+
 
 # Customizing your desktop
 
