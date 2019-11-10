@@ -10,6 +10,11 @@ You have this set of predicates - a bit like N3 tuples.
 
 ```
 predicates = [
+    "LoginButton hasSize 2",
+    "pagebody hasSize 8",
+    "LoginBox hasSize 2",
+    "LoginBox below Something",
+    "LoginBox above LoginButton",
     "bottomLinks below pagebody",
     "pagebody centered screen",
     "HeroText centered screen",
@@ -18,9 +23,7 @@ predicates = [
     "HeroText below LoginButton",
     "Something rightOf LoginBox",
     "Something above LoginBox",
-    "LoginBox leftOf LoginButton",
-    "LoginButton rightOf LoginBox",
-    "LoginBox above LoginButton",
+    "LoginButton under LoginBox",
     "pagebody below HeroText",
     "pagebody under HeroText"
 ]
