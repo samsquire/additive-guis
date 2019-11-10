@@ -42,6 +42,7 @@ def layout_page(predicates):
     objects = {}
     heights = {}
     centered = []
+    actual_start_pos = {}
     containers = {}
     sizes = {}
     things = collections.defaultdict(list)
@@ -94,6 +95,7 @@ def layout_page(predicates):
             model.Add(subject_height_var > object_height_var)
         if operand == "under":
             model.Add(object_var == subject_var)
+    
         if operand == "sameRowAs":
             model.Add(subject_height_var == object_height_var)
         if operand.startswith("withinSpace"):
@@ -150,11 +152,12 @@ def layout_page(predicates):
             cells = sorted(list(columns), key=lambda item: item[1].x)
             last_x = 0
             for key, cell in cells:
-
-                print("<div class=\"col col-md-{}\">".format(sizes.get(key)))
+                offset = ""
+                offset = "offset-md-{}".format(cell.x - last_x)
+                print("<div class=\"col col-md-{} {}\">".format(sizes.get(key), offset))
                 print(key, cell)
                 print("</div>")
-                last_x = cell.x
+                last_x = cell.x + int(sizes.get(key, 0)) - 1
             print("</div>")
         print("</div>")
             
