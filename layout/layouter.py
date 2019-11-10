@@ -3,7 +3,11 @@ from ortools.sat.python import cp_model
 from pprint import pprint
 
 predicates = [
-    "LoginButton centered screen",
+    "LoginButton hasSize 2",
+    "pagebody hasSize 8",
+    "LoginBox hasSize 2",
+    "LoginBox below Something",
+    "LoginBox above LoginButton",
     "bottomLinks below pagebody",
     "pagebody centered screen",
     "HeroText centered screen",
@@ -12,9 +16,7 @@ predicates = [
     "HeroText below LoginButton",
     "Something rightOf LoginBox",
     "Something above LoginBox",
-    "LoginBox leftOf LoginButton",
-    "LoginButton rightOf LoginBox",
-    "LoginBox above LoginButton",
+    "LoginButton under LoginBox",
     "pagebody below HeroText",
     "pagebody under HeroText"
 ]
@@ -30,6 +32,7 @@ def layout_page(predicates):
     heights = {}
     centered = []
     containers = {}
+    sizes = {}
     
     for predicate in predicates:
         subject, operand, object = predicate.split(" ")
@@ -38,8 +41,9 @@ def layout_page(predicates):
             this_container = containers.get(object, [])
             this_container.append(subject)
             containers[object] = this_container
-       
-        
+        if operand == "hasSize":
+            sizes[subject] = object
+            continue
         if subject not in objects:
             objects[subject] = model.NewIntVar(0, 1000, 'start/' + subject)
             heights[subject] = model.NewIntVar(0, 1000, 'start/' + subject)
@@ -56,6 +60,8 @@ def layout_page(predicates):
     for predicate in predicates:
         subject, operand, object = predicate.split(" ")
         if operand == "centered":
+            continue
+        if operand == "hasSize":
             continue
         subject_var = objects[subject]
         object_var = objects[object]
@@ -111,7 +117,7 @@ def layout_page(predicates):
         
         print("<div class=\"container\">")
         for yposition, yvalues in (sorted(vert_positions.items())):
-            print("<div class=\"row\">")
+            print("<div class=\"row d-flex justify-content-center\">")
             columns = []
             for yvalue in yvalues:
                 xposition = find_column_position(yvalue, sorted(hoz_positions.items()))
@@ -120,13 +126,11 @@ def layout_page(predicates):
             last = 0
             for xposition, item in columns:
                 for empties in range(last, xposition):
-                    print("<div class=\"col\">")
+                    print("<div class=\"col filler col-md-{}\">".format(xposition))
                     print("</div>")
-                last = xposition
- 
-
+                    last = xposition
             
-                print("<div class=\"col\">")
+                print("<div class=\"col col-md-{}\">".format(sizes.get(item)))
                 print(item)
                 print("</div>")
                 
