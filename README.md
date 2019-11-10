@@ -9,26 +9,28 @@ Each rule is relative to every other rule. The rules produce an emergent layout.
 You have this set of predicates - a bit like N3 tuples.
 
 ```
-predicates = [
     "LoginButton hasSize 2",
     "pagebody hasSize 8",
     "UsernameBox hasSize 2",
-    "UsernameBox below Something",
-    "UsernameBox above LoginButton",
+    "PasswordBox hasSize 2",
+    "UsernameBox below UserArea",
 	"PasswordBox rightOf UsernameBox",
+    "PasswordBox sameRowAs UsernameBox",
+    "UsernameBox withinSpace:1 PasswordBox",
+    "UsernameBox leftOf UserArea",
+    "UsernameBox withinSpace:1 UserArea",
+    "LoginButton below PasswordBox",
     "bottomLinks below pagebody",
     "pagebody centered screen",
-    "HeroText centered screen",
+    "HeroText centered screen", 
     "sidemenu leftOf HeroText",
     "HeroText leftOf UsernameBox",
     "HeroText below LoginButton",
-    "Something rightOf UsernameBox",
-    "Something above UsernameBox",
-    "LoginButton under UsernameBox",
+    "PasswordBox under UserArea",
+    "UserArea above UsernameBox",
+    "LoginButton under PasswordBox",
     "pagebody below HeroText",
-    "pagebody under HeroText"
-]
-```
+    "pagebody under HeroText"```
 
 This should produce a layout a bit like this. The centered predicate doesn't quite work just yet.
 
