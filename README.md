@@ -62,7 +62,7 @@ From the errors predicates you have available the form.fields.lastName context f
 
 # Customizing your desktop
 
-Adding an icon to your desktop operating system system tray should be really simple.
+Adding an icon to your desktop operating system tray should be really simple.
 
 ```
 predicates = [
