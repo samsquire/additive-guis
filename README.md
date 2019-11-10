@@ -68,7 +68,7 @@ From these tuples, I want the layout engine to display some thing like this:
 From the errors predicates you have available the form.fields.lastName context from errors.lastName predicates due to the above predicate. And from the fields object, you should be able to access the current error. It's cyclical. How errors.lastName and form.fields.lastName renders is dependent on that react widget.
 
 
-This should produce a layout a bit like this. The centered predicate doesn't quite work just yet.
+This currently produces a layout a bit like this. I'm still working on the predicates.
 
 ![example-layout](additive-gui-1.png)
 
