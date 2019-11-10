@@ -30,7 +30,9 @@ You have this set of predicates - a bit like N3 tuples.
     "UserArea above UsernameBox",
     "LoginButton under PasswordBox",
     "pagebody below HeroText",
-    "pagebody under HeroText"```
+    "pagebody under HeroText"
+]
+```
 
 This should produce a layout a bit like this. The centered predicate doesn't quite work just yet.
 
