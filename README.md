@@ -9,6 +9,7 @@ Each rule is relative to every other rule. The rules produce an emergent layout.
 You have this set of predicates - a bit like N3 tuples.
 
 ```
+predicates = [
     "LoginButton hasSize 2",
     "pagebody hasSize 8",
     "UsernameBox hasSize 2",
