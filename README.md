@@ -12,6 +12,9 @@ You have this set of predicates - a bit like N3 tuples.
 
 ```
 predicates = [
+    "middlespace hasSize 4",
+    "middlespace before UserArea",
+    "middlespace after sidemenu",
     "sidemenu hasSize 4",
     "LoginButton hasSize 2",
     "pagebody hasSize 8",
@@ -20,16 +23,13 @@ predicates = [
     "HeroText hasSize 8",
     "UserArea hasSize 3",
     "UsernameBox below UserArea",
-    "PasswordBox rightOf UsernameBox",
+	"PasswordBox rightOf UsernameBox",
     "PasswordBox sameRowAs UsernameBox",
     "UsernameBox withinSpace:2 PasswordBox",
-    "PasswordBox under UserArea",
+    "UsernameBox under UserArea",   
     "UsernameBox withinSpace:3 UserArea",
     "LoginButton below PasswordBox",
     "bottomLinks below pagebody",
-    "UserArea rightOf screen",
-    "PasswordBox rightOf screen",
-    "UsernameBox rightOf screen",
     "pagebody centered screen",
     "HeroText centered screen", 
     "sidemenu leftOf HeroText",
@@ -40,7 +40,8 @@ predicates = [
     "LoginButton below PasswordBox",
     "LoginButton under PasswordBox",
     "pagebody below HeroText",
-    "pagebody under HeroText"
+    "pagebody under HeroText",
+    "UsernameBox rightOf screen"
 ]
 ```
 
