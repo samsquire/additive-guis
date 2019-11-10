@@ -14,6 +14,7 @@ predicates = [
     "pagebody hasSize 8",
     "UsernameBox hasSize 2",
     "PasswordBox hasSize 2",
+	"UserArea hasSize 3",
     "UsernameBox below UserArea",
     "PasswordBox rightOf UsernameBox",
     "PasswordBox sameRowAs UsernameBox",

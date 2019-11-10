@@ -1,18 +1,22 @@
 import collections
 from ortools.sat.python import cp_model
 from pprint import pprint
+import itertools
 
 predicates = [
+    "sidemenu hasSize 4",
     "LoginButton hasSize 2",
     "pagebody hasSize 8",
     "UsernameBox hasSize 2",
     "PasswordBox hasSize 2",
+    "HeroText hasSize 8",
+    "UserArea hasSize 3",
     "UsernameBox below UserArea",
 	"PasswordBox rightOf UsernameBox",
     "PasswordBox sameRowAs UsernameBox",
-    "UsernameBox withinSpace:1 PasswordBox",
-    "UsernameBox leftOf UserArea",
-    "UsernameBox withinSpace:1 UserArea",
+    "UsernameBox withinSpace:2 PasswordBox",
+    "PasswordBox under UserArea",
+    "UsernameBox withinSpace:3 UserArea",
     "LoginButton below PasswordBox",
     "bottomLinks below pagebody",
     "pagebody centered screen",
@@ -20,8 +24,9 @@ predicates = [
     "sidemenu leftOf HeroText",
     "HeroText leftOf UsernameBox",
     "HeroText below LoginButton",
-    "PasswordBox under UserArea",
+    "PasswordBox below UserArea",
     "UserArea above UsernameBox",
+    "LoginButton below PasswordBox",
     "LoginButton under PasswordBox",
     "pagebody below HeroText",
     "pagebody under HeroText"
@@ -39,10 +44,13 @@ def layout_page(predicates):
     centered = []
     containers = {}
     sizes = {}
+    things = collections.defaultdict(list)
     
     for predicate in predicates:
         subject, operand, object = predicate.split(" ")
-        
+        if operand == "is":
+            things[object].append(subject)
+            continue
         if operand == "inside":
             this_container = containers.get(object, [])
             this_container.append(subject)
@@ -68,6 +76,8 @@ def layout_page(predicates):
         if operand == "centered":
             continue
         if operand == "hasSize":
+            continue
+        if operand == "is":
             continue
         subject_var = objects[subject]
         object_var = objects[object]
@@ -113,48 +123,41 @@ def layout_page(predicates):
             item_list = vert_positions.get(new_position, [])
             vert_positions[new_position] = item_list
             item_list.append(name)
-       
-        xpositions = iter(sorted(hoz_positions.items()))
      
         positions = []
         print(sorted(hoz_positions.items()))
         print(sorted(vert_positions.items()))
+        y_coords = {}
+        x_coords = {}
+        coords = {}
+        placed_item = collections.namedtuple('Point', 'x y')
+        for position, items in sorted(vert_positions.items()):
+            for item in items:
+                y_coords[item] = position
+        for position, items in sorted(hoz_positions.items()):
+            for item in items:
+                x_coords[item] = position
         
-        def find_column_position(yvalue, xitems):
-            for xposition, xvalues in xitems:
-                for xvalue in xvalues:
-                    if yvalue == xvalue:
-                        return xposition
+        for item in x_coords.keys():
+            coords[item] = placed_item(x_coords[item], y_coords[item])
         
+        pprint(coords)
+        
+        grouped = itertools.groupby(sorted(coords.items(), key=lambda item: item[1].y), key=lambda item: item[1].y)
         print("<div class=\"container\">")
-        for yposition, yvalues in (sorted(vert_positions.items())):
-            centered_class = ""
-            for yvalue in yvalues:
-                if yvalue in centered:
-                    centered_class = "justify-content-center"
-            print("<div class=\"row d-flex {}\">".format(centered_class))
-            columns = []
-            for yvalue in yvalues:
-                xposition = find_column_position(yvalue, sorted(hoz_positions.items()))
-                columns.append((xposition, yvalue))
-            columns = sorted(columns, key=lambda x: x[0])
-            last = 0
-            for xposition, item in columns:
-                for empties in range(last, xposition - 1):
-                  
-                        print("<div class=\"col filler col-md-{}\">".format(xposition - 1))
-                        print("</div>")
-                last = last + xposition
-            
-                print("<div class=\"col col-md-{}\">".format(sizes.get(item)))
-                print(item)
-                print("</div>")
-                last = last + int(sizes.get(item, 1))
-                
-            print("</div>")
-            
-        print("</div>")
+        for row_id, columns in grouped:
+            print("<div class=\"row\">")
+            cells = sorted(list(columns), key=lambda item: item[1].x)
+            last_x = 0
+            for key, cell in cells:
 
+                print("<div class=\"col col-md-{}\">".format(sizes.get(key)))
+                print(key, cell)
+                print("</div>")
+                last_x = cell.x
+            print("</div>")
+        print("</div>")
+            
 
 page_flow = layout_page(predicates)
 
