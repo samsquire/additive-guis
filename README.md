@@ -32,7 +32,7 @@ This should produce a layout a bit like this. The centered predicate doesn't qui
 
 This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid. It's not very good just yet.
 
-# The dream - Twitter for building GUIs
+# The dream - Build GUIs with microblogging (or twitter tweets)
 
 **What you say is what you get** - you make statements about the output of layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
 * I want GUIs to be manipulatable by lots of people via predicates.
