@@ -5,18 +5,24 @@ from pprint import pprint
 predicates = [
     "LoginButton hasSize 2",
     "pagebody hasSize 8",
-    "LoginBox hasSize 2",
-    "LoginBox below Something",
-    "LoginBox above LoginButton",
+    "UsernameBox hasSize 2",
+    "PasswordBox hasSize 2",
+    "UsernameBox below UserArea",
+	"PasswordBox rightOf UsernameBox",
+    "PasswordBox sameRowAs UsernameBox",
+    "UsernameBox withinSpace:1 PasswordBox",
+    "UsernameBox leftOf UserArea",
+    "UsernameBox withinSpace:1 UserArea",
+    "LoginButton below PasswordBox",
     "bottomLinks below pagebody",
     "pagebody centered screen",
-    "HeroText centered screen",
+    "HeroText centered screen", 
     "sidemenu leftOf HeroText",
-    "HeroText leftOf LoginBox",
+    "HeroText leftOf UsernameBox",
     "HeroText below LoginButton",
-    "Something rightOf LoginBox",
-    "Something above LoginBox",
-    "LoginButton under LoginBox",
+    "PasswordBox under UserArea",
+    "UserArea above UsernameBox",
+    "LoginButton under PasswordBox",
     "pagebody below HeroText",
     "pagebody under HeroText"
 ]
@@ -78,6 +84,11 @@ def layout_page(predicates):
             model.Add(subject_height_var > object_height_var)
         if operand == "under":
             model.Add(object_var == subject_var)
+        if operand == "sameRowAs":
+            model.Add(subject_height_var == object_height_var)
+        if operand.startswith("withinSpace"):
+            originalOperand, spaces = operand.split(":")
+            model.Add((subject_var - object_var) < int(spaces))
             
     solver = cp_model.CpSolver()
     status = solver.Solve(model)
@@ -117,7 +128,11 @@ def layout_page(predicates):
         
         print("<div class=\"container\">")
         for yposition, yvalues in (sorted(vert_positions.items())):
-            print("<div class=\"row d-flex justify-content-center\">")
+            centered_class = ""
+            for yvalue in yvalues:
+                if yvalue in centered:
+                    centered_class = "justify-content-center"
+            print("<div class=\"row d-flex {}\">".format(centered_class))
             columns = []
             for yvalue in yvalues:
                 xposition = find_column_position(yvalue, sorted(hoz_positions.items()))
@@ -125,14 +140,16 @@ def layout_page(predicates):
             columns = sorted(columns, key=lambda x: x[0])
             last = 0
             for xposition, item in columns:
-                for empties in range(last, xposition):
-                    print("<div class=\"col filler col-md-{}\">".format(xposition))
-                    print("</div>")
-                    last = xposition
+                for empties in range(last, xposition - 1):
+                  
+                        print("<div class=\"col filler col-md-{}\">".format(xposition - 1))
+                        print("</div>")
+                last = last + xposition
             
                 print("<div class=\"col col-md-{}\">".format(sizes.get(item)))
                 print(item)
                 print("</div>")
+                last = last + int(sizes.get(item, 1))
                 
             print("</div>")
             
