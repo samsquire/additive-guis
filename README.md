@@ -152,7 +152,7 @@ widgets = {
 
 And we can produce the following:
 
-![additive-gui1.png](additive-gui1.png)
+![additive-gui-1.png](additive-gui-1.png)
 
 # The dream - Build GUIs with microblogging (or twitter tweets)
 
