@@ -1,8 +1,6 @@
 # additive-guis
 
-## declarative layouts
-
-This is a work in progress.
+## declarative bootstrap layouts
 
 GUIs could be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the  code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output.
 
@@ -10,82 +8,49 @@ Each rule is relative to every other rule. The rules produce an emergent layout.
 
 # Example
 
-You have this set of predicates - a bit like N3 tuples.
+You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave.
 
+blog_post.json
 ```
-all_predicates = [
-    [
-        "header hasSize 12",
-        "header centered screen",
-        "header above menu",
-        "heroPost above featuredPosts",
-        "menu centered screen",
-        "menu hasSize 12",
-        "heroPost under menu",
-        "heroPost hasSize 12",
-        "menu above heroPost"
-    ],
-    [
-        "blogs hasSize 8",
-        "blogSidebar hasSize 4"
-    ]
-]
-```
-
-And these widgets:
-
-```
-widgets = {
-    "blogHeading": {
-        "html": "<h1>Sample blog post</h1>"
-    },
-    "postMetadata": {
-        "html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
-    },
-    "posting": {
-        "html": """<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>
-            <hr>
-            <p>Cum sociis natoque penatibus et magnis <a href=\"#\">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>
-            <blockquote>
-              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            </blockquote>
-            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>
-            <h2>Heading</h2>
-            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>
-            <h3>Sub-heading</h3>
-            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-            <pre><code>Example code block</code></pre>
-            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
-            <h3>Sub-heading</h3>
-            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-            <ul>"""
-    },
-    "blogPost": {
-        "predicates": [
-            "blogHeading above postMetadata",
-            "posting under postMetadata"
-        ]
-    },
-    "introduction": { "html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic" },
-    "blogs": {
-        "predicates": [
-            "introduction above blogPost"
-        ]
-    },
-    "logo": {
-        "html": "<h1 class=\"blog-header-logo\">Large</h1>"
-    },
+{
+	"predicates": [
+		[
+			"header hasSize 12",
+			"menu hasSize 12",
+			"header centered screen",
+			"menu centered screen",
+			"header above menu",
+			"menu above heroPost",
+			"heroPost above featuredPosts",
+			"heroPost hasSize 12"
+		],
+		[
+			"blogs hasSize 8",
+			"blogSidebar hasSize 4"
+		]
+	],
+"widgets": {
     "header": {
         "predicates": [
             "logo hasSize 12"
         ],
         "classes": "blog-header py-3 justify-content-between align-items-center text-center"
     },
-    "featuredPosts": {
+        "featuredPosts": {
         "predicates": [
             "featuredPostA hasSize 6",
             "featuredPostB hasSize 6",
-            "featuredPostB rightOf featuredPostA",
+            "featuredPostB rightOf featuredPostA"
+        ]
+    },
+    "featuredPostA": {
+        "predicates": [
+            "featureTextA above continueReadingLink"
+        ]
+    },
+    "featuredPostB": {
+        "predicates": [
+            "featureTextB above continueReadingLink"
         ]
     },
     "menu": {
@@ -108,39 +73,60 @@ widgets = {
             "heroText above continueReadingLink"
         ]
     },
+    "blogs": {
+        "predicates": [
+            "introduction above blogPost"
+        ]
+    },
+    "blogPost": {
+        "predicates": [
+            "blogHeading above postMetadata",
+            "posting under postMetadata"
+    ]},
+    "blogSidebar": {
+        "predicates": [
+            "aboutSection centered screen"
+        ],
+		"classes": "bg-light"
+    },
+    "aboutSection": {
+        "predicates": [
+            "aboutTitle above aboutText",
+            "aboutText hasSize 12"
+        ]
+    },
+    "blogHeading": {
+        "html": "<h1>Sample blog post</h1>"
+    },
+    "postMetadata": {
+        "html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+    },
+    "posting": {
+        "html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.<\/p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes<\/a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.<\/p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis<\/strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.<\/p>\r\n            <\/blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna<\/em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.<\/p>\r\n            <h2>Heading<\/h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<\/p>\r\n            <pre><code>Example code block<\/code><\/pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.<\/p>\r\n            <ul>"
+    },
+
+    "introduction": {
+        "html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic"
+    },
+    "logo": {
+        "html": "<h1 class=\"blog-header-logo\">Large</h1>"
+    },
+
+
     "heroText": {
         "html": "<h2>Title of a longer featured blog post</h2>"
     },
     "continueReadingLink": {
         "html": "<a href=\"featured-post-a\">Continue reading</a>"
     },
-    "featuredPostA": {
-        "predicates": [
-            "featureTextA above continueReadingLink"
-        ]
-    },
-    "featuredPostB": {
-        "predicates": [
-            "featureTextB above continueReadingLink"
-        ]
-    },
+
     "featureTextA": {
         "html": "<h3>Some interesting article 1</h3>"
     },
     "featureTextB": {
         "html": "<h3>Some interesting article 2</h3>"
     },
-    "blogSidebar": {
-        "predicates": [
-            "aboutSection centered screen", 
-        ],  "classes": "bg-light"
-    },
-    "aboutSection": {
-        "predicates": [
-        "aboutTitle above aboutText",
-        "aboutText hasSize 12"
-        ]
-    },
+
     "aboutText": {
         "html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
     },
@@ -148,9 +134,16 @@ widgets = {
         "html": "<h4 class=\"font-italic\">About</h4>"
     }
 }
+}
 ```
 
-And we can produce the following:
+Run the layout engine:
+
+```
+python layouter.py blog_post.json
+```
+
+And we can produce the following HTML page:
 
 ![additive-gui-1.png](additive-gui-1.png)
 
