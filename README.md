@@ -8,7 +8,7 @@ Each rule is relative to every other rule. The rules produce an emergent layout.
 
 # Example
 
-You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave.
+You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. This is a port of the [Bootstrap's Blog example](https://getbootstrap.com/docs/4.0/examples/blog/) as an additive GUI.
 
 blog_post.json
 ```
