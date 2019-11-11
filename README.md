@@ -89,4 +89,13 @@ predicates = [
 ]
 ```
 
+# Adding icon overlays to icons in file manager
+
+```
+predicates = [
+   "overlayDirtyIcon is image(unchecked_changes.png)
+   "overlayDirtyIcon over file{dirty==true}"	
+]
+```
+
 
