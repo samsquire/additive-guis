@@ -3,36 +3,96 @@ from ortools.sat.python import cp_model
 from pprint import pprint
 import itertools
 
-predicates = [
-    "sidemenu hasSize 4",
-    "LoginButton hasSize 2",
-    "pagebody hasSize 8",
-    "UsernameBox hasSize 2",
-    "PasswordBox hasSize 2",
-    "HeroText hasSize 8",
-    "UserArea hasSize 3",
-    "UsernameBox below UserArea",
-	"PasswordBox rightOf UsernameBox",
-    "PasswordBox sameRowAs UsernameBox",
-    "UsernameBox withinSpace:2 PasswordBox",
-    "PasswordBox under UserArea",
-    "UsernameBox withinSpace:3 UserArea",
-    "LoginButton below PasswordBox",
-    "bottomLinks below pagebody",
-    "pagebody centered screen",
-    "HeroText centered screen", 
-    "sidemenu leftOf HeroText",
-    "HeroText leftOf UsernameBox",
-    "HeroText below LoginButton",
-    "PasswordBox below UserArea",
-    "UserArea above UsernameBox",
-    "LoginButton below PasswordBox",
-    "LoginButton under PasswordBox",
-    "pagebody below HeroText",
-    "pagebody under HeroText"
+widgets = {
+    "header": {
+        "html": "<h1>Large</h1>"
+    },
+    "featuredPosts": {
+        "predicates": [
+            "featuredPostA hasSize 6",
+            "featuredPostB hasSize 6",
+            "featuredPostB rightOf featuredPostA",
+        ]
+    },
+    "menu": {
+        "predicates": [
+            "U.S. rightOf World",
+            "Technology rightOf U.S.",
+            "Design rightOf Technology",
+            "Culture rightOf Design",
+            "Business rightOf Culture",
+            "Politics rightOf Business",
+            "Opinion rightOf Politics",
+            "Science rightOf Opinion",
+            "Health rightOf Science",
+            "Style rightOf Health",
+            "Travel rightOf Style"
+        ]
+    },
+    "heroPost": {
+        "predicates": [
+            "heroText above continueReadingLink"
+        ]
+    },
+    "heroText": {
+        "html": "<h2>Title of a longer featured blog post</h2>"
+    },
+    "continueReadingLink": {
+        "html": "<a href=\"featured-post-a\">Continue reading</a>"
+    },
+    "featuredPostA": {
+        "predicates": [
+            "featureTextA above continueReadingLink"
+        ]
+    },
+    "featuredPostB": {
+        "predicates": [
+            "featureTextB above continueReadingLink"
+        ]
+    },
+    "featureTextA": {
+        "html": "<h3>Some interesting article 1</h3>"
+    },
+    "featureTextB": {
+        "html": "<h3>Some interesting article 2</h3>"
+    },
+    "blogSidebar": {
+        "predicates": [
+            "aboutSection hasSize 4", 
+        ],  "classes": "bg-light"
+    },
+    "aboutSection": {
+        "predicates": [
+        "aboutTitle above aboutText"
+        ]
+    },
+    "aboutText": {
+        "html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+    },
+    "aboutTitle": {
+        "html": "<h4 class=\"font-italic\">About</h4>"
+    }
+}
+
+all_containers = [
+    [
+        "header hasSize 12",
+        "header centered screen",
+        "header above menu",
+        "heroPost above featuredPosts",
+        "menu centered screen",
+        "menu hasSize 12",
+        "heroPost under menu",
+        "heroPost hasSize 12",
+        "menu above heroPost"
+    ],
+    [
+        "blogBody hasSize 8",
+        "blogSidebar hasSize 4"
+    ]
 ]
 
-def layout_page(predicates):
+def layout_page(predicates, classes):
     """Schedule elements on a page"""
     model = cp_model.CpModel()
     
@@ -45,6 +105,9 @@ def layout_page(predicates):
     actual_start_pos = {}
     containers = {}
     sizes = {}
+    size_vars = {}
+    end_vars = {}
+    intervals = {}
     things = collections.defaultdict(list)
     
     for predicate in predicates:
@@ -52,24 +115,39 @@ def layout_page(predicates):
         if operand == "is":
             things[object].append(subject)
             continue
+   
         if operand == "inside":
             this_container = containers.get(object, [])
             this_container.append(subject)
             containers[object] = this_container
         if operand == "hasSize":
             sizes[subject] = object
-            continue
+            size_vars[subject] = model.NewIntVar(0, 1000, 'size/' + subject)
+            model.Add(size_vars[subject] == int(object))
+            
         if subject not in objects:
-            objects[subject] = model.NewIntVar(0, 1000, 'start/' + subject)
-            heights[subject] = model.NewIntVar(0, 1000, 'start/' + subject)
+            objects[subject] = model.NewIntVar(0, 1000, 'x/' + subject)
+            heights[subject] = model.NewIntVar(0, 1000, 'y/' + subject)
+            end_vars[subject] = model.NewIntVar(0, 1000, 'end/' + subject)
         if operand == "centered":
             centered.append(subject)
             continue
+        if object == "screen":
+            continue
+        if operand == "hasSize":
+            continue
         if object not in objects:
-            objects[object] = model.NewIntVar(0, 1000, 'start/' + object)
-            heights[object] = model.NewIntVar(0, 1000, 'start/' + subject)
-
+            objects[object] = model.NewIntVar(0, 1000, 'x/' + object)
+            heights[object] = model.NewIntVar(0, 1000, 'y/' + subject)
+            end_vars[object] = model.NewIntVar(0, 1000, 'end/' + subject)
         
+    for object in objects.keys():
+        if object in size_vars:
+            across = model.NewIntervalVar(objects[object], size_vars[object], end_vars[object], 'interval/' + object)
+            intervals[object] = across
+    
+    
+    
     parallel_group = collections.defaultdict(list)
     successor_lookup = {}
     for predicate in predicates:
@@ -77,14 +155,19 @@ def layout_page(predicates):
         if operand == "centered":
             continue
         if operand == "hasSize":
+            model.Add(end_vars[subject] == objects[subject] + size_vars[subject])
             continue
         if operand == "is":
+            continue
+        if object == "screen":
             continue
         subject_var = objects[subject]
         object_var = objects[object]
         subject_height_var = heights[subject]
         object_height_var = heights[object]
-        
+        if operand == "before":
+            model.Add(subject_var <= object_var)
+            model.Add(subject_height_var <= object_height_var)
         if operand == "leftOf":
             model.Add(subject_var < object_var)
         if operand == "rightOf":
@@ -94,10 +177,12 @@ def layout_page(predicates):
         if operand == "below":
             model.Add(subject_height_var > object_height_var)
         if operand == "under":
-            model.Add(object_var == subject_var)
-    
+            model.Add(subject_height_var > object_height_var)
+            model.Add(subject_var == object_var)
         if operand == "sameRowAs":
             model.Add(subject_height_var == object_height_var)
+            model.AddNoOverlap([intervals[subject], intervals[object]])
+            
         if operand.startswith("withinSpace"):
             originalOperand, spaces = operand.split(":")
             model.Add((subject_var - object_var) < int(spaces))
@@ -127,8 +212,8 @@ def layout_page(predicates):
             item_list.append(name)
      
         positions = []
-        print(sorted(hoz_positions.items()))
-        print(sorted(vert_positions.items()))
+        # print(sorted(hoz_positions.items()))
+        ## print(sorted(vert_positions.items()))
         y_coords = {}
         x_coords = {}
         coords = {}
@@ -143,24 +228,29 @@ def layout_page(predicates):
         for item in x_coords.keys():
             coords[item] = placed_item(x_coords[item], y_coords[item])
         
-        pprint(coords)
         
         grouped = itertools.groupby(sorted(coords.items(), key=lambda item: item[1].y), key=lambda item: item[1].y)
-        print("<div class=\"container\">")
+        print("<div class=\"container {}\">".format(classes))
         for row_id, columns in grouped:
             print("<div class=\"row\">")
             cells = sorted(list(columns), key=lambda item: item[1].x)
             last_x = 0
             for key, cell in cells:
                 offset = ""
-                offset = "offset-md-{}".format(cell.x - last_x)
+                offset = "offset-md-{}".format(cell.x - last_x - 1)
                 print("<div class=\"col col-md-{} {}\">".format(sizes.get(key), offset))
-                print(key, cell)
+                render_data = widgets.get(key, {})
+                if "html" in render_data:
+                    print(render_data["html"])
+                elif "predicates" in render_data:
+                    layout_page(render_data["predicates"], render_data.get("classes", ""))
+                else:
+                    print(key)
                 print("</div>")
-                last_x = cell.x + int(sizes.get(key, 0)) - 1
+                last_x = cell.x + int(sizes.get(key, 0))
             print("</div>")
         print("</div>")
             
-
-page_flow = layout_page(predicates)
+for container in all_containers:
+    layout_page(container, "")
 
