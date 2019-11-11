@@ -4,8 +4,31 @@ from pprint import pprint
 import itertools
 
 widgets = {
+    "blogHeading": {
+        "html": "<h1>Sample blog post</h1>"
+    },
+    "postMetadata": {
+        "html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+    },
+    "blogPost": {
+        "predicates": [
+            "blogHeading above postMetadata"
+        ]
+    },
+    "introduction": { "html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic" },
+    "blogs": {
+        "predicates": [
+            "introduction above blogPost"
+        ]
+    },
+    "logo": {
+        "html": "<h1 class=\"blog-header-logo\">Large</h1>"
+    },
     "header": {
-        "html": "<h1>Large</h1>"
+        "predicates": [
+            "logo hasSize 12"
+        ],
+        "classes": "blog-header py-3 justify-content-between align-items-center text-center"
     },
     "featuredPosts": {
         "predicates": [
@@ -58,12 +81,13 @@ widgets = {
     },
     "blogSidebar": {
         "predicates": [
-            "aboutSection hasSize 4", 
+            "aboutSection centered screen", 
         ],  "classes": "bg-light"
     },
     "aboutSection": {
         "predicates": [
-        "aboutTitle above aboutText"
+        "aboutTitle above aboutText",
+        "aboutText hasSize 12"
         ]
     },
     "aboutText": {
@@ -73,6 +97,8 @@ widgets = {
         "html": "<h4 class=\"font-italic\">About</h4>"
     }
 }
+
+# <link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
 
 all_containers = [
     [
@@ -87,7 +113,7 @@ all_containers = [
         "menu above heroPost"
     ],
     [
-        "blogBody hasSize 8",
+        "blogs hasSize 8",
         "blogSidebar hasSize 4"
     ]
 ]
@@ -251,6 +277,7 @@ def layout_page(predicates, classes):
             print("</div>")
         print("</div>")
             
+print("<head><link href=\"https://getbootstrap.com/docs/4.0/examples/blog/blog.css\" rel=\"stylesheet\"></head>")
 for container in all_containers:
     layout_page(container, "")
 
