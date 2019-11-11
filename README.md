@@ -36,7 +36,7 @@ blog_post.json
 			],
 			"classes": "blog-header py-3 justify-content-between align-items-center text-center"
 		},
-			"featuredPosts": {
+		"featuredPosts": {
 			"predicates": [
 				"featuredPostA hasSize 6",
 				"featuredPostB hasSize 6",
