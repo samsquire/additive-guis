@@ -173,8 +173,9 @@ This currently produces a layout a bit like this. I'm still working on the predi
 
 This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid. It's not very good just yet.
 
+# What I want to see in the future with additive guis
 
-# Customizing your desktop
+## Customizing your desktop
 
 Adding an icon to your desktop operating system tray should be really simple.
 
@@ -187,7 +188,7 @@ predicates = [
 ]
 ```
 
-# Adding icon overlays to icons in file manager
+## Adding icon overlays to icons in file manager
 
 ```
 predicates = [
@@ -196,4 +197,14 @@ predicates = [
 ]
 ```
 
+## Extending context menus
 
+```
+{
+	"predicates": [
+		"outsource is menuItem",
+		"outsource inside fileContextMenu",
+		"outsource on:click exec(\"outsource\", this)"
+	]
+}
+```
