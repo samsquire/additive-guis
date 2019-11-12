@@ -202,14 +202,26 @@ And we can produce the following HTML page from the above predicates.
 # The dream - Build GUIs with microblogging (or twitter tweets)
 
 **What you say is what you get** - you make statements about the output of layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
-* I want GUIs to be manipulatable by lots of people via predicates.
+* **Community written GUIs** I a community of people writing manipulable GUIs by lots of people via simple predicates.
  * Each predicate changes the tree where rendered HTML will be placed.
  * Widget HTML is produced through mapping and filtering collections as per a React GUI.
  * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
- * **Predicate join** If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of join on the UI generation code for those two pieces of data. This is because you are generating two child widgets, each from their respect a mapping of a collection.
+ * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping data with respect to a data source collection.
  * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
  
  # Interactive predicate join
+ 
+ Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. To render this in a React component, we could have Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer React components. Each of these components has a render function that maps data to HTML elements via JSX. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
+
+At this point, there are number of approaches for additive guis to be used here:
+
+* In a declarative additive GUI, I should be able to right click the email list view on the email list and a context menu would appear. I can click 'Insert rightOf'
+
+* After selecting a source widget, I should be able to interrogate what context is available at this point in the GUI. Chances are there is a mapping operation on a collection with the source data.
+
+ 
+ # Spreadsheets
+ Imagine an Spreadsheet like GUI were each cell is either data or a function. These functions are functions clled from the render method of a React component. Their responsibility is to filter, select what is rendered in your GUI.
  
  
  
