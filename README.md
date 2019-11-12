@@ -211,7 +211,7 @@ And we can produce the following HTML page from the above predicates.
  
  # Interactive predicate join
  
- Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. To render this in a React component, we could have Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer React components. Each of these components has a render function that maps data to HTML elements via JSX. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
+Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. To render this in a React component, we could have Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer React components. Each of these components has a render function that maps data to HTML elements via JSX. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
 
 At this point, there are number of approaches for additive guis to be used here:
 
@@ -221,7 +221,7 @@ At this point, there are number of approaches for additive guis to be used here:
 
  
  # Spreadsheets
- Imagine an Spreadsheet like GUI were each cell is either data or a function. These functions are functions clled from the render method of a React component. Their responsibility is to filter, select what is rendered in your GUI.
+ Imagine an Spreadsheet like GUI were each cell is either data or a function. These functions are functions called from the render method of a React component. Their responsibility is to filter, select what is rendered in your GUI.
  
  
  
