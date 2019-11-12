@@ -137,13 +137,13 @@ blog_post.json
 }
 ```
 
-Run the layout engine:
+This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid.
 
 ```
 python layouter.py blog_post.json
 ```
 
-And we can produce the following HTML page:
+And we can produce the following HTML page from the aboe predicates.
 
 ![additive-gui-1.png](additive-gui-1.png)
 
@@ -167,11 +167,11 @@ And we can produce the following HTML page:
 From the errors predicates you have available the form.fields.lastName context from errors.lastName predicates due to the above predicate. And from the fields object, you should be able to access the current error. It's cyclical. How errors.lastName and form.fields.lastName renders is dependent on that react widget.
 
 
-This currently produces a layout a bit like this. I'm still working on the predicates.
 
-![example-layout](additive-gui-1.png)
+# Predicate join
 
-This prototype example (layout/layouter.py) uses constraint programming library ORTools to try place things into a Bootstrap grid. It's not very good just yet.
+You have two independent collections that you are mapping over to produce HTML with JSX, as you do in a React render method. Now I want to introduce a new element into the JSX output. If you have a predicate that states it must appear within the output of an existing mapped collection. How do you implement this?
+
 
 # What I want to see in the future with additive guis
 
