@@ -66,7 +66,8 @@ blog_post.json
 				"Health rightOf Science",
 				"Style rightOf Health",
 				"Travel rightOf Style"
-			]
+			],
+			"classes": "col-md-1"
 		},
 		"heroPost": {
 			"predicates": [

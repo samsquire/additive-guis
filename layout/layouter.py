@@ -29,6 +29,7 @@ def layout_page(predicates, classes):
     size_vars = {}
     end_vars = {}
     intervals = {}
+    siblings = {}
     things = collections.defaultdict(list)
     
     for predicate in predicates:
@@ -36,7 +37,9 @@ def layout_page(predicates, classes):
         if operand == "is":
             things[object].append(subject)
             continue
-   
+        if subject == "siblings" and operand == "hasDefaultSize":
+            siblings[operand] = object
+            continue
         if operand == "inside":
             this_container = containers.get(object, [])
             this_container.append(subject)
@@ -74,6 +77,8 @@ def layout_page(predicates, classes):
     for predicate in predicates:
         subject, operand, object = predicate.split(" ")
         if operand == "centered":
+            continue
+        if operand == "hasDefaultSize":
             continue
         if operand == "hasSize":
             model.Add(end_vars[subject] == objects[subject] + size_vars[subject])
@@ -157,9 +162,8 @@ def layout_page(predicates, classes):
             cells = sorted(list(columns), key=lambda item: item[1].x)
             last_x = 0
             for key, cell in cells:
-                offset = ""
-                offset = "offset-md-{}".format(cell.x - last_x - 1)
-                print("<div class=\"col col-md-{} {}\">".format(sizes.get(key), offset))
+            
+                print("<div class=\"col col-md-{}\">".format(sizes.get(key,siblings.get("hasDefaultSize"))))
                 render_data = widgets.get(key, {})
                 if "html" in render_data:
                     print(render_data["html"])
