@@ -1,10 +1,10 @@
 # additive-guis
 
-## declarative bootstrap layouts
+## declarative layouts
 
 GUIs could be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the  code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output.
 
-Each rule is relative to every other rule. The rules produce an emergent layout.
+Each rule is relative to every other rule. The rules together produce an emergent layout.
 
 # Example
 
