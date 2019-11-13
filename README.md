@@ -45,13 +45,13 @@ blog_post.json
 		},
 		"featuredPostB": {
 			"predicates": [
-				"featuredPostContentB above imageB"
+				"featuredPostContentB leftOf imageB"
 			],
 			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
 		},
 		"featuredPostA": {
 			"predicates": [
-				"featuredPostContentA above imageA"
+				"featuredPostContentA leftOf imageA"
 			],
 			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
 		},
