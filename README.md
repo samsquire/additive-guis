@@ -235,6 +235,7 @@ And we can produce the following HTML page from the above predicates.
 # The dream - Build GUIs with microblogging (or twitter tweets)
 
 **What you say is what you get** - you make statements about the output of layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
+* **Update GUIs while they are running** I want to be able to introduce widgets to a running GUI with predicates.
 * **Community written GUIs** I want a community of people writing manipulable GUIs by lots of people via simple predicates.
  * Each predicate changes the tree where rendered HTML will be placed.
  * Widget HTML is produced through mapping and filtering collections as per a React GUI.
