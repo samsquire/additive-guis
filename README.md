@@ -34,6 +34,11 @@ The widget should appear directly underneath.
 
 The widget appears on the screen after this widget but not necessarily directly underneath.
 
+If the layout does not look correct - such as spacing is missing, you either:
+
+* add classes to fix the spacing issues
+* add new rules related to spacing (which don't exist yet)
+
 # Example
 
 You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. This is a port of the [Bootstrap's Blog example](https://getbootstrap.com/docs/4.0/examples/blog/) as an additive GUI.
