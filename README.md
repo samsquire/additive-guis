@@ -236,6 +236,10 @@ And we can produce the following HTML page from the above predicates.
  * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping data with respect to a data source collection.
  * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
  
+ # GUIs that multiple people can hack on without trampling eachother's changes
+ 
+Changing the layout is accomplished by adding statements or removing statements.
+ 
  # Interactive predicate join
  
 Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. To render this in a React component, we could have Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer React components. Each of these components has a render function that maps data (props) to HTML elements via JSX. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
