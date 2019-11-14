@@ -1,6 +1,6 @@
 # additive-guis
 
-This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization).
+This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization). This is a prototype.
 
 ## declarative layouts - build layouts with statements not HTML
 
