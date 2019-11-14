@@ -6,7 +6,7 @@ This repository renders bootstrap layouts as a [constraint satisfaction problem]
 
 GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. I want to build live additive editors that react when rules are changed.
 
-Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs.
+Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
 ## Quickstart - predicates
 
