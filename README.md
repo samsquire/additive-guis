@@ -19,7 +19,7 @@ submitTodo rightOf todoField
 ```
 
 * **Each rule is relative to every other rule simultaneously**
-* Predicates that are three words long create two widgets.
+* Predicates are currently three words long. These are are subject predicate object. A widget is created by mentioning it and defined further in the `widgets` key below.
 * The rules together produce an emergent layout together.
 
 Here's a list of predicates implemented so far:
