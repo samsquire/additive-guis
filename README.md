@@ -4,13 +4,13 @@ This repository renders bootstrap layouts as a [constraint satisfaction problem]
 
 ## declarative layouts - build layouts with statements not HTML
 
-GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation discussed below. An online implementation would update in real time after a rule has changed. I want to build live additive editors that react when rules are changed.
+GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. I want to build live additive editors that react when rules are changed.
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs.
 
-## Quickstart
+## Quickstart - predicates
 
-Rules in additive GUIs look like this:
+Rules in additive GUIs look like this - you describe the propositions of each widget on the screen and let the computer generate the layout.
 
 ```
 todoField above todosList
@@ -18,7 +18,8 @@ todosList above todoFilters
 submitTodo rightOf todoField
 ```
 
-* **Each rule is relative to every other rule simultaneously*
+* **Each rule is relative to every other rule simultaneously**
+* Predicates that are three words long create two widgets.
 * The rules together produce an emergent layout together.
 
 Here's a list of predicates implemented so far:
