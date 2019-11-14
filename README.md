@@ -1,10 +1,12 @@
 # additive-guis
 
-## declarative layouts
+This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization).
 
-GUIs can be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules. I want live editors that react when rules are changed. This repository has an example offline implementation discussed below.
+## declarative layouts - build layouts with statements not HTML
 
-Why is it important that the tuples are monotonically increasing? This is due to a property of sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs.
+GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation discussed below. An online implementation would update in real time after a rule has changed. I want to build live additive editors that react when rules are changed.
+
+Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs.
 
 ## Quickstart
 
@@ -16,7 +18,10 @@ todosList above todoFilters
 submitTodo rightOf todoField
 ```
 
-Each rule is relative to every other rule. The rules together produce an emergent layout. Here's a list of predicates implemented so far:
+* **Each rule is relative to every other rule simultaneously*
+* The rules together produce an emergent layout together.
+
+Here's a list of predicates implemented so far:
 
 # leftOf
 
@@ -40,14 +45,14 @@ The widget appears on the screen after this widget but not necessarily directly 
 
 ## Tweaking
 
-If the layout does not look correct - such as spacing is missing, you either:
+If the layout is not how you want it to appear - such as spacing is missing, you either:
 
-* add classes to fix the spacing issues
-* add new rules related to spacing - yet to be implemented
+* add more rules to get the layout you want
+* add additional classes
 
 # Example
 
-You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. This is a port of the [Bootstrap's Blog example](https://getbootstrap.com/docs/4.0/examples/blog/) as an additive GUI.
+You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. The following is a port of the [Bootstrap's Blog example](https://getbootstrap.com/docs/4.0/examples/blog/) as an additive GUI. Please note that the HTML leaf nodes are a temporary solution. Ideally these will be React components.
 
 blog_post.json
 ```
@@ -263,7 +268,7 @@ There are a number of ways a declarative UI would allow changes online, while th
 
 * After selecting a source widget, I should be able to interrogate what context is available at a point I selected. The context is the lists being mapped over.
 
-# How do I insert a widget in between a React managed render function? Do I need to update the JSX?
+How do I insert a widget in between a React managed render function? Do I need to update the JSX?
  
  ## Spreadsheet editor
  
