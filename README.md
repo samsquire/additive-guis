@@ -2,9 +2,13 @@
 
 ## declarative layouts
 
-GUIs can be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI.
+GUIs can be buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive Guis because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules. I want live editors that react when rules are changed. This repository has an example offline implementation discussed below.
 
-Rules look like this:
+Why is it important that the tuples are monotonically increasing? This is due to a property of sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs.
+
+## Quickstart
+
+Rules in additive GUIs look like this:
 
 ```
 todoField above todosList
@@ -34,10 +38,12 @@ The widget should appear directly underneath.
 
 The widget appears on the screen after this widget but not necessarily directly underneath.
 
+## Tweaking
+
 If the layout does not look correct - such as spacing is missing, you either:
 
 * add classes to fix the spacing issues
-* add new rules related to spacing (which don't exist yet)
+* add new rules related to spacing - yet to be implemented
 
 # Example
 
