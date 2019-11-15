@@ -15,10 +15,25 @@
 
 	<link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
 	
+	<style>
+	#input {
+		float: left;
+		top: 0px;
+		width: 30vw;
+		height: 100vh;
+		position: sticky;
+	}
+	#output {
+		width: 100%;
+		margin-left: 30vw;
+		overflow: visible;
+	}
+	</style>
 
 </head>
 
 <body>
+<textarea id="input"></textarea>
 <div id="output"></div>
 <script>
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
@@ -449,7 +464,7 @@ var data = {
 widgets = data["widgets"]
 all_predicates = data["predicates"]
 
-
+document.getElementById("input").value = JSON.stringify(data, null, 4);
 
 function layout_page(predicates, classes) {
 	model = new Problem();
@@ -621,14 +636,31 @@ function layout_page(predicates, classes) {
 	return container;
 }
 
+var containers = []
 for (var i = 0; i < all_predicates.length; i++) {
-	var group = all_predicates[i];
-    var container = layout_page(group, "");
-	var output = document.createElement("div");
-	document.getElementById("output").appendChild(output);
-	ReactDOM.render(container, output);
+	containers.push(document.createElement("div"));
 }
+
+var data = document.getElementById("input");
+data.addEventListener('change', function () {
+	console.log(data.value);
+	data = JSON.parse(data.value);
+	widgets = data["widgets"];
+	all_predicates = data["predicates"];
+	rerender();
+});
+function rerender() {
+	for (var i = 0; i < all_predicates.length; i++) {
+		var group = all_predicates[i];
+		var container = layout_page(group, "");
+		var output = containers[i];
+		document.getElementById("output").appendChild(output);
+		ReactDOM.render(container, output);
+	}
+}
+
 </script>
+
 
 
 
