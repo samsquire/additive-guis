@@ -25,8 +25,9 @@
 	}
 	#output {
 		width: 100%;
+		margin-top: 0;
 		margin-left: 30vw;
-		overflow: visible;
+		overflow: scroll;
 	}
 	</style>
 
@@ -638,13 +639,15 @@ function layout_page(predicates, classes) {
 
 var containers = []
 for (var i = 0; i < all_predicates.length; i++) {
-	containers.push(document.createElement("div"));
+	var container = document.createElement("div");
+	containers.push(container);
+	document.getElementById("output").appendChild(container);
 }
 
-var data = document.getElementById("input");
-data.addEventListener('change', function () {
-	console.log(data.value);
-	data = JSON.parse(data.value);
+var inputField = document.getElementById("input");
+inputField.addEventListener('change', function () {
+	console.log(inputField.value);
+	data = JSON.parse(inputField.value);
 	widgets = data["widgets"];
 	all_predicates = data["predicates"];
 	rerender();
@@ -654,7 +657,7 @@ function rerender() {
 		var group = all_predicates[i];
 		var container = layout_page(group, "");
 		var output = containers[i];
-		document.getElementById("output").appendChild(output);
+		
 		ReactDOM.render(container, output);
 	}
 }
