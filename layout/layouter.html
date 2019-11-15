@@ -361,8 +361,7 @@ var data = {
 				"Science rightOf Opinion",
 				"Health rightOf Science",
 				"Style rightOf Health",
-				"Travel rightOf Style",
-				"Sam rightOf World"
+				"Travel rightOf Style"
 			]
 		},
 		"heroPost": {
@@ -471,7 +470,7 @@ document.getElementById("input").value = JSON.stringify(data, null, 4);
 function layout_page(predicates, classes) {
 	model = new Problem();
 	var domain = [];
-	for (var i=0; i < 500; i++) {
+	for (var i=0; i < 100; i++) {
 		domain.push(i);
 	}
 	
