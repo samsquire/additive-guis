@@ -270,7 +270,6 @@ https://github.com/njoubert/csp.js
       var valid = true;
       if (checkAssignment(nextVar, val)) {
         assignments[nextVar.name] = val;
-		console.log(assignments, variables, constraints, single);
         if (this.solve(assignments, variables, constraints, single)) {
           if (single) {
             return true
@@ -475,7 +474,7 @@ function layout_page(predicates, classes) {
 	for (var i=0; i < 500; i++) {
 		domain.push(i);
 	}
-	console.log(domain);
+	
 	var things = {};
 	var siblings = {};
 	var sizes = {}
@@ -649,7 +648,7 @@ for (var i = 0; i < all_predicates.length; i++) {
 
 var inputField = document.getElementById("input");
 inputField.addEventListener('change', function () {
-	console.log(inputField.value);
+	
 	data = JSON.parse(inputField.value);
 	widgets = data["widgets"];
 	all_predicates = data["predicates"];
@@ -664,7 +663,7 @@ function rerender() {
 		ReactDOM.render(container, output);
 	}
 }
-
+rerender();
 </script>
 
 
