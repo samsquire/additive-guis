@@ -21,13 +21,14 @@
 <body>
 <div id="output"></div>
 <script>
+// https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 var groupBy = function(xs, key) {
   return xs.reduce(function(rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
     return rv;
   }, {});
 };
-
+ // From https://github.com/njoubert/csp.js
  var Set = function(/* array */) {
     if (arguments.length === 1) {
       var arr = arguments[0];
@@ -63,7 +64,7 @@ var groupBy = function(xs, key) {
   }
   
   
-
+// From https://github.com/njoubert/csp.js
 util = {
     
     mixin: function(target, src) {
@@ -86,7 +87,10 @@ util = {
 
  
 }
-
+/*
+CSP software from 
+https://github.com/njoubert/csp.js
+*
 /* 
    * Variable
    */
@@ -263,7 +267,7 @@ util = {
   }
   
 
-    
+// Sam Squire
 
 var data = {
 	"predicates": [
@@ -448,7 +452,6 @@ all_predicates = data["predicates"]
 
 
 function layout_page(predicates, classes) {
-	console.log("Laying out ", predicates);
 	model = new Problem();
 	var domain = [];
 	for (var i=0; i < 100; i++) {
@@ -544,7 +547,6 @@ function layout_page(predicates, classes) {
 			
 		}
 		if (operand === "rightOf") {
-			// model.Add(subject_height_var < object_height_var )
 			model.addConstraint([subject + "_x", object + "_x"], function (subject, object) { return subject > object});
 		}
 		if (operand === "sameRowAs") {
@@ -556,7 +558,7 @@ function layout_page(predicates, classes) {
 	
 	
 	var answer = model.getSolution();
-	console.log("answer", answer);
+
 	ordered = {}
 	hoz_positions = {}
 	vert_positions = {}
@@ -573,7 +575,7 @@ function layout_page(predicates, classes) {
 		cache[item].item = item;
 	}
 	var grouped = groupBy(Object.values(cache), 'y');
-	console.log(grouped);
+
 	var rows = Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (row) {
 		var item = grouped[row];
 		
@@ -599,15 +601,12 @@ function layout_page(predicates, classes) {
 				contents = null;
 			}
 			if (renderData.hasOwnProperty("predicates")) {
-				console.log("Rendering inner predicates", renderData["predicates"]);
-				
 				var classes = "";
 				if (renderData.hasOwnProperty("classes")) {
 					classes = renderData["classes"];
 					
 				}
 				contents = layout_page(renderData["predicates"], classes);
-				console.log("Inner contents", contents);
 				
 				return React.createElement("div", attr, contents);
 				
