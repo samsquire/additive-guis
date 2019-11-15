@@ -1,0 +1,13 @@
+{
+	"predicates": [
+		["todoField above todosList",
+		"todosList above todoFilters",
+		"submitTodo rightOf todoField"]
+	]
+	,
+	"widgets": {
+		"todoField": {"html": "<input type=\"text\" />"},
+		"submitTodo": {"html": "<button type=\"submit\">Submit</button>"},
+		"todosList": {"html": "<ul></ul>"}
+	}
+}

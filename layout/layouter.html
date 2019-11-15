@@ -1,0 +1,637 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>additive-guis live</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.10.2/umd/react.development.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.10.2/umd/react-dom.development.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
+	
+
+</head>
+
+<body>
+<div id="output"></div>
+<script>
+var groupBy = function(xs, key) {
+  return xs.reduce(function(rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+ var Set = function(/* array */) {
+    if (arguments.length === 1) {
+      var arr = arguments[0];
+      for (var i = 0; i < arr.length; i++) {
+        this[arr[i]] = true;
+      }
+    }
+  }
+  
+  Set.prototype.clone = function() {
+    return new this.constructor(this.toArray());
+  }
+  
+  Set.prototype.insert = function(v) {
+    if (this[v]) {
+      return false;
+    } else {
+      this[v] = true;
+      return true;
+    }
+  }
+  
+  Set.prototype.contains = function(v) {
+    return (this[v] !== undefined);
+  }
+  
+  Set.prototype.toString = function() {
+    return Object.keys(this).toString();
+  }
+  
+  Set.prototype.toArray = function() {
+    return Object.keys(this);
+  }
+  
+  
+
+util = {
+    
+    mixin: function(target, src) {
+      for (var name in src) {
+        if (src.hasOwnProperty(name) && !target.hasOwnProperty(name)) {
+          target[name] = src[name];
+        }
+      }
+    },
+   
+    hashcopy: function(obj) {
+      var ret = obj.constructor();
+      for (var p in obj) {
+        if (obj.hasOwnProperty(p)) {
+          ret[p] = obj[p];
+        }
+      }
+      return ret;
+    }
+
+ 
+}
+
+/* 
+   * Variable
+   */
+  var Variable = function(name,domain) {
+    this.name = name;
+    this.domain = domain;
+  }
+  
+  Variable.prototype.toString = function() {
+    return "" + this.name + " => [" + this.domain.toString() + "]";
+  }
+
+  /* 
+   * Constraint 
+   */
+  
+  var Constraint = function(variables, fn) {
+    this.fn = fn;
+    this.variables = variables;
+  }
+  
+  Constraint.prototype.toString = function() {
+    return "(" + this.variables.toString() + ") => " + this.fn.toString();
+  }
+  
+  /* 
+   * Problem 
+   */ 
+  var Problem = function() {
+    this.solver = new RecursiveBacktrackingSolver();
+    this.variables = {};
+    this.constraints = [];
+  };
+  
+  Problem.prototype.addVariable = function(name, domain) {
+    this.variables[name] = new Variable(name,domain);
+  }
+  Problem.prototype.changeVariable = function(name, newdomain) {
+    if (this.variables[name]) {
+      this.variables[name].domain = newdomain;      
+    } else {
+      throw new Error("Attempted to change a nonexistant variable.");
+    }
+  }
+
+  Problem.prototype.addConstraint = function(variables, fn) {
+      if (variables.length == 0) {
+          return;
+      }
+    this.constraints.push(new Constraint(variables, fn));
+  }
+  
+  Problem.prototype.setSolver = function(solver) {
+    this.solver = solver;
+  }
+  
+  Problem.prototype.getSolution = function() {
+    return this.solver.getSolution(this);
+  }
+
+  Problem.prototype.getSolutions = function() {
+    return this.solver.getSolutions(this);
+  }
+  
+  Problem.prototype.getSolutionIter = function() {
+    return this.solver.getSolutions(this);
+  }
+  
+  /* 
+   * Solver 
+   */
+  var RecursiveBacktrackingSolver = function() {
+    
+  };
+  
+  RecursiveBacktrackingSolver.prototype.getSolution = function(csp) {
+    var assignment = {}
+    if (this.solve(assignment, csp.variables, csp.constraints, true)) {
+      return assignment;
+    } else {
+      return {};
+    }
+  }
+
+  RecursiveBacktrackingSolver.prototype.getSolutions = function(csp) {
+    this.allAssignments = [];
+    this.solve({}, csp.variables, csp.constraints, false);
+    return this.allAssignments;
+  }
+
+  RecursiveBacktrackingSolver.prototype.getSolutionIter = function(csp) {
+    throw {
+      error: "Unsupported",
+      message: "RecursiveBacktrackingSolver does not support a solution iterator"
+    }
+  }
+  
+  RecursiveBacktrackingSolver.prototype.solve = function(assignments, variables, constraints, single) {
+    
+    
+    
+    function recursiveSolve(assignments, variables, constraints, single) {
+      //Move stuff in here to not re-evaluate the checkAssignment function...
+      
+    }
+    
+    if (Object.keys(assignments).length === Object.keys(variables).length) {
+      if (!single) {
+        this.allAssignments.push(util.hashcopy(assignments));
+      }
+      return true;
+    }
+    //find the next variable
+    var nextVar = null;
+    for (v in variables) {
+      var found = false;
+      for (a in assignments) {
+        if (v === a) {
+          found = true;
+        }
+      }
+      if (!found) {
+        nextVar = variables[v];
+        break;
+      }
+    }
+    
+    function checkAssignment(nextVar, val) {
+      assignments[nextVar.name] = val;
+      for (var c in constraints) {
+        args = []
+        var valid = true;
+        
+        //try to build the argument list for this constraint...
+        for (var k in constraints[c].variables) {
+          var fp = constraints[c].variables[k];
+          if (typeof assignments[fp] != "undefined") {
+            args.push(assignments[fp]);
+          } else {
+            valid = false;
+            break;
+          }
+        }
+        
+        if (valid) {
+          //we can check it, so check it.
+          if (!constraints[c].fn.apply(null,args)) {
+            delete assignments[nextVar.name];
+            return false;
+          }
+        }
+
+      }
+      delete assignments[nextVar.name];
+      return true;
+    }
+    
+    //now try the values in its domain
+    for (var j in nextVar.domain) {
+      var val = nextVar.domain[j];
+      var valid = true;
+      if (checkAssignment(nextVar, val)) {
+        assignments[nextVar.name] = val;
+        if (this.solve(assignments, variables, constraints, single)) {
+          if (single) {
+            return true
+          }
+        }
+        delete assignments[nextVar.name];
+      }
+    }
+    return false;
+    
+  }
+  
+
+    
+
+var data = {
+	"predicates": [
+		[
+			"header hasSize 12",
+			"menu hasSize 12",
+			"header centered screen",
+			"menu centered screen",
+			"header above menu",
+			"menu above heroPost",
+			"heroPost above featuredPosts",
+			"heroPost hasSize 12"
+		],
+		[
+			"blogs hasSize 8",
+			"blogSidebar hasSize 4",
+			"blogSidebar rightOf blogs"
+		]
+	],
+	"widgets": {
+		"header": {
+			"predicates": [
+				"logo hasSize 12"
+			],
+			"classes": "blog-header py-3 justify-content-between align-items-center text-center"
+		},
+		"featuredPosts": {
+			"predicates": [
+				"featuredPostA hasSize 6",
+				"featuredPostB hasSize 6",
+				"featuredPostB rightOf featuredPostA"
+			]
+		},
+		"featuredPostB": {
+			"predicates": [
+				"featuredPostContentB leftOf imageB"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostA": {
+			"predicates": [
+				"featuredPostContentA leftOf imageA"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostContentA": {
+			"predicates": [
+				"categoryA above featuredPostHeadingA",
+				"featuredPostHeadingA above featuredPostDateA",
+				"featuredPostDateA above featuredIntroA",
+				"featuredPostDateA below categoryA"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		"featuredPostContentB": {
+			"predicates": [
+				"categoryB above featuredPostHeadingB",
+				"featuredPostHeadingB above featuredPostDateB",
+				"featuredPostDateB above featuredIntroB",
+				"featuredPostDateB below categoryB"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		
+		"menu": {
+			"predicates": [
+				"siblings hasDefaultSize 1",
+				"U.S. rightOf World",
+				"Technology rightOf U.S.",
+				"Design rightOf Technology",
+				"Culture rightOf Design",
+				"Business rightOf Culture",
+				"Politics rightOf Business",
+				"Opinion rightOf Politics",
+				"Science rightOf Opinion",
+				"Health rightOf Science",
+				"Style rightOf Health",
+				"Travel rightOf Style"
+			]
+		},
+		"heroPost": {
+			"predicates": [
+				"heroText above continueReadingLink"
+			],
+			"classes": "jumbotron p-3 p-md-5 text-white rounded bg-dark"
+		},
+		"blogs": {
+			"predicates": [
+				"introduction above blogPost"
+			]
+		},
+		"blogPost": {
+			"predicates": [
+				"blogHeading above postMetadata",
+				"posting under postMetadata"
+		]},
+		"blogSidebar": {
+			"predicates": [
+				"aboutSection centered screen"
+			],
+			"classes": "bg-light"
+		},
+		"aboutSection": {
+			"predicates": [
+				"aboutTitle above aboutText",
+				"aboutText hasSize 12"
+			]
+		},
+		"blogHeading": {
+			"html": "<h1>Sample blog post</h1>"
+		},
+		"postMetadata": {
+			"html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+		},
+		"posting": {
+			"html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.<\/p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes<\/a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.<\/p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis<\/strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.<\/p>\r\n            <\/blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna<\/em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.<\/p>\r\n            <h2>Heading<\/h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<\/p>\r\n            <pre><code>Example code block<\/code><\/pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.<\/p>\r\n            <ul>"
+		},
+
+		"introduction": {
+			"html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic"
+		},
+		"logo": {
+			"html": "<h1 class=\"blog-header-logo\">Large</h1>"
+		},
+"categoryA": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">World<\/strong>"
+		},
+		"categoryB": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology<\/strong>"
+		},
+		"featuredIntroA": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredIntroB": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredPostHeadingA": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostHeadingB": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostDateA": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"featuredPostDateB": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"imageA": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+		"imageB": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+
+		"heroText": {
+			"html": "<h2>Title of a longer featured blog post</h2>"
+		},
+		"continueReadingLink": {
+			"html": "<a href=\"featured-post-a\">Continue reading</a>"
+		},
+
+		"featureTextA": {
+			"html": "<h3>Some interesting article 1</h3>"
+		},
+		"featureTextB": {
+			"html": "<h3>Some interesting article 2</h3>"
+		},
+
+		"aboutText": {
+			"html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+		},
+		"aboutTitle": {
+			"html": "<h4 class=\"font-italic\">About</h4>"
+		}
+	}
+}
+
+widgets = data["widgets"]
+all_predicates = data["predicates"]
+
+
+
+function layout_page(predicates, classes) {
+	console.log("Laying out ", predicates);
+	model = new Problem();
+	var domain = [];
+	for (var i=0; i < 100; i++) {
+		domain.push(i);
+	}
+	var things = {};
+	var siblings = {};
+	var sizes = {}
+	var size_vars = {};
+	var objects = {};
+	var heights = {};
+	var end_vars = {};
+	var centered = [];
+	
+	var object_vars = {}
+	var height_vars = {}
+	for (var i = 0 ; i < predicates.length; i++) {
+		var predicate = predicates[i];
+		components = predicate.split(" ")
+		var subject = components[0];
+		var operand = components[1];
+		var object = components[2];
+		
+		if (operand === "is") {
+			if (!things.hasOwnProperty(object)) { things[object] = []; }
+			things[object].push(subject);
+            continue
+		}
+		
+		if (operand === "hasSize") {
+			sizes[subject] = object
+		}
+		
+	    if (subject === "siblings" && operand === "hasDefaultSize") {
+			siblings[operand] = object;
+			continue
+		}
+		if (operand == "inside") {
+            if (!containers.hasOwnProperty(object)) { containers[object] = []; }
+            containers[object].push(subject)
+		}
+	    
+		if (!objects.hasOwnProperty(subject)) {
+			objects[subject] = model.addVariable(subject + "_x", domain);
+			heights[subject] = model.addVariable(subject + "_y", domain);
+			
+		}
+		if (operand === "centered") {
+			centered.push(subject);
+		}
+		if (object === "screen") {
+			continue
+		}
+		if (operand === "hasSize") {
+			continue
+		}
+		if (!objects.hasOwnProperty(object)) {
+			objects[object] = model.addVariable(object + "_x", domain);
+			heights[object] = model.addVariable(object + "_y", domain);
+			
+		}
+	}
+	for (var i = 0 ; i < predicates.length; i++) {
+		var predicate = predicates[i];
+		components = predicate.split(" ")
+		var subject = components[0];
+		var operand = components[1];
+		var object = components[2];
+		if (operand === "centered") { continue ; }
+		if (operand === "hasDefaultSize") { continue; }
+		if (operand === "is") { continue; }
+		if (operand === "screen") { continue; }
+		
+		subject_var = objects[subject]
+        object_var = objects[object]
+        subject_height_var = heights[subject]
+        object_height_var = heights[object]
+		
+		if (operand === "under") {
+            model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject > object; });
+		}
+		
+		if (operand === "leftOf") {
+            model.addConstraint([subject + "_x", object + "_x"], function (subject, object) { return subject < object; });
+		}
+		if (operand === "above") {
+			// model.Add(subject_height_var < object_height_var )
+			model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject < object});	
+		}
+		
+		if (operand === "below") {
+			model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject > object});
+			
+		}
+		if (operand === "rightOf") {
+			// model.Add(subject_height_var < object_height_var )
+			model.addConstraint([subject + "_x", object + "_x"], function (subject, object) { return subject > object});
+		}
+		if (operand === "sameRowAs") {
+			model.addConstraint([subject + "_y", object + "_y"], function () {
+			return subject === object;
+			});
+		}
+	}
+	
+	
+	var answer = model.getSolution();
+	console.log("answer", answer);
+	ordered = {}
+	hoz_positions = {}
+	vert_positions = {}
+	
+	cache = {}
+    coords = {}
+	
+	for (var key in answer) {
+		var components = key.split("_");
+		var item = components[0];
+		var xy = components[1];
+		if (!cache.hasOwnProperty(item)) { cache[item] = {}; }
+		cache[item][xy] = answer[key];
+		cache[item].item = item;
+	}
+	var grouped = groupBy(Object.values(cache), 'y');
+	console.log(grouped);
+	var rows = Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (row) {
+		var item = grouped[row];
+		
+		var colChildren = item.sort(function (a, b)  { return a.x < b.x ? -1 : 1 }).map(function (cell) {
+			var contents = cell.item;
+			var attr = {className: "col"}
+			var size;
+			
+			if (sizes.hasOwnProperty(cell.item)) { size = sizes[cell.item]; }
+			if (siblings.hasOwnProperty("hasDefaultSize")) { size = siblings["hasDefaultSize"]}
+			attr["className"] += " col-md-" + size; 
+			
+			var renderData = {};
+			if (widgets.hasOwnProperty(cell.item)) { 
+				renderData = widgets[cell.item];
+			}
+			
+			if (renderData.hasOwnProperty("html")) {
+
+				attr["dangerouslySetInnerHTML"] = {
+					"__html": renderData["html"]
+				}
+				contents = null;
+			}
+			if (renderData.hasOwnProperty("predicates")) {
+				console.log("Rendering inner predicates", renderData["predicates"]);
+				
+				var classes = "";
+				if (renderData.hasOwnProperty("classes")) {
+					classes = renderData["classes"];
+					
+				}
+				contents = layout_page(renderData["predicates"], classes);
+				console.log("Inner contents", contents);
+				
+				return React.createElement("div", attr, contents);
+				
+			}
+			
+			return React.createElement("div", attr, contents);
+		});
+		return React.createElement("div", {className: "row"},colChildren);
+	})
+	
+	var container = React.createElement('div', {className: "container " + classes }, rows);
+	return container;
+}
+
+for (var i = 0; i < all_predicates.length; i++) {
+	var group = all_predicates[i];
+    var container = layout_page(group, "");
+	var output = document.createElement("div");
+	document.getElementById("output").appendChild(output);
+	ReactDOM.render(container, output);
+}
+</script>
+
+
+
+</body>
+</html>
