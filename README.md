@@ -240,6 +240,8 @@ This prototype example (layout/layouter.py) uses constraint programming library 
 python layouter.py blog_post.json
 ```
 
+See layouter.html for a HTML version that does the same.
+
 And we can produce the following HTML page from the above predicates.
 
 ![additive-gui-1.png](additive-gui-1.png)
