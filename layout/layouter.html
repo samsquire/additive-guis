@@ -270,6 +270,7 @@ https://github.com/njoubert/csp.js
       var valid = true;
       if (checkAssignment(nextVar, val)) {
         assignments[nextVar.name] = val;
+		console.log(assignments, variables, constraints, single);
         if (this.solve(assignments, variables, constraints, single)) {
           if (single) {
             return true
@@ -361,7 +362,8 @@ var data = {
 				"Science rightOf Opinion",
 				"Health rightOf Science",
 				"Style rightOf Health",
-				"Travel rightOf Style"
+				"Travel rightOf Style",
+				"Sam rightOf World"
 			]
 		},
 		"heroPost": {
@@ -470,9 +472,10 @@ document.getElementById("input").value = JSON.stringify(data, null, 4);
 function layout_page(predicates, classes) {
 	model = new Problem();
 	var domain = [];
-	for (var i=0; i < 100; i++) {
+	for (var i=0; i < 500; i++) {
 		domain.push(i);
 	}
+	console.log(domain);
 	var things = {};
 	var siblings = {};
 	var sizes = {}

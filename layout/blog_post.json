@@ -63,6 +63,7 @@
 		"menu": {
 			"predicates": [
 				"siblings hasDefaultSize 1",
+				"Sam leftOf World",
 				"U.S. rightOf World",
 				"Technology rightOf U.S.",
 				"Design rightOf Technology",
