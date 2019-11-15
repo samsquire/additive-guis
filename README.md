@@ -2,7 +2,7 @@
 
 This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization). This is a prototype.
 
-## declarative layouts - build layouts with statements not HTML
+## declarative layouts - build layouts with statements rendering to HTML
 
 GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layouter.html` is a live implementation example. S
 
