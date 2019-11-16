@@ -1,6 +1,6 @@
 # additive-guis
 
-This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization). This is a prototype. There is also a live Javascript demo in `layout/layouter.html`.
+This repository renders bootstrap layouts as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization). This is a prototype. There is also a live Javascript demo in `layout/layouter.html`. They are both still in development. I'm trying to fix a recursion bug in the Javascript version.
 
 ## declarative layouts - build layouts with statements rendering to HTML
 
