@@ -34,7 +34,7 @@ The widget should be to the right of another widget.
 
 # above
 
-The wiget appears somewhere above - nearer the top of the screen compared to the other widget.
+The widget appears somewhere above - nearer the top of the screen compared to the other widget.
 
 # under
 
