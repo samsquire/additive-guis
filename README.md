@@ -17,7 +17,7 @@ Why is it important that the tuples are monotonically increasing? This is due to
  * Widget HTML is produced through mapping and filtering collections as per a React GUI.
  * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
  * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping JSON data collection to UI widgets.
- * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
+ * **Creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
  
  # GUIs that multiple people can hack on without trampling eachother's changes
  
