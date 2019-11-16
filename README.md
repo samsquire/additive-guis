@@ -78,8 +78,6 @@ blog_post.json
 		[
 			"header hasSize 12",
 			"menu hasSize 12",
-			"header centered screen",
-			"menu centered screen",
 			"header above menu",
 			"menu above heroPost",
 			"heroPost above featuredPosts",
@@ -87,7 +85,8 @@ blog_post.json
 		],
 		[
 			"blogs hasSize 8",
-			"blogSidebar hasSize 4"
+			"blogSidebar hasSize 4",
+			"blogSidebar rightOf blogs"
 		]
 	],
 	"widgets": {
@@ -116,12 +115,6 @@ blog_post.json
 			],
 			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
 		},
-		"categoryA": {
-			"html": "<strong class=\"d-inline-block mb-2 text-primary\">World<\/strong>"
-		},
-		"categoryB": {
-			"html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology<\/strong>"
-		},
 		"featuredPostContentA": {
 			"predicates": [
 				"categoryA above featuredPostHeadingA",
@@ -140,30 +133,7 @@ blog_post.json
 			],
 			"classes": "card-body d-flex flex-column align-items-start"
 		},
-		"featuredIntroA": {
-			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
-		},
-		"featuredIntroB": {
-			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
-		},
-		"featuredPostHeadingA": {
-			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
-		},
-		"featuredPostHeadingB": {
-			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
-		},
-		"featuredPostDateA": {
-			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
-		},
-		"featuredPostDateB": {
-			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
-		},
-		"imageA": {
-			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
-		},
-		"imageB": {
-			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
-		},
+		
 		"menu": {
 			"predicates": [
 				"siblings hasDefaultSize 1",
@@ -198,7 +168,7 @@ blog_post.json
 		]},
 		"blogSidebar": {
 			"predicates": [
-				"aboutSection centered screen"
+				"aboutSection hasSize 12"
 			],
 			"classes": "bg-light"
 		},
@@ -224,7 +194,36 @@ blog_post.json
 		"logo": {
 			"html": "<h1 class=\"blog-header-logo\">Large</h1>"
 		},
-
+"categoryA": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">World<\/strong>"
+		},
+		"categoryB": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology<\/strong>"
+		},
+		"featuredIntroA": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredIntroB": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredPostHeadingA": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostHeadingB": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostDateA": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"featuredPostDateB": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"imageA": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+		"imageB": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
 
 		"heroText": {
 			"html": "<h2>Title of a longer featured blog post</h2>"
