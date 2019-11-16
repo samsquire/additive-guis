@@ -4,7 +4,7 @@ This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.co
 
 ## declarative layouts - build layouts with statements rendering to HTML
 
-GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layouter.html` is a live implementation example. S
+GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by RDF N3 tuples and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layouter.html` is a live implementation example.
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
@@ -16,7 +16,7 @@ Why is it important that the tuples are monotonically increasing? This is due to
  * Each predicate changes the tree where rendered HTML will be placed.
  * Widget HTML is produced through mapping and filtering collections as per a React GUI.
  * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
- * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping data with respect to a data source collection.
+ * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping JSON data to UI widgets with respect to a data source collection.
  * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
  
  # GUIs that multiple people can hack on without trampling eachother's changes
