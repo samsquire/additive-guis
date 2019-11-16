@@ -137,17 +137,17 @@ blog_post.json
 		"menu": {
 			"predicates": [
 				"siblings hasDefaultSize 1",
-				"U.S. rightOf World",
-				"Technology rightOf U.S.",
-				"Design rightOf Technology",
-				"Culture rightOf Design",
-				"Business rightOf Culture",
-				"Politics rightOf Business",
-				"Opinion rightOf Politics",
-				"Science rightOf Opinion",
-				"Health rightOf Science",
-				"Style rightOf Health",
-				"Travel rightOf Style"
+				"U.S. order 1",
+				"Technology order 2",
+				"Design order 3",
+				"Culture order 4",
+				"Business order 5",
+				"Politics order 6",
+				"Opinion order 7",
+				"Science order 8",
+				"Health order 9",
+				"Style order 10",
+				"Travel order 11"
 			]
 		},
 		"heroPost": {
