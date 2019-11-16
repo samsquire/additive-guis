@@ -570,9 +570,12 @@ function layout_page(predicates, classes) {
 			model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject > object});
 		}
 		if (operand === "order") {
-			
-			model.addConstraint([subject + "_x"], function (subject) {			return subject == object});
-			
+			var bind = function(order) {
+				model.addConstraint([subject + "_x"], function (value) {
+				return value === Number(order)
+			});
+			}
+			bind(object);
 			
 		}
 		if (operand === "rightOf") {
@@ -608,7 +611,7 @@ function layout_page(predicates, classes) {
 	var rows = Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (row) {
 		var item = grouped[row];
 		
-		var colChildren = item.sort(function (a, b)  { return a.x < b.x ? 1 : -1 }).map(function (cell) {
+		var colChildren = item.sort(function (a, b)  { return a.x < b.x ? -1 : 1 }).map(function (cell) {
 			var contents = cell.item;
 			var attr = {className: "col"}
 			var size;
