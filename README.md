@@ -8,6 +8,22 @@ GUIs are buildable through declarative tuples where each statement changes the l
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of CRDT sets whereby they can be changed indepependly on different machines and merged safely without conflict. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
+# The dream - Build GUIs with microblogging (or twitter tweets)
+
+**What you say is what you get** - you make statements about the output of layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
+* **Update GUIs while they are running** I want to be able to introduce widgets to a running GUI with predicates.
+* **Community written GUIs** I want a community of people updating and customizing GUIs at the same time by lots of people via simple predicates.
+ * Each predicate changes the tree where rendered HTML will be placed.
+ * Widget HTML is produced through mapping and filtering collections as per a React GUI.
+ * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
+ * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping data with respect to a data source collection.
+ * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
+ 
+ # GUIs that multiple people can hack on without trampling eachother's changes
+ 
+Changing the layout is accomplished by adding statements or removing statements.
+ 
+
 ## Quickstart - predicates
 
 Rules in additive GUIs look like this - you describe the propositions of each widget on the screen and let the computer generate the layout.
@@ -246,21 +262,7 @@ And we can produce the following HTML page from the above predicates.
 
 ![additive-gui-1.png](additive-gui-1.png)
 
-# The dream - Build GUIs with microblogging (or twitter tweets)
 
-**What you say is what you get** - you make statements about the output of layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
-* **Update GUIs while they are running** I want to be able to introduce widgets to a running GUI with predicates.
-* **Community written GUIs** I want a community of people writing manipulable GUIs by lots of people via simple predicates.
- * Each predicate changes the tree where rendered HTML will be placed.
- * Widget HTML is produced through mapping and filtering collections as per a React GUI.
- * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
- * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join. Each component on the screen is mapping data with respect to a data source collection.
- * **Modifying running GUIs and creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
- 
- # GUIs that multiple people can hack on without trampling eachother's changes
- 
-Changing the layout is accomplished by adding statements or removing statements.
- 
  # Interactive predicate join
  
 Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. To render this in a React component, we could have Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer React components. Each of these components has a render function that maps data (props) to HTML elements via JSX. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
