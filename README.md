@@ -272,7 +272,7 @@ There are a number of ways a declarative UI would allow changes online, while th
 
 * After selecting a source widget, I should be able to interrogate what context is available at a point I selected. The context is the lists being mapped over.
 
-How do I insert a widget in between a React managed render function? Do I need to update the JSX?
+If the user selects an inner part of a rendered React component, how do I change the predicates to insert some thing inside the output of a React component? Or can only insert things around a React component as a whole.
  
  ## Spreadsheet editor
  
