@@ -280,6 +280,8 @@ How do I insert a widget in between a React managed render function? Do I need t
  
  # Example of a predicate join
  
+ This is not implemented yet.
+ 
  This is an example, you have a form object with fields inside and you have an errors object with errors for each field. To join them together, you could use a predicate like this:
  
 
