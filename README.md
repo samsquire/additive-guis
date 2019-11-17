@@ -36,7 +36,7 @@ submitTodo rightOf todoField
 
 * **Each rule is relative to every other rule simultaneously**
 * Predicates are currently three words long. These are are subject predicate object. A widget is created by mentioning it and defined further in the `widgets` key below.
-* The rules together produce an emergent layout together.
+* The rules together produce an emergent layout.
 
 Here's a list of predicates implemented so far:
 
@@ -59,6 +59,10 @@ The widget should appear directly underneath.
 # below
 
 The widget appears on the screen after this widget but not necessarily directly underneath.
+
+# order
+
+The wiget appears at this position along the X axis.
 
 ## Tweaking
 
