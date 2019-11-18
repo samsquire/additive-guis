@@ -60,6 +60,8 @@ def layout_page(predicates, classes):
             continue
         if operand == "hasSize":
             continue
+        if operand == "order":
+            continue
         if object not in objects:
             objects[object] = model.NewIntVar(0, 1000, 'x/' + object)
             heights[object] = model.NewIntVar(0, 1000, 'y/' + subject)
@@ -83,11 +85,15 @@ def layout_page(predicates, classes):
         if operand == "hasSize":
             model.Add(end_vars[subject] == objects[subject] + size_vars[subject])
             continue
+      
         if operand == "is":
             continue
         if object == "screen":
             continue
         subject_var = objects[subject]
+        if operand == "order":
+            model.Add(subject_var == int(object))
+            continue
         object_var = objects[object]
         subject_height_var = heights[subject]
         object_height_var = heights[object]

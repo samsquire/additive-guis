@@ -3,8 +3,6 @@
 		[
 			"header hasSize 12",
 			"menu hasSize 12",
-			"header centered screen",
-			"menu centered screen",
 			"header above menu",
 			"menu above heroPost",
 			"heroPost above featuredPosts",
@@ -12,7 +10,8 @@
 		],
 		[
 			"blogs hasSize 8",
-			"blogSidebar hasSize 4"
+			"blogSidebar hasSize 4",
+			"blogSidebar rightOf blogs"
 		]
 	],
 	"widgets": {
@@ -63,18 +62,17 @@
 		"menu": {
 			"predicates": [
 				"siblings hasDefaultSize 1",
-				"Sam leftOf World",
-				"U.S. rightOf World",
-				"Technology rightOf U.S.",
-				"Design rightOf Technology",
-				"Culture rightOf Design",
-				"Business rightOf Culture",
-				"Politics rightOf Business",
-				"Opinion rightOf Politics",
-				"Science rightOf Opinion",
-				"Health rightOf Science",
-				"Style rightOf Health",
-				"Travel rightOf Style"
+				"U.S. order 1",
+				"Technology order 2",
+				"Design order 3",
+				"Culture order 4",
+				"Business order 5",
+				"Politics order 6",
+				"Opinion order 7",
+				"Science order 8",
+				"Health order 9",
+				"Style order 10",
+				"Travel order 11"
 			]
 		},
 		"heroPost": {
@@ -95,7 +93,7 @@
 		]},
 		"blogSidebar": {
 			"predicates": [
-				"aboutSection centered screen"
+				"aboutSection hasSize 12"
 			],
 			"classes": "bg-light"
 		},

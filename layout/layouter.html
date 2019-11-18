@@ -351,17 +351,17 @@ var data = {
 		"menu": {
 			"predicates": [
 				"siblings hasDefaultSize 1",
-				"U.S. order 1",
-				"Technology order 2",
-				"Design order 3",
-				"Culture order 4",
-				"Business order 5",
-				"Politics order 6",
-				"Opinion order 7",
-				"Science order 8",
-				"Health order 9",
-				"Style order 10",
-				"Travel order 11"
+				"U.S. order 0",
+				"Technology order 1",
+				"Design order 2",
+				"Culture order 3",
+				"Business order 4",
+				"Politics order 5",
+				"Opinion order 6",
+				"Science order 7",
+				"Health order 8",
+				"Style order 9",
+				"Travel order 10"
 			]
 		},
 		"heroPost": {
@@ -466,6 +466,34 @@ widgets = data["widgets"]
 all_predicates = data["predicates"]
 
 document.getElementById("input").value = JSON.stringify(data, null, 4);
+
+function filler(column) {
+	var newColumns = [];
+
+	for (var j = 0; j < column.length ; j++) {
+		var expectedX = 0;
+		var newItems = [];
+		var items = column[j];
+		for (var i = 0; i < items.length; i++) {
+			var item = items[i];
+		
+			if (item.x > expectedX) {
+				
+				for (var k = expectedX; k < item.x; k++) {
+					newItems.push({item: 'filler' + expectedX, y: item.y, x: expectedX, filler: true});
+					expectedX = expectedX + 1;
+				}
+				expectedX = item.x + 1;
+				newItems.push(item);
+			} else {
+				newItems.push(item);
+				expectedX = expectedX + 1;
+			}
+		}
+		newColumns.push(newItems);
+	}
+	return newColumns;
+}
 
 function layout_page(predicates, classes) {
 	model = new Problem();
@@ -590,7 +618,7 @@ function layout_page(predicates, classes) {
 	
 	
 	var answer = model.getSolution();
-
+    console.log(answer);
 	ordered = {}
 	hoz_positions = {}
 	vert_positions = {}
@@ -608,11 +636,15 @@ function layout_page(predicates, classes) {
 	}
 	var grouped = groupBy(Object.values(cache), 'y');
 
-	var rows = Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (row) {
-		var item = grouped[row];
-		
+	var rows = filler(Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (item) {
+		return grouped[item];
+	})).map(function (item) {
+	
 		var colChildren = item.sort(function (a, b)  { return a.x < b.x ? -1 : 1 }).map(function (cell) {
 			var contents = cell.item;
+			if (cell.hasOwnProperty("filler")) {
+				contents = "";
+			}
 			var attr = {className: "col"}
 			var size;
 			
