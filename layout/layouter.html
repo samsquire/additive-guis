@@ -583,7 +583,7 @@ function layout_page(predicates, classes) {
         object_height_var = heights[object]
 		
 		if (operand === "under") {
-            model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject > object; });
+            model.addConstraint([subject + "_y", object + "_y", subject + "_x", object + "_x"], function (subject_y, object_y, subject_x, object_x) { return subject_y > object_y && subject_x == object_x });
 		}
 		
 		if (operand === "leftOf") {
