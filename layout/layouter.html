@@ -272,7 +272,7 @@ https://github.com/njoubert/csp.js
       var valid = true;
       if (checkAssignment(nextVar, val)) {
         assignments[nextVar.name] = val;
-		console.log(assignments);
+		
         if (this.solve(assignments, variables, constraints, single)) {
           if (single) {
             return true
