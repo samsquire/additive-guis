@@ -272,12 +272,14 @@ https://github.com/njoubert/csp.js
       var valid = true;
       if (checkAssignment(nextVar, val)) {
         assignments[nextVar.name] = val;
+		console.log(assignments);
         if (this.solve(assignments, variables, constraints, single)) {
           if (single) {
             return true
           }
         }
-        delete assignments[nextVar.name];
+        } else {
+			delete assignments[nextVar.name];
       }
     }
     return false;
@@ -583,19 +585,19 @@ function layout_page(predicates, classes) {
         object_height_var = heights[object]
 		
 		if (operand === "under") {
-            model.addConstraint([subject + "_y", object + "_y", subject + "_x", object + "_x"], function (subject_y, object_y, subject_x, object_x) { return subject_y > object_y && subject_x == object_x });
+            model.addConstraint([subject + "_y", object + "_y", subject + "_x", object + "_x"], function (subject_y, object_y, subject_x, object_x) { return subject_y > object_y && subject_x === object_x });
 		}
 		
 		if (operand === "leftOf") {
-            model.addConstraint([subject + "_x", object + "_x"], function (subject, object) { return subject < object; });
+            model.addConstraint([subject + "_x", object + "_x"], function (subject_x, object_x) { return subject_x < object_x; });
 		}
 		if (operand === "above") {
 			// model.Add(subject_height_var < object_height_var )
-			model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject < object});	
+			model.addConstraint([subject + "_y", object + "_y"], function (subject_y, object_y) { return subject_y < object_y});	
 		}
 		
 		if (operand === "below") {
-			model.addConstraint([subject + "_y", object + "_y"], function (subject, object) { return subject > object});
+			model.addConstraint([subject + "_y", object + "_y"], function (subject_y, object_y) { return subject_y > object_y});
 		}
 		if (operand === "order") {
 			var bind = function(order) {
@@ -607,11 +609,11 @@ function layout_page(predicates, classes) {
 			
 		}
 		if (operand === "rightOf") {
-			model.addConstraint([subject + "_x", object + "_x"], function (subject, object) { return subject > object});
+			model.addConstraint([subject + "_x", object + "_x"], function (subject_x, object_x) { return subject_x > object_x});
 		}
 		if (operand === "sameRowAs") {
-			model.addConstraint([subject + "_y", object + "_y"], function () {
-			return subject === object;
+			model.addConstraint([subject + "_y", object + "_y"], function (subject_y, object_y) {
+			return subject_y === object_y;
 			});
 		}
 	}
