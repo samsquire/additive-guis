@@ -279,7 +279,7 @@ https://github.com/njoubert/csp.js
           }
         }
         } else {
-			delete assignments[nextVar.name];
+			
       }
     }
     return false;
@@ -638,7 +638,7 @@ function layout_page(predicates, classes) {
 	}
 	var grouped = groupBy(Object.values(cache), 'y');
 
-	var rows = filler(Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? 1 : -1 }).map(function (item) {
+	var rows = filler(Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? -1 : 1 }).map(function (item) {
 		return grouped[item];
 	})).map(function (item) {
 	
