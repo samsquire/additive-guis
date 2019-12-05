@@ -1,0 +1,275 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>additive-guis live</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.10.2/umd/react.development.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.10.2/umd/react-dom.development.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
+	
+	<style>
+	#input {
+		float: left;
+		top: 0px;
+		width: 30vw;
+		height: 100vh;
+		position: sticky;
+	}
+	#output {
+		width: 100%;
+		margin-top: 0;
+		margin-left: 30vw;
+		overflow: scroll;
+		position: absolute;
+		top: 0px;
+	}
+	</style>
+
+</head>
+
+<body>
+<textarea id="input"></textarea>
+<div id="output"></div>
+<script>
+// https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
+var groupBy = function(xs, key) {
+  return xs.reduce(function(rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+
+// Sam Squire
+
+var data = {
+	"predicates": [
+		[
+			"header hasSize 12",
+			"menu hasSize 12",
+			"header above menu",
+			"menu above heroPost",
+			"heroPost above featuredPosts",
+			"heroPost hasSize 12"
+		],
+		[
+			"blogs hasSize 8",
+			"blogSidebar hasSize 4",
+			"blogSidebar rightOf blogs"
+		]
+	],
+	"widgets": {
+		"header": {
+			"predicates": [
+				"logo hasSize 12"
+			],
+			"classes": "blog-header py-3 justify-content-between align-items-center text-center"
+		},
+		"featuredPosts": {
+			"predicates": [
+				"featuredPostA hasSize 6",
+				"featuredPostB hasSize 6",
+				"featuredPostB rightOf featuredPostA"
+			]
+		},
+		"featuredPostB": {
+			"predicates": [
+				"featuredPostContentB leftOf imageB"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostA": {
+			"predicates": [
+				"featuredPostContentA leftOf imageA"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostContentA": {
+			"predicates": [
+				"categoryA above featuredPostHeadingA",
+				"featuredPostHeadingA above featuredPostDateA",
+				"featuredPostDateA above featuredIntroA",
+				"featuredPostDateA below categoryA"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		"featuredPostContentB": {
+			"predicates": [
+				"categoryB above featuredPostHeadingB",
+				"featuredPostHeadingB above featuredPostDateB",
+				"featuredPostDateB above featuredIntroB",
+				"featuredPostDateB below categoryB"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		
+		"menu": {
+			"predicates": [
+				"siblings hasDefaultSize 1",
+				"U.S. order 0",
+				"Technology order 1",
+				"Design order 2",
+				"Culture order 3",
+				"Business order 4",
+				"Politics order 5",
+				"Opinion order 6",
+				"Science order 7",
+				"Health order 8",
+				"Style order 9",
+				"Travel order 10"
+			]
+		},
+		"heroPost": {
+			"predicates": [
+				"heroText above continueReadingLink"
+			],
+			"classes": "jumbotron p-3 p-md-5 text-white rounded bg-dark"
+		},
+		"blogs": {
+			"predicates": [
+				"introduction above blogPost"
+			]
+		},
+		"blogPost": {
+			"predicates": [
+				"blogHeading above postMetadata",
+				"posting under postMetadata"
+		]},
+		"blogSidebar": {
+			"predicates": [
+				"aboutSection hasSize 12"
+			],
+			"classes": "bg-light"
+		},
+		"aboutSection": {
+			"predicates": [
+				"aboutTitle above aboutText",
+				"aboutText hasSize 12"
+			]
+		},
+		"blogHeading": {
+			"html": "<h1>Sample blog post</h1>"
+		},
+		"postMetadata": {
+			"html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+		},
+		"posting": {
+			"html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.<\/p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes<\/a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.<\/p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis<\/strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.<\/p>\r\n            <\/blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna<\/em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.<\/p>\r\n            <h2>Heading<\/h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<\/p>\r\n            <pre><code>Example code block<\/code><\/pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.<\/p>\r\n            <ul>"
+		},
+
+		"introduction": {
+			"html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic"
+		},
+		"logo": {
+			"html": "<h1 class=\"blog-header-logo\">Large</h1>"
+		},
+"categoryA": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">World<\/strong>"
+		},
+		"categoryB": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology<\/strong>"
+		},
+		"featuredIntroA": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredIntroB": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredPostHeadingA": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostHeadingB": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostDateA": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"featuredPostDateB": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"imageA": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+		"imageB": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+
+		"heroText": {
+			"html": "<h2>Title of a longer featured blog post</h2>"
+		},
+		"continueReadingLink": {
+			"html": "<a href=\"featured-post-a\">Continue reading</a>"
+		},
+
+		"featureTextA": {
+			"html": "<h3>Some interesting article 1</h3>"
+		},
+		"featureTextB": {
+			"html": "<h3>Some interesting article 2</h3>"
+		},
+
+		"aboutText": {
+			"html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+		},
+		"aboutTitle": {
+			"html": "<h4 class=\"font-italic\">About</h4>"
+		}
+	}
+}
+
+
+document.getElementById("input").value = JSON.stringify(data, null, 4);
+
+
+var containers = []
+for (var i = 0; i < all_predicates.length; i++) {
+	var container = document.createElement("div");
+	containers.push(container);
+	document.getElementById("output").appendChild(container);
+}
+
+var inputField = document.getElementById("input");
+inputField.addEventListener('change', async function () {
+	
+	data = JSON.parse(inputField.value);
+	widgets = data["widgets"];
+	all_predicates = data["predicates"];
+		
+	const response = await fetch("http://localhost:5000/", {
+		method: "POST",
+		mode: "cors",
+		headers: new Headers({
+			'Accept': 'text/plain', 
+			"Content-Type": "application/json"
+		}),
+		body: JSON.stringify(data)
+	});
+
+	const text = await response.text();
+
+	output.innerHTML = text;
+
+});
+function rerender() {
+	for (var i = 0; i < all_predicates.length; i++) {
+		var group = all_predicates[i];
+		var container = layout_page(group, "");
+		var output = containers[i];
+		
+		ReactDOM.render(container, output);
+	}
+}
+</script>
+
+
+
+
+</body>
+</html>
