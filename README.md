@@ -62,7 +62,7 @@ The widget appears on the screen after this widget but not necessarily directly 
 
 # order
 
-The wiget appears at this position along the X axis.
+The widget appears at this position along the X axis.
 
 ## Tweaking
 
