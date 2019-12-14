@@ -102,7 +102,6 @@ util = {
       }
       return ret;
     }
-
  
 }
 /*
@@ -120,7 +119,6 @@ https://github.com/njoubert/csp.js
   Variable.prototype.toString = function() {
     return "" + this.name + " => [" + this.domain.toString() + "]";
   }
-
   /* 
    * Constraint 
    */
@@ -153,7 +151,6 @@ https://github.com/njoubert/csp.js
       throw new Error("Attempted to change a nonexistant variable.");
     }
   }
-
   Problem.prototype.addConstraint = function(variables, fn) {
       if (variables.length == 0) {
           return;
@@ -168,7 +165,6 @@ https://github.com/njoubert/csp.js
   Problem.prototype.getSolution = function() {
     return this.solver.getSolution(this);
   }
-
   Problem.prototype.getSolutions = function() {
     return this.solver.getSolutions(this);
   }
@@ -186,19 +182,24 @@ https://github.com/njoubert/csp.js
   
   RecursiveBacktrackingSolver.prototype.getSolution = function(csp) {
     var assignment = {}
-    if (this.solve(assignment, csp.variables, csp.constraints, true)) {
+	var unassigned = {}
+	for (var variable in csp.variables) {
+		console.log("Assigning variable", variable, csp.variables[variable].domain[0]);
+		assignment[variable] = csp.variables[variable].domain[0];
+	}
+    if (this.solve(assignment, csp.variables, csp.constraints, true, unassigned)) {
+		console.log("Returning successfully");
       return assignment;
     } else {
+		console.log("Unsatisfied");
       return {};
     }
   }
-
   RecursiveBacktrackingSolver.prototype.getSolutions = function(csp) {
     this.allAssignments = [];
     this.solve({}, csp.variables, csp.constraints, false);
     return this.allAssignments;
   }
-
   RecursiveBacktrackingSolver.prototype.getSolutionIter = function(csp) {
     throw {
       error: "Unsupported",
@@ -206,7 +207,7 @@ https://github.com/njoubert/csp.js
     }
   }
   
-  RecursiveBacktrackingSolver.prototype.solve = function(assignments, variables, constraints, single) {
+  RecursiveBacktrackingSolver.prototype.solve = function(assignments, variables, constraints, single, unassigned) {
     
     
     
@@ -215,80 +216,68 @@ https://github.com/njoubert/csp.js
       
     }
     
-    if (Object.keys(assignments).length === Object.keys(variables).length) {
-      if (!single) {
-        this.allAssignments.push(util.hashcopy(assignments));
-      }
-      return true;
-    }
-    //find the next variable
-    var nextVar = null;
-    for (v in variables) {
-      var found = false;
-      for (a in assignments) {
-        if (v === a) {
-          found = true;
-        }
-      }
-      if (!found) {
-        nextVar = variables[v];
-        break;
-      }
-    }
-    
-    function checkAssignment(nextVar, val) {
-      assignments[nextVar.name] = val;
-      for (var c in constraints) {
-        args = []
-        var valid = true;
-        
-        //try to build the argument list for this constraint...
-        for (var k in constraints[c].variables) {
-          var fp = constraints[c].variables[k];
-          if (typeof assignments[fp] != "undefined") {
-            args.push(assignments[fp]);
-          } else {
-            valid = false;
-            break;
-          }
-        }
-        
-        if (valid) {
-          //we can check it, so check it.
-          if (!constraints[c].fn.apply(null,args)) {
-            delete assignments[nextVar.name];
-            return false;
-          }
-        }
-
-      }
-      delete assignments[nextVar.name];
-      return true;
-    }
-    
+	function minimum(left, right) {
+		if (left === null) { return right; }
+		var score = 0;
+		for (key in right) {
+			if (left[key] < right[key]) { score--; }
+			if (right[key] < left[key]) { score++; }
+		}
+		if (score > 0) { return Object.assign({}, right); }
+		if (score <= 0) { return Object.assign({}, left); }
+	}
+	
+	var minSoFar = null;
+	var domain;
+	var otherDomain;
     //now try the values in its domain
-    for (var j in nextVar.domain) {
-      var val = nextVar.domain[j];
-      var valid = true;
-      if (checkAssignment(nextVar, val)) {
-        assignments[nextVar.name] = val;
-		
-        if (this.solve(assignments, variables, constraints, single)) {
-          if (single) {
-            return true
-          }
-        }
-        } else {
+	for (variable in variables) {
+		for (var i = 0; i < variables[variable].domain.length; i++) {
+			domain = variables[variable].domain[i];
+			assignments[variable] = domain;
 			
-      }
-    }
-    return false;
+			for (otherVariable in variables) {
+				
+				for (var j = 0; j < variables[otherVariable].domain.length; j++) {
+					
+					otherDomain = variables[otherVariable].domain[j];
+					if (variable == otherVariable) { continue; }
+					assignments[otherVariable] = otherDomain;
+					var valid = true;
+					
+					for (var c in constraints) {
+						var args = []
+						for (var k in constraints[c].variables) {
+						  var fp = constraints[c].variables[k];
+						  if (typeof assignments[fp] != "undefined") {
+							args.push(assignments[fp]);
+						  } else {
+							break;
+						  }
+						}
+											
+						if (!constraints[c].fn.apply(null,args)) {
+							valid = false;
+							break;
+						}
+						
+					}
+					if (valid) {
+						console.log(assignments);
+						minSoFar = minimum(minSoFar, assignments);
+					}
+				}
+			}
+		}
+
+	}
+	console.log(minSoFar);
+	assignments = Object.assign(assignments, minSoFar);
+	return true;
     
   }
   
-
 // Sam Squire
-
 var data = {
 	"predicates": [
 		[
@@ -403,7 +392,6 @@ var data = {
 		"posting": {
 			"html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.<\/p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes<\/a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.<\/p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis<\/strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.<\/p>\r\n            <\/blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna<\/em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.<\/p>\r\n            <h2>Heading<\/h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<\/p>\r\n            <pre><code>Example code block<\/code><\/pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.<\/p>\r\n            <ul>"
 		},
-
 		"introduction": {
 			"html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic"
 		},
@@ -440,21 +428,18 @@ var data = {
 		"imageB": {
 			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
 		},
-
 		"heroText": {
 			"html": "<h2>Title of a longer featured blog post</h2>"
 		},
 		"continueReadingLink": {
 			"html": "<a href=\"featured-post-a\">Continue reading</a>"
 		},
-
 		"featureTextA": {
 			"html": "<h3>Some interesting article 1</h3>"
 		},
 		"featureTextB": {
 			"html": "<h3>Some interesting article 2</h3>"
 		},
-
 		"aboutText": {
 			"html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
 		},
@@ -463,15 +448,11 @@ var data = {
 		}
 	}
 }
-
 widgets = data["widgets"]
 all_predicates = data["predicates"]
-
 document.getElementById("input").value = JSON.stringify(data, null, 4);
-
 function filler(column) {
 	var newColumns = [];
-
 	for (var j = 0; j < column.length ; j++) {
 		var expectedX = 0;
 		var newItems = [];
@@ -496,11 +477,10 @@ function filler(column) {
 	}
 	return newColumns;
 }
-
 function layout_page(predicates, classes) {
 	model = new Problem();
 	var domain = [];
-	for (var i=0; i < 200; i++) {
+	for (var i=0; i < 15; i++) {
 		domain.push(i);
 	}
 	
@@ -592,7 +572,6 @@ function layout_page(predicates, classes) {
             model.addConstraint([subject + "_x", object + "_x"], function (subject_x, object_x) { return subject_x < object_x; });
 		}
 		if (operand === "above") {
-			// model.Add(subject_height_var < object_height_var )
 			model.addConstraint([subject + "_y", object + "_y"], function (subject_y, object_y) { return subject_y < object_y});	
 		}
 		
@@ -637,10 +616,9 @@ function layout_page(predicates, classes) {
 		cache[item].item = item;
 	}
 	var grouped = groupBy(Object.values(cache), 'y');
-
-	var rows = filler(Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? -1 : 1 }).map(function (item) {
+	var rows = Object.keys(grouped).sort(function (a, b) { return a.y < b.y ? -1 : 1 }).map(function (item) {
 		return grouped[item];
-	})).map(function (item) {
+	}).map(function (item) {
 	
 		var colChildren = item.sort(function (a, b)  { return a.x < b.x ? -1 : 1 }).map(function (cell) {
 			var contents = cell.item;
@@ -660,7 +638,6 @@ function layout_page(predicates, classes) {
 			}
 			
 			if (renderData.hasOwnProperty("html")) {
-
 				attr["dangerouslySetInnerHTML"] = {
 					"__html": renderData["html"]
 				}
@@ -686,14 +663,12 @@ function layout_page(predicates, classes) {
 	var container = React.createElement('div', {className: "container " + classes }, rows);
 	return container;
 }
-
 var containers = []
 for (var i = 0; i < all_predicates.length; i++) {
 	var container = document.createElement("div");
 	containers.push(container);
 	document.getElementById("output").appendChild(container);
 }
-
 var inputField = document.getElementById("input");
 inputField.addEventListener('change', function () {
 	
@@ -719,3 +694,4 @@ rerender();
 
 </body>
 </html>
+
