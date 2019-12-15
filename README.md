@@ -1,6 +1,6 @@
 # additive-guis
 
-This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter.html`. They are both still in development. I'm trying to fix a significant bug in the Javascript version. The Javascript version uses [njoubert's csp.js - constraint satisfaction problem solver](https://github.com/njoubert/csp.js) and React to render.
+This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter.html`. They are both still in development. I'm trying to fix a significant bug in the Javascript version. The Javascript version uses a brute forcing approach to work.
 
 ## declarative layouts - build layouts with statements rendering to HTML
 
