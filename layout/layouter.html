@@ -230,31 +230,20 @@ https://github.com/njoubert/csp.js
 	var minSoFar = null;
 
 	/* https://stackoverflow.com/a/59342622/10662977 */
-	function getCartesian(object) {
-		return Object.entries(object).reduce((r, [k, v]) => {
-        var temp = [];
-        r.forEach(s =>
-            (Array.isArray(v) ? v : [v]).forEach(w =>
-                (w && typeof w === 'object' ? getCartesian(w) : [w]).forEach(x =>
-                    temp.push(Object.assign({}, s, { [k]: x }))
-                )
-            )
-        );
-        return temp;
-    }, [{}]);
+	function* cartesian(keys, values, k = 0, tmp = {}) {
+	  if (k >= keys.length) {
+		yield { ...tmp }
+	  } else {
+		for (let i = 0; i < values.length; i++) {
+		  Object.assign(tmp, { [keys[k]]: values[i] })
+		  yield* cartesian(keys, values, k + 1, tmp)
+		}
+	  }
 	}
 	
-    // data = { aboutTitle_x: values, aboutTitle_y: values };
-	var data = {};
-	for (var v in variables) {
-		var variable = variables[v];
-		data[v] = variable.domain;
-		
-	}
-    cartesian = getCartesian(data);
 
-	for (var item in cartesian) {
-		assignments = Object.assign(assignments, cartesian[item]);
+	for (var item of cartesian(Object.keys(variables), [0,1,2,3,4,5])) {
+		assignments = Object.assign(assignments, item);
 		// console.log(assignments);
 		var valid = true;
 					
