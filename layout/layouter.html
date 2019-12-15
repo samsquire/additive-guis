@@ -38,7 +38,7 @@
 <body>
 <textarea id="input"></textarea>
 <div id="output"></div>
-<script>
+<script type="text/javascript">
 // https://stackoverflow.com/questions/14446511/most-efficient-method-to-groupby-on-an-array-of-objects
 var groupBy = function(xs, key) {
   return xs.reduce(function(rv, x) {
@@ -219,7 +219,7 @@ https://github.com/njoubert/csp.js
 	function minimum(left, right) {
 		if (left === null) { return right; }
 		var score = 0;
-		for (key in right) {
+		for (key in left) {
 			if (left[key] < right[key]) { score--; }
 			if (right[key] < left[key]) { score++; }
 		}
@@ -228,9 +228,68 @@ https://github.com/njoubert/csp.js
 	}
 	
 	var minSoFar = null;
+
+	/* https://stackoverflow.com/a/59342622/10662977 */
+	function getCartesian(object) {
+		return Object.entries(object).reduce((r, [k, v]) => {
+        var temp = [];
+        r.forEach(s =>
+            (Array.isArray(v) ? v : [v]).forEach(w =>
+                (w && typeof w === 'object' ? getCartesian(w) : [w]).forEach(x =>
+                    temp.push(Object.assign({}, s, { [k]: x }))
+                )
+            )
+        );
+        return temp;
+    }, [{}]);
+	}
+	
+    // data = { aboutTitle_x: values, aboutTitle_y: values };
+	var data = {};
+	for (var v in variables) {
+		var variable = variables[v];
+		data[v] = variable.domain;
+		
+	}
+    cartesian = getCartesian(data);
+
+	for (var item in cartesian) {
+		assignments = Object.assign(assignments, cartesian[item]);
+		// console.log(assignments);
+		var valid = true;
+					
+		for (var c in constraints) {
+			var args = []
+			for (var k in constraints[c].variables) {
+			  var fp = constraints[c].variables[k];
+			  
+			  if (typeof assignments[fp] != "undefined") {
+				args.push(assignments[fp]);
+			  } else {
+				break;
+			  }
+			}
+								
+			if (!constraints[c].fn.apply(null,args)) {
+				valid = false;
+				
+				break;
+			}
+			
+		}
+		if (valid) {
+			minSoFar = minimum(minSoFar, assignments);
+			break;
+		} else {
+		
+		}
+	}
+		
+	
+    //now try the values in its domain
+	/*
 	var domain;
 	var otherDomain;
-    //now try the values in its domain
 	for (variable in variables) {
 		for (var i = 0; i < variables[variable].domain.length; i++) {
 			domain = variables[variable].domain[i];
@@ -249,6 +308,7 @@ https://github.com/njoubert/csp.js
 						var args = []
 						for (var k in constraints[c].variables) {
 						  var fp = constraints[c].variables[k];
+						  
 						  if (typeof assignments[fp] != "undefined") {
 							args.push(assignments[fp]);
 						  } else {
@@ -258,6 +318,7 @@ https://github.com/njoubert/csp.js
 											
 						if (!constraints[c].fn.apply(null,args)) {
 							valid = false;
+							
 							break;
 						}
 						
@@ -265,14 +326,18 @@ https://github.com/njoubert/csp.js
 					if (valid) {
 						console.log(assignments);
 						minSoFar = minimum(minSoFar, assignments);
+					} else {
+					
 					}
 				}
 			}
 		}
 
 	}
-	console.log(minSoFar);
+	*/
+	console.log("Minimum found", minSoFar);
 	assignments = Object.assign(assignments, minSoFar);
+	console.log(assignments);
 	return true;
     
   }
@@ -341,18 +406,8 @@ var data = {
 		
 		"menu": {
 			"predicates": [
-				"siblings hasDefaultSize 1",
-				"U.S. order 0",
-				"Technology order 1",
-				"Design order 2",
-				"Culture order 3",
-				"Business order 4",
-				"Politics order 5",
-				"Opinion order 6",
-				"Science order 7",
-				"Health order 8",
-				"Style order 9",
-				"Travel order 10"
+				"siblings hasDefaultSize 1"
+		
 			]
 		},
 		"heroPost": {
@@ -480,7 +535,7 @@ function filler(column) {
 function layout_page(predicates, classes) {
 	model = new Problem();
 	var domain = [];
-	for (var i=0; i < 15; i++) {
+	for (var i=0; i < 5; i++) {
 		domain.push(i);
 	}
 	
