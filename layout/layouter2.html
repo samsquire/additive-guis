@@ -1,0 +1,446 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+
+  <title>additive-guis live</title>
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <link rel="stylesheet" href="css/styles.css?v=1.0">
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.10.2/umd/react.development.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.10.2/umd/react-dom.development.js" type="text/javascript"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+	<link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
+	
+	<style>
+	#input {
+		float: left;
+		top: 0px;
+		width: 30vw;
+		height: 100vh;
+		position: sticky;
+	}
+	#output {
+		width: 100%;
+		margin-top: 0;
+		margin-left: 30vw;
+		overflow: scroll;
+		position: absolute;
+		top: 0px;
+	}
+	</style>
+
+</head>
+
+<body>
+<textarea id="input"></textarea>
+<div id="output"></div>
+<script type="text/javascript">
+var groupBy = function(xs, key) {
+  return xs.reduce(function(rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+  }, {});
+};
+// Sam Squire
+var template = {
+	"predicates": [
+			"menu hasSize 12",
+			"heroPost hasSize 12",
+			"menu",
+			"featuredPosts",
+			"heroPost",
+			"header above menu",
+			"heroPost above featuredPosts",
+			"menu above heroPost",
+			"header",
+			"blogs hasSize 8",
+			"blogSidebar hasSize 4",
+			"blogSidebar rightOf blogs",
+			"featuredPosts above blogs",
+			"featuredPosts above blogSidebar",
+			"menu above featuredPosts"
+	
+	],
+	"widgets": {
+		"header": {
+			"predicates": [
+				"logo hasSize 12"
+			],
+			"classes": "blog-header py-3 justify-content-between align-items-center text-center"
+		},
+		"featuredPosts": {
+			"predicates": [
+				"featuredPostA hasSize 6",
+				"featuredPostB hasSize 6",
+				"featuredPostB rightOf featuredPostA"
+			]
+		},
+		"featuredPostB": {
+			"predicates": [
+				"featuredPostContentB leftOf imageB"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostA": {
+			"predicates": [
+				"featuredPostContentA leftOf imageA"
+			],
+			"classes": "card flex-md-row mb-4 box-shadow h-md-250"
+		},
+		"featuredPostContentA": {
+			"predicates": [
+				"categoryA above featuredPostHeadingA",
+				"featuredPostHeadingA above featuredPostDateA",
+				"featuredPostDateA above featuredIntroA",
+				"featuredPostDateA below categoryA"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		"featuredPostContentB": {
+			"predicates": [
+				"categoryB above featuredPostHeadingB",
+				"featuredPostHeadingB above featuredPostDateB",
+				"featuredPostDateB above featuredIntroB",
+				"featuredPostDateB below categoryB"
+			],
+			"classes": "card-body d-flex flex-column align-items-start"
+		},
+		
+		"menu": {
+			"predicates": [
+				"siblings hasDefaultSize 1"
+		
+			]
+		},
+		"heroPost": {
+			"predicates": [
+				"heroText above continueReadingLink"
+			],
+			"classes": "jumbotron p-3 p-md-5 text-white rounded bg-dark"
+		},
+		"blogs": {
+			"predicates": [
+				"introduction above blogPost"
+			]
+		},
+		"blogPost": {
+			"predicates": [
+				"blogHeading above postMetadata",
+				"posting under postMetadata"
+		]},
+		"blogSidebar": {
+			"predicates": [
+				"aboutSection hasSize 12"
+			],
+			"classes": "bg-light"
+		},
+		"aboutSection": {
+			"predicates": [
+				"aboutTitle above aboutText",
+				"aboutText hasSize 12"
+			]
+		},
+		"blogHeading": {
+			"html": "<h1>Sample blog post</h1>"
+		},
+		"postMetadata": {
+			"html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+		},
+		"posting": {
+			"html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.<\/p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes<\/a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.<\/p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis<\/strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.<\/p>\r\n            <\/blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna<\/em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.<\/p>\r\n            <h2>Heading<\/h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.<\/p>\r\n            <pre><code>Example code block<\/code><\/pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.<\/p>\r\n            <h3>Sub-heading<\/h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.<\/p>\r\n            <ul>"
+		},
+		"introduction": {
+			"html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>", "classes": "font-italic"
+		},
+		"logo": {
+			"html": "<h1 class=\"blog-header-logo\">Large</h1>"
+		},
+"categoryA": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">World<\/strong>"
+		},
+		"categoryB": {
+			"html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology<\/strong>"
+		},
+		"featuredIntroA": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredIntroB": {
+			"html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.<\/p>"
+		},
+		"featuredPostHeadingA": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostHeadingB": {
+			"html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post<\/a>\r\n              <\/h3>"
+		},
+		"featuredPostDateA": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"featuredPostDateB": {
+			"html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+		},
+		"imageA": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+		"imageB": {
+			"html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js\/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image\/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+		},
+		"heroText": {
+			"html": "<h2>Title of a longer featured blog post</h2>"
+		},
+		"continueReadingLink": {
+			"html": "<a href=\"featured-post-a\">Continue reading</a>"
+		},
+		"featureTextA": {
+			"html": "<h3>Some interesting article 1</h3>"
+		},
+		"featureTextB": {
+			"html": "<h3>Some interesting article 2</h3>"
+		},
+		"aboutText": {
+			"html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+		},
+		"aboutTitle": {
+			"html": "<h4 class=\"font-italic\">About</h4>"
+		}
+	}
+}
+
+function layout_page(template, data, classes) {
+
+	var Problem = function() {
+		this.variables = [];
+		this.lookup = {};
+		this.rules = [];
+	}
+
+	var Declaration = function (name) {
+		this.name = name;
+		this.x = 0;
+		this.y = 0;
+		this.size = "";
+		this.banned_y = []
+	}
+
+	Problem.prototype.addDeclaration = function (name) {
+		if (name == undefined) { debugger ; }
+		var createdDeclaration = new Declaration(name)
+		this.variables.push(createdDeclaration);
+		this.lookup[name] = createdDeclaration;
+		
+
+	};
+
+	var problem = new Problem();
+
+
+	for (var i = 0 ; i < data.length; i++) {
+		var item = data[i];
+		
+		var components = item.split(" ");
+			
+		if (components.length == 1) {
+			// declaration
+			if (!problem.lookup.hasOwnProperty(components[0])) {
+				problem.addDeclaration(components[0]);
+			}
+			
+		} else {
+			if (components[0] == "siblings") { continue }
+			
+			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
+			if (components[1] == "hasSize") { continue }
+			if (!problem.lookup.hasOwnProperty(components[2])) { problem.addDeclaration(components[2]); }
+		}
+	}
+
+	for (var i = 0 ; i < data.length; i++) {
+		var item = data[i];
+		
+		var components = item.split(" ");
+		
+		if (components[1] == "hasSize") {
+			problem.lookup[components[0]].size = components[2];
+				
+		}
+	}
+
+	Problem.prototype.addRule = function (left, right, mutator, comparator) {
+		this.rules.push([left, right, mutator, comparator]);
+		
+	}
+
+	Problem.prototype.solve = function () {
+		var settling = true;
+		var self = this;
+		var lastSorted = []; var sorted;
+		var comparators = [];
+
+		for (rule of this.rules) {
+			var left = rule[0];
+			var right = rule[1];
+			var mutator = rule[2];
+			var comparator = rule[3];
+			comparators.push(comparator);
+			
+			mutator(this.lookup[left], this.lookup[right]);
+			
+			}
+
+
+		var ordered = this.variables.sort(function (left, right) {
+			var score = 0;
+			for (var comparator of comparators) {
+				score += comparator(left, right);
+			}
+			return score;
+		});
+		
+		return ordered;
+	}
+
+
+	for (var i = 0 ; i < data.length; i++) {
+		var item = data[i];
+		
+		var components = item.split(" ");
+		if (components.length == 3) {
+			// rule
+			if (components[1] == "above") {
+			
+				problem.addRule(components[0], components[2],
+						function mutator(left, right) {
+							left.banned_y.push(right);
+							var difference = 1;
+							if (left.y > right.y) {
+								difference = left.y - right.y;
+								
+							}
+							left.y -= difference; right.y++;
+							var banned = true;
+							var someMatchOurY = true;	
+							
+						},
+					function (left, right) {
+					if (left.y < right.y) { return -1; } 
+					if (right.y > left.y) { return 1; }
+					return 0;
+				});
+			}
+			if (components[1] == "leftOf") {
+			
+				problem.addRule(components[0], components[2],
+						function mutator(left, right) {
+							var difference = 1;
+							if (left.x > right.x) {
+								difference = left.x - right.x;
+								
+							}
+							left.x -= difference + 1; right.x++
+						},
+					function (left, right) {
+					if (left.x < right.x) { return -1; } 
+					if (right.x > left.x) { return 1; }
+					return 0;
+				});
+			}
+			if (components[1] == "rightOf") {
+			
+				problem.addRule(components[0], components[2],
+						function mutator(left, right) {
+							var difference = 1;
+							if (left.x < right.x) {
+								difference = left.x - right.x;
+								
+							}
+							left.x += difference; right.x--;
+						},
+					function (left, right) {
+					if (left.x < right.x) { return 1; } 
+					if (right.x > left.x) { return -1; }
+					return 0;
+				});
+			}
+			
+		}
+	}
+	var ordered = problem.solve();
+	
+	var grouped = groupBy(ordered, 'y');
+	
+	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
+		
+		return grouped[item];
+	}).map(function (item) {
+		console.log(item);
+		var colChildren = item.sort(function (a, b)  { return Number(a.x) < Number(b.x) ? -1 : 1 }).map(function (cell) {
+			
+			var contents = cell.name;
+			
+			var attr = {className: "col"}
+			var size;
+			
+			size = cell.size;
+
+			attr["className"] += " col-md-" + size; 
+			
+			var renderData = {};
+			if (template.widgets.hasOwnProperty(cell.name)) { 
+				renderData = template.widgets[cell.name];
+			}
+			
+			if (renderData.hasOwnProperty("html")) {
+				attr["dangerouslySetInnerHTML"] = {
+					"__html": renderData["html"]
+				}
+				contents = null;
+			}
+			if (renderData.hasOwnProperty("predicates")) {
+				var classes = "";
+				if (renderData.hasOwnProperty("classes")) {
+					classes = renderData["classes"];
+					
+				}
+				contents = layout_page(template, renderData["predicates"], classes);
+				
+				return React.createElement("div", attr, contents);
+				
+			}
+			
+			return React.createElement("div", attr, contents);
+		});
+		return React.createElement("div", {className: "row"},colChildren);
+	})
+	
+	var container = React.createElement('div', {className: "container " + classes }, rows);
+	return container;
+}
+
+
+var output = document.getElementById("output");
+
+document.getElementById("input").value = JSON.stringify(template, null, 4);
+var inputField = document.getElementById("input");
+inputField.addEventListener('change', function () {
+	
+	template = JSON.parse(inputField.value);
+	widgets = template["widgets"];
+	all_predicates = template["predicates"];
+	rerender();
+});
+function rerender() {
+	ReactDOM.render(layout_page(template, template.predicates, ""), output);
+}
+rerender();
+</script>
+
+
+
+
+</body>
+</html>
+
