@@ -223,7 +223,6 @@ function layout_page(template, data, classes) {
 		this.x = 0;
 		this.y = 0;
 		this.size = "";
-		this.banned_y = []
 	}
 
 	Problem.prototype.addDeclaration = function (name) {
@@ -314,15 +313,13 @@ function layout_page(template, data, classes) {
 			
 				problem.addRule(components[0], components[2],
 						function mutator(left, right) {
-							left.banned_y.push(right);
 							var difference = 1;
 							if (left.y > right.y) {
 								difference = left.y - right.y;
 								
 							}
 							left.y -= difference; right.y++;
-							var banned = true;
-							var someMatchOurY = true;	
+				
 							
 						},
 					function (left, right) {
