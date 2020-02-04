@@ -446,13 +446,13 @@ function layout_page(template, data, classes) {
 	
 	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
 		console.log(grouped[item]);
-		return grouped[item];
+		return {key: item, items: grouped[item]};
 	}).map(function (item) {
-		var colChildren = item.sort(function (a, b)  { return Number(a.x) < Number(b.x) ? -1 : 1 }).map(function (cell) {
+		var colChildren = item.items.sort(function (a, b)  { return Number(a.x) < Number(b.x) ? -1 : 1 }).map(function (cell) {
 			
 			var contents = cell.name;
 			
-			var attr = {className: "col"}
+			var attr = {key: cell.name, className: "col"}
 			var size;
 			
 			size = cell.size;
@@ -484,7 +484,7 @@ function layout_page(template, data, classes) {
 			
 			return React.createElement("div", attr, contents);
 		});
-		return React.createElement("div", {className: "row"},colChildren);
+		return React.createElement("div", {key: item.key, className: "row"},colChildren);
 	})
 	
 	var container = React.createElement('div', {className: "container " + classes }, rows);
