@@ -319,12 +319,19 @@ function layout_page(template, data, classes) {
 					if (ordering == left) {
 						this.ordering["y"][i] = [left];
 						this.ordering["y"][i].push(right);
+						if (this.ordering["y"].indexOf(right) != -1) {
+							this.ordering["y"].splice(this.ordering["y"].indexOf(right), 1);
+						}
 						console.log(this.ordering["y"]);
+						
 						found = true;
 						break;
 					} else if (ordering == right) {
 						this.ordering["y"][i] = [right];
 						this.ordering["y"][i].push(left);
+						if (this.ordering["y"].indexOf(left) != -1) {
+							this.ordering["y"].splice(this.ordering["y"].indexOf(left), 1);
+						}
 						console.log(this.ordering["y"]);
 						found = true;
 						break;
@@ -360,7 +367,9 @@ function layout_page(template, data, classes) {
 		}
 		for (var i = 0 ; i < this.ordering[coordinate].length ; i++) {
 			var current = this.ordering[coordinate][i];
+			console.log(coordinate, "current is", current);
 			if (Array.isArray(current)) {
+			    console.log("same row");
 				for (var item of current) {
 					this.lookup[item][coordinate] = i + 1;
 				}
@@ -369,6 +378,7 @@ function layout_page(template, data, classes) {
 			}
 			
 		}
+		console.log(this.ordering["x"]);
 		this.rules.push([left, right, mutator, comparator]);
 		
 	}
