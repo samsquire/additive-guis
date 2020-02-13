@@ -45,31 +45,37 @@ var groupBy = function(xs, key) {
     return rv;
   }, {});
 };
+function shuffle(a) {
+    var j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
+}
 // Sam Squire
 var template = {
     "predicates": [
-   "blogSidebar hasSize 4",
+        "blogSidebar hasSize 4",
         "menu above heroPost",
         "blah rightOf heroPost",
         "featuredPosts above blogs",
         "header above menu",
         "heroPost above featuredPosts",
         "menu hasSize 12",
-        "heroPost hasSize 6", 
+        "heroPost hasSize 6",
         "menu",
-        "featuredPosts", 
+        "featuredPosts",
         "heroPost",
-
         "header above featuredPosts",
-
         "header",
-
         "blogs hasSize 8",
-     
         "blogSidebar rightOf blogs",
         "featuredPosts above blogs",
-
-        "blah2 leftOf blah"
+        "blah2 leftOf blah",
+ "header above heroPost"
     ],
     "widgets": {
         "header": {
@@ -282,10 +288,24 @@ function layout_page(template, data, classes) {
 		var needInsertLeft = false;
 		if (this.ordering[coordinate].indexOf(left) == -1) {
 			needInsertLeft = true;
+			for (var i = 0; i < this.ordering[coordinate].length; i++) {
+				if (Array.isArray(this.ordering[coordinate][i])) {
+					if (this.ordering[coordinate][i].indexOf(left) != -1) {
+						needInsertLeft = false;
+					}
+				}	
+			}
 		}
 		var needInsertRight = false;
 		if (this.ordering[coordinate].indexOf(right) == -1) {
 			needInsertRight = true;
+			for (var i = 0; i < this.ordering[coordinate].length; i++) {
+				if (Array.isArray(this.ordering[coordinate][i])) {
+					if (this.ordering[coordinate][i].indexOf(right) != -1) {
+						needInsertRight = false;
+					}
+				}	
+			}
 		}
 		if (needInsertLeft == true && needInsertRight == false) {
 			for (var i = 0 ; i < this.ordering[coordinate].length ; i++) {
@@ -314,12 +334,13 @@ function layout_page(template, data, classes) {
 			if (! (this.ordering[coordinate].indexOf(left) < this.ordering[coordinate].indexOf(right))) {
 				console.log("Swap needed", left, right);
 				var leftPos = this.ordering[coordinate].indexOf(left);
+				this.ordering[coordinate].splice(leftPos, 1);
 				var rightPos = this.ordering[coordinate].indexOf(right);
 				// delete left
 				this.ordering[coordinate][rightPos] = left;
 				this.ordering[coordinate].splice(rightPos + 1, 0, right);
-				// this.ordering[coordinate].splice(leftPos, 1);
 				
+				console.log("swap", this.ordering[coordinate])
 			}
 		}
 		if (coordinate === "x") {
@@ -389,8 +410,8 @@ function layout_page(template, data, classes) {
 			
 		}
 		
-		console.log(this.ordering["y"]);
-		
+		console.log("y", this.ordering["y"]);
+		console.log("x", this.ordering["x"]);
 		this.rules.push([left, right, mutator, comparator]);
 		
 	}
@@ -399,6 +420,8 @@ function layout_page(template, data, classes) {
 		return this.variables;
 	}
 
+
+	data = shuffle(data);
 
 	for (var i = 0 ; i < data.length; i++) {
 		var item = data[i];
