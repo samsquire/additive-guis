@@ -1,6 +1,6 @@
 # additive-guis
 
-This project should probably be called associative GUIs.
+This project should probably be called commutative GUIs.
 
 This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter2.html`. They are both still in development.
 
