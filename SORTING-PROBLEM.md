@@ -2,7 +2,13 @@ This is how I sort widget Xs and Ys to solve an equation like:
 
 widgetA.x < widgetB.x < widgetC.x
 
-I've got a list of items that I want to keep sorted according to a few rules.
+I've got a list of items that I want to keep sorted according to a few rules. 
+
+addRule arguments are in order so that 
+
+A < B
+
+is addRule(A, B)
 
 addRule(itemA, itemB)
 
