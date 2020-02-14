@@ -1,4 +1,6 @@
-I'm having problems with this programming problem.
+This is how I sort widget Xs and Ys to solve an equation like:
+
+widgetA.x < widgetB.x < widgetC.x
 
 I've got a list of items that I want to keep sorted according to a few rules.
 
