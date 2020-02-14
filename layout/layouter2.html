@@ -331,11 +331,25 @@ function layout_page(template, data, classes) {
 			this.ordering[coordinate].push(right);
 		} else if (needInsertLeft == false && needInsertRight == false) {
 			// is left before right
-			if (! (this.ordering[coordinate].indexOf(left) < this.ordering[coordinate].indexOf(right))) {
+			var rightPos = this.ordering[coordinate].indexOf(right);
+			var foundRight = false;
+			for (var i = 0; i < this.ordering[coordinate].length; i++) {
+				if (Array.isArray(this.ordering[coordinate][i])) {
+					if (this.ordering[coordinate][i].indexOf(right) != -1) {
+						foundRight = true;
+						rightPos = i;
+						break;
+					}
+				}
+			}
+			var leftPos = this.ordering[coordinate].indexOf(left);
+			
+			if (! (leftPos < rightPos)) {
 				console.log("Swap needed", left, right);
+				console.log("swap", rightPos);
 				var leftPos = this.ordering[coordinate].indexOf(left);
 				this.ordering[coordinate].splice(leftPos, 1);
-				var rightPos = this.ordering[coordinate].indexOf(right);
+				
 				// delete left
 				this.ordering[coordinate][rightPos] = left;
 				this.ordering[coordinate].splice(rightPos + 1, 0, right);
@@ -393,6 +407,12 @@ function layout_page(template, data, classes) {
 					}
 					
 				}
+				
+				if (!found) {
+					this.ordering["y"].push([left, right]);
+					
+					console.log("We need to introduce into Y");
+				}
 								
 			}
 		}
@@ -421,7 +441,7 @@ function layout_page(template, data, classes) {
 	}
 
 
-	data = shuffle(data);
+	// data = shuffle(data);
 
 	for (var i = 0 ; i < data.length; i++) {
 		var item = data[i];
