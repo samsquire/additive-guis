@@ -1,10 +1,9 @@
 # additive-guis
 
+This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter2.html`. They are both still in development.
 This project should probably be called commutative GUIs.
 
-This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter2.html`. They are both still in development.
-
-This is an example mail client written as an additive GUI:
+As a demonstration of how compact additive guis are to render interactive displays, this is an example mail client written as an additive GUI. You can run this yourself in `layout/layouter2.html`:
 
 ## Email client 
 
