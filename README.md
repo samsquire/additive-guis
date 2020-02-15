@@ -269,9 +269,19 @@ There are a number of ways a declarative UI would allow changes online, while th
 
 If the user selects an inner part of a rendered React component, how do I change the predicates to insert some thing inside the output of a React component? Or can only insert things around a React component as a whole.
  
- ## Spreadsheet editor
- 
- Imagine an Spreadsheet like GUI were each cell is either data or a function. These functions are functions called from the render method of a React component. Their responsibility is to filter, select what is rendered in your GUI.
+# Proposed predicates
+
+## emits
+
+Emits the data that was used to render this element
+
+## selects
+
+Configures which widget an emitted item goes into
+
+## mappedBy
+
+Configures what widget is rendered
  
  
  # Example of a predicate join
