@@ -42,6 +42,19 @@ submitTodo rightOf todoField
 
 Here's a list of predicates implemented so far:
 
+## emits
+
+Emits the data that was used to render this element
+
+## selects
+
+Configures which widget an emitted item goes into
+
+## mappedBy
+
+Configures what widget is rendered
+
+
 # leftOf
 
 The widget should be to the left of another widget.
@@ -54,17 +67,6 @@ The widget should be to the right of another widget.
 
 The widget appears somewhere above - nearer the top of the screen compared to the other widget.
 
-# under
-
-The widget should appear directly underneath.
-
-# below
-
-The widget appears on the screen after this widget but not necessarily directly underneath.
-
-# order
-
-The widget appears at this position along the X axis.
 
 ## Tweaking
 
@@ -268,23 +270,9 @@ There are a number of ways a declarative UI would allow changes online, while th
 * After selecting a source widget, I should be able to interrogate what context is available at a point I selected. The context is the lists being mapped over.
 
 If the user selects an inner part of a rendered React component, how do I change the predicates to insert some thing inside the output of a React component? Or can only insert things around a React component as a whole.
+
  
-# Proposed predicates
-
-## emits
-
-Emits the data that was used to render this element
-
-## selects
-
-Configures which widget an emitted item goes into
-
-## mappedBy
-
-Configures what widget is rendered
- 
- 
- # Example of a predicate join
+# Example of a predicate join
  
  This is not implemented yet.
  
