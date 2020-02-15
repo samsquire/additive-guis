@@ -4,6 +4,132 @@ This project should probably be called commutative GUIs.
 
 This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter2.html`. They are both still in development.
 
+This is an example mail client written as an additive GUI:
+
+## Email client 
+
+```
+{
+	"data": {
+		"folders": [
+			{
+				"name": "inbox",
+				"label": "Inbox",
+				"emails": [
+					{
+						"subject": "An email",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"body": "Hello Samuel, this is an email"
+					}
+				
+				]
+			},
+			{
+				"name": "important",
+				"label": "Important",
+				"emails": [
+					{
+						"subject": "An important email",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"body": "Hello Samuel, this is an important email"
+					}
+				
+				]
+			}
+		
+		]
+	},
+	"predicates": [
+		"folderList",
+		"mailArea",
+		"folderList hasSize 2",
+		"mailArea rightOf folderList",
+		"folderList backedBy .folders",
+		"folderList mappedTo folderItem",
+		"folderList key name"
+	],
+	
+	"widgets": {
+		"mailArea": {
+			"predicates": [
+				"emailList",
+				"mailPreview",
+				"emailList above mailPreview",
+				"emailList mappedTo emailItem",
+				"emailList is grid",
+				"emailList key subject",
+				"mailPreview mappedTo email"
+			]
+		
+		},
+		
+	
+		"folderItem": {
+			"predicates": [
+				"folderName",
+				
+				"folderName is label",
+				"folderName hasContent .label",
+				"folderName selects emailList",
+				"folderName emits .emails"
+			]
+		},
+		"emailItem": {
+			"predicates": [
+			    "to hasSize 5",
+				"subject hasSize 4",
+				"to",
+				"subject",
+				"sentDate",
+				"to is label",
+				"subject is label",
+				"sentDate is label",
+				"to hasContent .to",
+				"subject hasContent .subject",
+				"sentDate hasContent .sentDate",
+				"to leftOf subject",
+				"subject leftOf sentDate",
+				"subject selects mailPreview",
+				"subject emits .",
+				"to selects mailPreview",
+				"to emits .",
+			]
+		},
+		"email": {
+			"predicates": [
+				"toLabel",
+				"to",
+				"to hasSize 5",
+				"toLabel hasSize 1",
+				"subject",
+				"subjectLabel",
+				"subject hasSize 5",
+				"subjectLabel hasSize 2",
+				"mailBody",
+				"toLabel is label",
+				"to is label",
+				"subjectLabel is label",
+				"subject is label",
+				"mailBody is html",
+				"to above mailBody",
+				"to above subject",
+				"toLabel above subject",
+				"subject above mailBody",
+				"subjectLabel above mailBody",
+				"toLabel leftOf to",
+				"toLabel hasContent To",
+				"subjectLabel leftOf subject",
+				"subjectLabel hasContent Subject",
+				"to hasContent .to",
+				"subject hasContent .subject",
+				"mailBody hasContent .body"
+				
+			]
+		}
+	}
+}
+```
+
 ## declarative layouts - build layouts with statements rendering to HTML
 
 GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layout/layouter.html` and `layout/layouter2.html` are online live implementation examples.
@@ -331,83 +457,4 @@ predicates = [
 }
 ```
 
-## Email client 
 
-```
-{
-	"data": {
-		"folders": [
-			{
-				"name": "inbox",
-				"label": "Inbox",
-				"emails": [
-					{
-						"subject": "An email",
-						"to": "Samuel Squire <sam@samsquire.com>",
-						"body": "Hello Samuel, this is an email"
-					}
-				
-				]
-			}
-		
-		]
-	},
-	"predicates": [
-		"folderList leftOf emailList",
-		"folderList backedBy .folders",
-		"folderList mappedTo folderItem",
-		"folderList selects emailList",
-		"folderList emits .emails",
-		
-		"emailList mappedTo emailItem",
-		"emailList is grid",
-		"emailList selects mailPreview",
-		"emailList emits .",
-		
-		"mailPreview mappedTo email"
-	],
-	"widgets": {
-		"folderItem": {
-			"predicates": [
-				"folderName",
-				"folderName is label",
-				"folderName hasContent .label"
-			]
-		},
-		"emailItem": {
-			"predicates": [
-				"from is label",
-				"subject is label",
-				"sentDate is label",
-				"from hasContent .from",
-				"subject hasContent .subject",
-				"sentDate hasContent .sentDate",
-				"from leftOf subject",
-				"subject leftOf sentDate"
-			]
-		},
-		"email": {
-			"predicates": [
-				"toLabel is label",
-				"to is label",
-				"subjectLabel is label",
-				"subject is label",
-				"mailBody is html",
-				"to above mailBody",
-				"to above subject",
-				"toLabel above subject",
-				"subject above mailBody",
-				"subjectLabel above mailBody",
-				"toLabel leftOf to",
-				"toLabel hasContent To",
-				"subjectLabel leftOf subject",
-				"subjectLabel hasContent Subject",
-				"to hasContent .to",
-				"subject hasContent .subject",
-				"mailBody hasContent .body"
-				
-			]
-		}
-	}
-}
-```
