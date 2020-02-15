@@ -333,10 +333,83 @@ predicates = [
 }
 ```
 
-## 
+## Email client 
 
 ```
 {
-
+	"data": {
+		"folders": [
+			{
+				"name": "inbox",
+				"label": "Inbox",
+				"emails": [
+					{
+						"subject": "An email",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"body": "Hello Samuel, this is an email"
+					}
+				
+				]
+			}
+		
+		]
+	},
+	"predicates": [
+		"folderList leftOf emailList",
+		"folderList backedBy .folders",
+		"folderList mappedTo folderItem",
+		"folderList selects emailList",
+		"folderList emits .emails",
+		
+		"emailList mappedTo emailItem",
+		"emailList is grid",
+		"emailList selects mailPreview",
+		"emailList emits .",
+		
+		"mailPreview mappedTo email"
+	],
+	"widgets": {
+		"folderItem": {
+			"predicates": [
+				"folderName",
+				"folderName is label",
+				"folderName hasContent .label"
+			]
+		},
+		"emailItem": {
+			"predicates": [
+				"from is label",
+				"subject is label",
+				"sentDate is label",
+				"from hasContent .from",
+				"subject hasContent .subject",
+				"sentDate hasContent .sentDate",
+				"from leftOf subject",
+				"subject leftOf sentDate"
+			]
+		},
+		"email": {
+			"predicates": [
+				"toLabel is label",
+				"to is label",
+				"subjectLabel is label",
+				"subject is label",
+				"mailBody is html",
+				"to above mailBody",
+				"to above subject",
+				"toLabel above subject",
+				"subject above mailBody",
+				"subjectLabel above mailBody",
+				"toLabel leftOf to",
+				"toLabel hasContent To",
+				"subjectLabel leftOf subject",
+				"subjectLabel hasContent Subject",
+				"to hasContent .to",
+				"subject hasContent .subject",
+				"mailBody hasContent .body"
+				
+			]
+		}
+	}
 }
 ```
