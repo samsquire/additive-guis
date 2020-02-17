@@ -16,9 +16,16 @@ As a demonstration of how compact additive guis are to render interactive displa
 				"label": "Inbox",
 				"emails": [
 					{
-						"subject": "An email",
-						"to": "Samuel Squire <sam@samsquire.com>",
-						"body": "Hello Samuel, this is an email"
+						"subject": "Additive GUIs are compact",
+						"from": "Samuel Squire",
+						"body": "You can get a lot of behaviour for free",
+						"to": "Samuel Squire <sam@samsquire.com>"
+					},
+						{
+						"subject": "Re: Additive GUIs",
+						"from": "Frank Joy",
+						"body": "Sure are compact",
+						"to": "Samuel Squire <sam@samsquire.com>"
 					}
 				
 				]
@@ -29,7 +36,7 @@ As a demonstration of how compact additive guis are to render interactive displa
 				"emails": [
 					{
 						"subject": "An important email",
-						"to": "Samuel Squire <sam@samsquire.com>",
+						"from": "Samuel Squire <sam@samsquire.com>",
 						"body": "Hello Samuel, this is an important email"
 					}
 				
@@ -45,7 +52,8 @@ As a demonstration of how compact additive guis are to render interactive displa
 		"mailArea rightOf folderList",
 		"folderList backedBy .folders",
 		"folderList mappedTo folderItem",
-		"folderList key name"
+		"folderList key name",
+		"folderList hasClass folder-list"
 	],
 	
 	"widgets": {
@@ -57,7 +65,9 @@ As a demonstration of how compact additive guis are to render interactive displa
 				"emailList mappedTo emailItem",
 				"emailList is grid",
 				"emailList key subject",
-				"mailPreview mappedTo email"
+				"mailPreview mappedTo email",
+				"emailList hasClass email-list",
+				"mailPreview hasClass mail-preview"
 			]
 		
 		},
@@ -75,32 +85,34 @@ As a demonstration of how compact additive guis are to render interactive displa
 		},
 		"emailItem": {
 			"predicates": [
-			    "to hasSize 5",
+			    "from hasSize 5",
 				"subject hasSize 4",
-				"to",
+				"from",
 				"subject",
 				"sentDate",
-				"to is label",
+				"from is label",
 				"subject is label",
 				"sentDate is label",
-				"to hasContent .to",
+				"from hasContent .from",
 				"subject hasContent .subject",
 				"sentDate hasContent .sentDate",
-				"to leftOf subject",
-				"subject leftOf sentDate",
+				"from leffromf subject",
+				"subject leffromf sentDate",
 				"subject selects mailPreview",
 				"subject emits .",
-				"to selects mailPreview",
-				"to emits .",
+				"from selects mailPreview",
+				"from emits .",
 			]
 		},
 		"email": {
 			"predicates": [
 				"toLabel",
 				"to",
+				"fromLabel",
+				"from",
+				"subject",
 				"to hasSize 5",
 				"toLabel hasSize 1",
-				"subject",
 				"subjectLabel",
 				"subject hasSize 5",
 				"subjectLabel hasSize 2",
@@ -110,11 +122,20 @@ As a demonstration of how compact additive guis are to render interactive displa
 				"subjectLabel is label",
 				"subject is label",
 				"mailBody is html",
+				"from rightOf fromLabel",
+				"fromLabel above toLabel",
+				"from hasContent .from",
+				"fromLabel hasContent From",
+				"fromLabel hasSize 1",
+				"from above subject",
+				"from above subjectLabel",
+				"from above mailBody",
 				"to above mailBody",
 				"to above subject",
 				"toLabel above subject",
 				"subject above mailBody",
 				"subjectLabel above mailBody",
+			
 				"toLabel leftOf to",
 				"toLabel hasContent To",
 				"subjectLabel leftOf subject",
@@ -122,6 +143,8 @@ As a demonstration of how compact additive guis are to render interactive displa
 				"to hasContent .to",
 				"subject hasContent .subject",
 				"mailBody hasContent .body"
+
+	
 				
 			]
 		}
