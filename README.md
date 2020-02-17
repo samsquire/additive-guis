@@ -7,6 +7,12 @@ This project should probably be called commutative GUIs as the goal is for the o
 
 As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor.
 
+## declarative layouts - build layouts with statements rendering to HTML
+
+GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layout/layouter.html` and `layout/layouter2.html` are online live implementation examples.
+
+Why is it important that the tuples are monotonically increasing? This is due to a property of [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) sets whereby they can be changed indepependly on different machines and unlike HTML, can be merged safely without conflict. HTML is difficult to diff as it is not line based. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
+
 ## Email viewer 
 
 This data produces an email viewer whereby you can select folders and select emails.
@@ -156,11 +162,6 @@ This data produces an email viewer whereby you can select folders and select ema
 }
 ```
 
-## declarative layouts - build layouts with statements rendering to HTML
-
-GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements that can arrive in any order and still produce a sensible, valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layout/layouter.html` and `layout/layouter2.html` are online live implementation examples.
-
-Why is it important that the tuples are monotonically increasing? This is due to a property of [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) sets whereby they can be changed indepependly on different machines and unlike HTML, can be merged safely without conflict. HTML is difficult to diff as it is not line based. I plan to use Automerge to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
 # The dream - Build GUIs with microblogging (or twitter tweets)
 
