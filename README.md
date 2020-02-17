@@ -192,7 +192,7 @@ Here's a list of predicates implemented so far:
 
 ## emits
 
-Emits the data that was used to render this element
+Emits the data that was used to render this element when clicked. Used to change what data another widget is rendering.
 
 ## selects
 
@@ -200,7 +200,21 @@ Configures which widget an emitted item goes into
 
 ## mappedBy
 
-Configures what widget is rendered
+Configures what widget to map the data as.
+
+Equivalent to:
+
+```
+data.map(mappedBy);
+```
+
+## backedBy
+
+The data used to render this widget. Equivalent to:
+
+```
+backedBy.map(mappedBy);
+```
 
 
 # leftOf
