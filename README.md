@@ -89,7 +89,7 @@ This data produces an email viewer whereby you can select folders and select ema
 		},
 		"emailItem": {
 			"predicates": [
-			    "from hasSize 5",
+			        "from hasSize 5",
 				"subject hasSize 4",
 				"from",
 				"subject",
