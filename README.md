@@ -9,6 +9,8 @@ As a demonstration of how compact additive guis are to render interactive displa
 
 ## Email viewer 
 
+This data produces an email viewer whereby you can select folders and select emails.
+
 ```
 {
 	"data": {
