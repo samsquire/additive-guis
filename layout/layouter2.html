@@ -109,7 +109,7 @@ var template = {
 		"mailArea rightOf folderList",
 		"folderList backedBy .folders",
 		"folderList mappedTo folderItem",
-		"folderList key name",
+		"folderList key .name",
 		"folderList hasClass folder-list"
 	],
 	
@@ -121,7 +121,7 @@ var template = {
 				"emailList above mailPreview",
 				"emailList mappedTo emailItem",
 				"emailList is grid",
-				"emailList key subject",
+				"emailList key .subject",
 				"mailPreview mappedTo email",
 				"emailList hasClass email-list",
 				"mailPreview hasClass mail-preview"
@@ -611,23 +611,27 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					var dataSource;
 					if (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")) {
 						console.log("Mapping", cell.name, environment.data);
+						console.log(cell.name);
 						dataSource = environment.data[cell.name] || [];
 						console.log(dataSource);
 					} else {
 						dataSource = problem.properties[cell.name].backedBy(values)
+						console.log(dataSource);
 					}
 					if (Array.isArray(dataSource)) {
 						var screenItems = dataSource.map(function (dataItem) {
-						var keyPostfix = dataItem[problem.properties[cell.name].key]
+						var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
 						return contents;
 					});
+					
 					console.log(screenItems);
+					attr["key"] = cell.name;
 					return React.createElement("div", attr, screenItems);
 
 					} else {
 						var dataItem = dataSource;
-						var keyPostfix = dataItem[problem.properties[cell.name].key]
+						var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 						
 						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
 						return React.createElement("div", attr, contents);
@@ -636,18 +640,21 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				}
 				if (problem.properties[cell.name].hasOwnProperty("emits")) {
 					console.log("Creating event handler for", cell.name);
-					attr["onClick"] = function () {
-						var emits = problem.properties[cell.name].emits;
-						console.log("Need to re-render", environment.properties[cell.name].selects, "with", emits);
-						if (emits === ".") {
-							toRender = values;
-						} else {
-							toRender = values[emits.replace(".", "")];
+					attr["onClick"] = function (problem, environment, cell) {
+						return function () {
+							var emits = problem.properties[cell.name].emits;
+							console.log("Need to re-render", environment.properties[cell.name].selects, "with", emits);
+							if (emits === ".") {
+								toRender = values;
+							} else {
+								toRender = values[emits.replace(".", "")];
+							}
+							console.log("Mapping", toRender);
+							console.log("Register data", cell.name);
+							environment.registerData(environment.properties[cell.name].selects, toRender);
+							rerender();
 						}
-						console.log("Mapping", toRender);
-						environment.registerData(environment.properties[cell.name].selects, toRender);
-						rerender();
-					}
+					}(problem, environment, cell);
 				}
 				if (problem.properties[cell.name].hasOwnProperty("hasContent")) {
 					var contentSpecifier = problem.properties[cell.name]["hasContent"];
@@ -689,7 +696,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		});
 		return React.createElement("div", {key: item.key, className: "row"},colChildren);
 	})
-	
+	console.log(keyPostfix);
 	var container = React.createElement('div', {key: keyPostfix, className: "container " + classes }, rows);
 	return container;
 }
@@ -709,7 +716,7 @@ inputField.addEventListener('change', function () {
 var environment = new Environment();
 function rerender() {
 	
-	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", ""), output);
+	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", "root"), output);
 }
 rerender();
 </script>
