@@ -488,7 +488,7 @@ predicates = [
 ```
 {
 	"predicates": [
-		"outsource is menuItem",
+		"outsource isA menuItem",
 		"outsource hasLabel \"Outsource\"",
 		"outsource inside fileContextMenu",
 		"outsource on:click exec(\"outsource\", this)"
