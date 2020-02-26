@@ -6,9 +6,28 @@
 				"label": "Inbox",
 				"emails": [
 					{
-						"subject": "An email",
-						"to": "Samuel Squire <sam@samsquire.com>",
-						"body": "Hello Samuel, this is an email"
+						"subject": "Additive GUIs are compact",
+						"from": "Samuel Squire",
+						"body": "You can get a lot of behaviour for free",
+						"to": "Samuel Squire <sam@samsquire.com>"
+					},
+						{
+						"subject": "Re: Additive GUIs",
+						"from": "Frank Joy",
+						"body": "Sure are compact",
+						"to": "Samuel Squire <sam@samsquire.com>"
+					}
+				
+				]
+			},
+			{
+				"name": "important",
+				"label": "Important",
+				"emails": [
+					{
+						"subject": "An important email",
+						"from": "Samuel Squire <sam@samsquire.com>",
+						"body": "Hello Samuel, this is an important email"
 					}
 				
 				]
@@ -17,29 +36,51 @@
 		]
 	},
 	"predicates": [
-		"folderList leftOf emailList",
+		"folderList",
+		"mailArea",
+		"folderList hasSize 2",
+		"mailArea rightOf folderList",
 		"folderList backedBy .folders",
 		"folderList mappedTo folderItem",
-		"folderList selects emailList",
-		"folderList emits .emails",
-		
-		"emailList mappedTo emailItem",
-		"emailList is grid",
-		"emailList selects mailPreview",
-		"emailList emits .",
-		
-		"mailPreview mappedTo email"
+		"folderList key .name",
+		"folderList hasClass folder-list"
 	],
+	
 	"widgets": {
+		"mailArea": {
+			"predicates": [
+				"emailList",
+				"mailPreview",
+				"emailList above mailPreview",
+				"emailList mappedTo emailItem",
+				"emailList is grid",
+				"emailList key .subject",
+				"mailPreview mappedTo email",
+				"emailList hasClass email-list",
+				"mailPreview hasClass mail-preview",
+				"mailPreview key .subject"
+			]
+		
+		},
+		
+	
 		"folderItem": {
 			"predicates": [
 				"folderName",
+				
 				"folderName is label",
-				"folderName hasContent .label"
+				"folderName hasContent .label",
+				"folderName selects emailList",
+				"folderName emits .emails"
 			]
 		},
 		"emailItem": {
 			"predicates": [
+			    "from hasSize 5",
+				"subject hasSize 4",
+				"from",
+				"subject",
+				"sentDate",
 				"from is label",
 				"subject is label",
 				"sentDate is label",
@@ -47,21 +88,45 @@
 				"subject hasContent .subject",
 				"sentDate hasContent .sentDate",
 				"from leftOf subject",
-				"subject leftOf sentDate"
+				"subject leftOf sentDate",
+				"subject selects mailPreview",
+				"subject emits .",
+				"from selects mailPreview",
+				"from emits .",
 			]
 		},
 		"email": {
 			"predicates": [
+				"toLabel",
+				"to",
+				"fromLabel",
+				"from",
+				"subject",
+				"to hasSize 5",
+				"toLabel hasSize 1",
+				"subjectLabel",
+				"subject hasSize 5",
+				"subjectLabel hasSize 2",
+				"mailBody",
 				"toLabel is label",
 				"to is label",
 				"subjectLabel is label",
 				"subject is label",
 				"mailBody is html",
+				"from rightOf fromLabel",
+				"fromLabel above toLabel",
+				"from hasContent .from",
+				"fromLabel hasContent From",
+				"fromLabel hasSize 1",
+				"from above subject",
+				"from above subjectLabel",
+				"from above mailBody",
 				"to above mailBody",
 				"to above subject",
 				"toLabel above subject",
 				"subject above mailBody",
 				"subjectLabel above mailBody",
+			
 				"toLabel leftOf to",
 				"toLabel hasContent To",
 				"subjectLabel leftOf subject",
@@ -69,6 +134,8 @@
 				"to hasContent .to",
 				"subject hasContent .subject",
 				"mailBody hasContent .body"
+
+	
 				
 			]
 		}
