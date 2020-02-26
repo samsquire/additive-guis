@@ -124,7 +124,8 @@ var template = {
 				"emailList key .subject",
 				"mailPreview mappedTo email",
 				"emailList hasClass email-list",
-				"mailPreview hasClass mail-preview"
+				"mailPreview hasClass mail-preview",
+				"mailPreview key .subject"
 			]
 		
 		},
@@ -153,8 +154,8 @@ var template = {
 				"from hasContent .from",
 				"subject hasContent .subject",
 				"sentDate hasContent .sentDate",
-				"from leffromf subject",
-				"subject leffromf sentDate",
+				"from leftOf subject",
+				"subject leftOf sentDate",
 				"subject selects mailPreview",
 				"subject emits .",
 				"from selects mailPreview",
