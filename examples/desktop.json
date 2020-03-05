@@ -1,0 +1,25 @@
+{
+	"predicates": [
+		"startMenuButton is atBottomLeft",
+		"startMenuButton inside bottomBar",
+		"bottomBar is grid",
+		"bottomBar is atBottom",
+		"bottomBar inside mainGrid",
+		"mainGrid is grid",
+		"programArea is grid",
+		"programArea inside bottomBar",
+		"programArea rightOf searchBar",
+		"searchBar rightOf startMenu",
+		"searchBar inside bottomBar",
+		"programArea is byColumn",
+		"startIcon inside startMenuButton",
+		"startLabel inside startMenuButton",
+		"startMenu is hidden",
+		"startMenuButton toggles startMenu",
+		"startMenu is grid",
+		"startMenuCategories inside startMenu",
+		"startMenuCategories is left",
+		"startMenuCategories is menu",
+		"applicationArea is center"
+	]
+}
