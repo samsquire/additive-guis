@@ -65,27 +65,7 @@ function shuffle(a) {
 }
 // Sam Squire
 var template = {
-    "predicates": [
-        "blogSidebar rightOf blogs",
-        "header above featuredPosts",
-        "blogs hasSize 8",
-        "blah rightOf heroPost",
-        "heroPost above featuredPosts",
-        "menu",
-        "header",
-        "heroPost",
-        "menu hasSize 12",
-        "featuredPosts above blogs",
-        "featuredPosts above blogSidebar",
-        "header above menu",   
-        "blogSidebar hasSize 4",
-        "menu above heroPost",
-        "heroPost hasSize 6",
-        "blah2 leftOf blah",
-         "blah2 rightOf heroPost", 
-        "featuredPosts",
-        "header above heroPost"  
-    ],
+    "predicates":  ["menu","menu hasSize 12","blogs hasSize 8","blogSidebar hasSize 4","blah2 rightOf heroPost","featuredPosts above blogSidebar","header above heroPost","heroPost","blah rightOf heroPost","header above featuredPosts","heroPost hasSize 6","menu above heroPost","header above menu","header","blah2 leftOf blah","heroPost above featuredPosts","blogSidebar rightOf blogs","featuredPosts above blogs","featuredPosts"],
     "widgets": {
         "header": {
             "predicates": [
@@ -344,7 +324,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 	}
 
 	Problem.prototype.addRule = function (coordinate, rule, left, right) {
-		if (rule == "above" && left == "heroPost" && right == "featuredPosts") { debugger ; }
+		if (rule === "above" && left === "heroPost" && right === "featuredPosts") { debugger ; }
 		if (!this.aboves.hasOwnProperty(right)) {
 			aboves = [];
 			this.aboves[right] = aboves;
@@ -434,16 +414,21 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				}
 				// delete left
 				this.ordering[coordinate].splice(leftPos, 1);
-					
+				var rightBackup;	
 				if (isCollection) {
+					rightBackup = this.ordering[coordinate][rightPos];
 					this.ordering[coordinate][rightPos] = backup;
+					
 				} else {
+					rightBackup = this.ordering[coordinate][rightPos];
 					this.ordering[coordinate][rightPos] = left;
+					
 				}
+				console.log("insert", right);
 				this.ordering[coordinate].splice(rightPos + 1, 0, right);
 				
 				
-				console.log("swap", this.ordering[coordinate])
+				console.log("swap", this.ordering[coordinate]);
 				
 			}
 		}
@@ -529,8 +514,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					
 						for (var j = 0 ; j < size ; j++) {
 							var item = ordering[j];
-							if (item == left) { found = true; ordering.push(right); break; }
-							if (item == right) { found = true; ordering.push(left); break; }
+							if (item == left && ordering.indexOf(right) == -1) { found = true; ordering.push(right); break; }
+							if (item == right && ordering.indexOf(left) == -1) { found = true; ordering.push(left); break; }
 						}
 						if (!found) {  }
 					}
@@ -550,7 +535,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				}
 				
 				if (!found) {
-					this.ordering["y"].push([left, right]);
+					// this.ordering["y"].push([left, right]);
 					console.log(JSON.stringify(this.ordering["y"]));
 					console.log("We need to introduce into Y");
 					
@@ -573,7 +558,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			
 		}
 		
-		console.log("y", this.ordering["y"]);
+		console.log("y", JSON.stringify(this.ordering["y"]));
 		// console.log("x", this.ordering["x"]);
 		var ruleKey = coordinate + rule + left + right;
 		if (!this.ruleIndex.hasOwnProperty(ruleKey)) {
