@@ -290,6 +290,14 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			
 			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
 			if (components[1] == "hasSize") { continue }
+			if (components[1] == "is") { continue }
+			if (components[1] == "key") { continue }
+			if (components[1] == "mappedTo") { continue }
+			if (components[1] == "backedBy") { continue }
+			if (components[1] == "hasClass") { continue }
+			if (components[1] == "selects") { continue }
+			if (components[1] == "emits") { continue }
+			if (components[1] == "hasContent") { continue }
 			if (!problem.lookup.hasOwnProperty(components[2])) { problem.addDeclaration(components[2]); }
 			
 		}
@@ -324,7 +332,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 	}
 
 	Problem.prototype.addRule = function (coordinate, rule, left, right) {
-		if (rule === "above" && left === "heroPost" && right === "featuredPosts") { debugger ; }
+		
 		if (!this.aboves.hasOwnProperty(right)) {
 			aboves = [];
 			this.aboves[right] = aboves;
