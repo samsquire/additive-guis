@@ -65,147 +65,170 @@ function shuffle(a) {
 }
 // Sam Squire
 var template = {
-	"data": {
-		"folders": [
-			{
-				"name": "inbox",
-				"label": "Inbox",
-				"emails": [
-					{
-						"subject": "Additive GUIs are compact",
-						"from": "Samuel Squire",
-						"body": "You can get a lot of behaviour for free",
-						"to": "Samuel Squire <sam@samsquire.com>"
-					},
-						{
-						"subject": "Re: Additive GUIs",
-						"from": "Frank Joy",
-						"body": "Sure are compact",
-						"to": "Samuel Squire <sam@samsquire.com>"
-					}
-				
-				]
-			},
-			{
-				"name": "important",
-				"label": "Important",
-				"emails": [
-					{
-						"subject": "An important email",
-						"from": "Samuel Squire <sam@samsquire.com>",
-						"body": "Hello Samuel, this is an important email"
-					}
-				
-				]
-			}
-		
-		]
-	},
-	"predicates": [
-		"folderList",
-		"mailArea",
-		"folderList hasSize 2",
-		"mailArea rightOf folderList",
-		"folderList backedBy .folders",
-		"folderList mappedTo folderItem",
-		"folderList key .name",
-		"folderList hasClass folder-list"
-	],
-	
-	"widgets": {
-		"mailArea": {
-			"predicates": [
-				"emailList",
-				"mailPreview",
-				"emailList above mailPreview",
-				"emailList mappedTo emailItem",
-				"emailList is grid",
-				"emailList key .subject",
-				"mailPreview mappedTo email",
-				"emailList hasClass email-list",
-				"mailPreview hasClass mail-preview",
-				"mailPreview key .subject"
-			]
-		
-		},
-		
-	
-		"folderItem": {
-			"predicates": [
-				"folderName",
-				
-				"folderName is label",
-				"folderName hasContent .label",
-				"folderName selects emailList",
-				"folderName emits .emails"
-			]
-		},
-		"emailItem": {
-			"predicates": [
-			    "from hasSize 5",
-				"subject hasSize 4",
-				"from",
-				"subject",
-				"sentDate",
-				"from is label",
-				"subject is label",
-				"sentDate is label",
-				"from hasContent .from",
-				"subject hasContent .subject",
-				"sentDate hasContent .sentDate",
-				"from leftOf subject",
-				"subject leftOf sentDate",
-				"subject selects mailPreview",
-				"subject emits .",
-				"from selects mailPreview",
-				"from emits .",
-			]
-		},
-		"email": {
-			"predicates": [
-				"toLabel",
-				"to",
-				"fromLabel",
-				"from",
-				"subject",
-				"to hasSize 5",
-				"toLabel hasSize 1",
-				"subjectLabel",
-				"subject hasSize 5",
-				"subjectLabel hasSize 2",
-				"mailBody",
-				"toLabel is label",
-				"to is label",
-				"subjectLabel is label",
-				"subject is label",
-				"mailBody is html",
-				"from rightOf fromLabel",
-				"fromLabel above toLabel",
-				"from hasContent .from",
-				"fromLabel hasContent From",
-				"fromLabel hasSize 1",
-				"from above subject",
-				"from above subjectLabel",
-				"from above mailBody",
-				"to above mailBody",
-				"to above subject",
-				"toLabel above subject",
-				"subject above mailBody",
-				"subjectLabel above mailBody",
-			
-				"toLabel leftOf to",
-				"toLabel hasContent To",
-				"subjectLabel leftOf subject",
-				"subjectLabel hasContent Subject",
-				"to hasContent .to",
-				"subject hasContent .subject",
-				"mailBody hasContent .body"
-
-	
-				
-			]
-		}
-	}
+    "predicates": [
+        "blogSidebar rightOf blogs",
+        "header above featuredPosts",
+        "blogs hasSize 8",
+        "blah rightOf heroPost",
+        "heroPost above featuredPosts",
+        "menu",
+        "header",
+        "heroPost",
+        "menu hasSize 12",
+        "featuredPosts above blogs",
+        "featuredPosts above blogSidebar",
+        "header above menu",   
+        "blogSidebar hasSize 4",
+        "menu above heroPost",
+        "heroPost hasSize 6",
+        "blah2 leftOf blah",
+         "blah2 rightOf heroPost", 
+        "featuredPosts",
+        "header above heroPost"  
+    ],
+    "widgets": {
+        "header": {
+            "predicates": [
+                "logo hasSize 12"
+            ],
+            "classes": "blog-header py-3 justify-content-between align-items-center text-center"
+        },
+        "featuredPosts": {
+            "predicates": [
+                "featuredPostA hasSize 6",
+                "featuredPostB hasSize 6",
+                "featuredPostB rightOf featuredPostA"
+            ]
+        },
+        "featuredPostB": {
+            "predicates": [
+                "featuredPostContentB leftOf imageB"
+            ],
+            "classes": "card flex-md-row mb-4 box-shadow h-md-250"
+        },
+        "featuredPostA": {
+            "predicates": [
+                "featuredPostContentA leftOf imageA"
+            ],
+            "classes": "card flex-md-row mb-4 box-shadow h-md-250"
+        },
+        "featuredPostContentA": {
+            "predicates": [
+                "categoryA above featuredPostHeadingA",
+                "featuredPostHeadingA above featuredPostDateA",
+                "featuredPostDateA above featuredIntroA",
+                "featuredPostDateA below categoryA"
+            ],
+            "classes": "card-body d-flex flex-column align-items-start"
+        },
+        "featuredPostContentB": {
+            "predicates": [
+                "categoryB above featuredPostHeadingB",
+                "featuredPostHeadingB above featuredPostDateB",
+                "featuredPostDateB above featuredIntroB",
+                "featuredPostDateB below categoryB"
+            ],
+            "classes": "card-body d-flex flex-column align-items-start"
+        },
+        "menu": {
+            "predicates": [
+                "siblings hasDefaultSize 1"
+            ]
+        },
+        "heroPost": {
+            "predicates": [
+                "heroText above continueReadingLink"
+            ],
+            "classes": "jumbotron p-3 p-md-5 text-white rounded bg-dark"
+        },
+        "blogs": {
+            "predicates": [
+                "introduction above blogPost"
+            ]
+        },
+        "blogPost": {
+            "predicates": [
+                "blogHeading above postMetadata",
+                "postMetadata above posting"
+            ]
+        },
+        "blogSidebar": {
+            "predicates": [
+                "aboutSection hasSize 12"
+            ],
+            "classes": "bg-light"
+        },
+        "aboutSection": {
+            "predicates": [
+                "aboutTitle above aboutText",
+                "aboutText hasSize 12"
+            ]
+        },
+        "blogHeading": {
+            "html": "<h1>Sample blog post</h1>"
+        },
+        "postMetadata": {
+            "html": "<p class=\"blog-post-meta\">January 1, 2014 by <a href=\"author\">Mark</a></p>"
+        },
+        "posting": {
+            "html": "<p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>\r\n            <hr>\r\n            <p>Cum sociis natoque penatibus et magnis <a href=\\\"#\\\">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>\r\n            <blockquote>\r\n              <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>\r\n            </blockquote>\r\n            <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>\r\n            <h2>Heading</h2>\r\n            <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>\r\n            <h3>Sub-heading</h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>\r\n            <pre><code>Example code block</code></pre>\r\n            <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>\r\n            <h3>Sub-heading</h3>\r\n            <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>\r\n            <ul>"
+        },
+        "introduction": {
+            "html": "<h3 class=\"pb-3 mb-4 font-italic border-bottom\">From the firehose</h3>",
+            "classes": "font-italic"
+        },
+        "logo": {
+            "html": "<h1 class=\"blog-header-logo\">Large</h1>"
+        },
+        "categoryA": {
+            "html": "<strong class=\"d-inline-block mb-2 text-primary\">World</strong>"
+        },
+        "categoryB": {
+            "html": "<strong class=\"d-inline-block mb-2 text-primary\">Technology</strong>"
+        },
+        "featuredIntroA": {
+            "html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.</p>"
+        },
+        "featuredIntroB": {
+            "html": "<p class=\"card-text mb-auto\">This is a wider card with supporting text below as a natural lead-in to additional content.</p>"
+        },
+        "featuredPostHeadingA": {
+            "html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post</a>\r\n              </h3>"
+        },
+        "featuredPostHeadingB": {
+            "html": "<h3 class=\"mb-0\">\r\n                <a class=\"text-dark\" href=\"#\">Featured post</a>\r\n              </h3>"
+        },
+        "featuredPostDateA": {
+            "html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+        },
+        "featuredPostDateB": {
+            "html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
+        },
+        "imageA": {
+            "html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+        },
+        "imageB": {
+            "html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+        },
+        "heroText": {
+            "html": "<h2>Title of a longer featured blog post</h2>"
+        },
+        "continueReadingLink": {
+            "html": "<a href=\"featured-post-a\">Continue reading</a>"
+        },
+        "featureTextA": {
+            "html": "<h3>Some interesting article 1</h3>"
+        },
+        "featureTextB": {
+            "html": "<h3>Some interesting article 2</h3>"
+        },
+        "aboutText": {
+            "html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+        },
+        "aboutTitle": {
+            "html": "<h4 class=\"font-italic\">About</h4>"
+        }
+    }
 }
 
 function Environment() {
@@ -236,7 +259,8 @@ Environment.prototype.addProperty = function (property, widget, fn) {
 
 
 function layout_page(environment, values, template, data, classes, keyPostfix) {
-
+	data = shuffle(data);
+	console.log("data", JSON.stringify(data));
 	var Problem = function() {
 		this.variables = [];
 		this.lookup = {};
@@ -246,6 +270,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			"y": []
 		}
 		this.data = [];
+		this.ruleIndex = {};
+		this.properties = {};
+		this.aboves = {};
 	}
 
 	var Declaration = function (name) {
@@ -260,7 +287,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		var createdDeclaration = new Declaration(name)
 		this.variables.push(createdDeclaration);
 		this.lookup[name] = createdDeclaration;
-		this.properties = {};
+
 
 	};
 
@@ -280,11 +307,11 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			
 		} else {
 			if (components[0] == "siblings") { continue }
-			/*
+			
 			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
 			if (components[1] == "hasSize") { continue }
 			if (!problem.lookup.hasOwnProperty(components[2])) { problem.addDeclaration(components[2]); }
-			*/
+			
 		}
 	}
 
@@ -316,7 +343,14 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		
 	}
 
-	Problem.prototype.addRule = function (coordinate, rule, left, right, mutator, comparator) {
+	Problem.prototype.addRule = function (coordinate, rule, left, right) {
+		if (rule == "above" && left == "heroPost" && right == "featuredPosts") { debugger ; }
+		if (!this.aboves.hasOwnProperty(right)) {
+			aboves = [];
+			this.aboves[right] = aboves;
+		}	
+		this.aboves[right].push(left);
+		
 		var needInsertLeft = false;
 		if (this.ordering[coordinate].indexOf(left) == -1) {
 			needInsertLeft = true;
@@ -365,39 +399,88 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			// is left before right
 			var rightPos = this.ordering[coordinate].indexOf(right);
 			var foundRight = false;
+			var isCollection = false;
 			for (var i = 0; i < this.ordering[coordinate].length; i++) {
 				if (Array.isArray(this.ordering[coordinate][i])) {
 					if (this.ordering[coordinate][i].indexOf(right) != -1) {
 						foundRight = true;
 						rightPos = i;
+						isCollection = true;
 						break;
 					}
 				}
 			}
 			var leftPos = this.ordering[coordinate].indexOf(left);
+			for (var i = 0; i < this.ordering[coordinate].length; i++) {
+				if (Array.isArray(this.ordering[coordinate][i])) {
+					if (this.ordering[coordinate][i].indexOf(left) != -1) {
+						foundLeft = true;
+						leftPos = i;
+						isCollection = true;
+						break;
+					}
+				}
+			}
+			console.log("rightPos", rightPos);
 			
 			if (! (leftPos < rightPos)) {
+				var backup;
 				console.log("Swap needed", left, right);
 				console.log("swap", rightPos);
-				var leftPos = this.ordering[coordinate].indexOf(left);
-				this.ordering[coordinate].splice(leftPos, 1);
 				
+				if (isCollection) {
+					backup = this.ordering[coordinate][leftPos];
+					console.log(backup);
+				}
 				// delete left
-				this.ordering[coordinate][rightPos] = left;
+				this.ordering[coordinate].splice(leftPos, 1);
+					
+				if (isCollection) {
+					this.ordering[coordinate][rightPos] = backup;
+				} else {
+					this.ordering[coordinate][rightPos] = left;
+				}
 				this.ordering[coordinate].splice(rightPos + 1, 0, right);
 				
+				
 				console.log("swap", this.ordering[coordinate])
+				
 			}
 		}
 		if (coordinate === "x") {
 			if (rule === "leftOf" || rule === "rightOf") {
-				// console.log("Left", left, "and right", right, "have the same y");
+				console.log("Left", left, "and right", right, "have the same y");
 				var found = false;
 				for (var i = 0 ; i < this.ordering["y"].length ; i++) {
 					var ordering = this.ordering["y"][i];
+					var innerMove = false;
 					if (ordering == left) {
+						console.log("Found on the left");
 						this.ordering["y"][i] = [left];
-						this.ordering["y"][i].push(right);
+						// look for right in list
+						for (var k = 0 ; k < this.ordering["y"].length; k++) {
+							var inner = this.ordering["y"][k];
+							if (Array.isArray(this.ordering["y"][i]) && Array.isArray(inner)) {
+								console.log("Inner is a list");
+								console.log("inner", inner);
+								for (var m = 0; m < inner.length ; m++) {
+									if (inner[m] === right) {
+										console.log("We have to move what's here");
+										innerMove = true;
+										for (var thing of inner) {
+											console.log("Moving", this.ordering["y"][i]);
+											this.ordering["y"][i].push(thing);
+										}
+										this.ordering["y"].splice(k, 1);
+									}
+								}
+								
+							}
+							
+						}
+						if (!innerMove) {
+							this.ordering["y"][i].push(right);
+						}
 						if (this.ordering["y"].indexOf(right) != -1) {
 							this.ordering["y"].splice(this.ordering["y"].indexOf(right), 1);
 						}
@@ -406,8 +489,32 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 						found = true;
 						break;
 					} else if (ordering == right) {
+						console.log("Found on the right");
 						this.ordering["y"][i] = [right];
-						this.ordering["y"][i].push(left);
+						// look for right in list
+						for (var k = 0 ; k < this.ordering["y"].length; k++) {
+							var inner = this.ordering["y"][k];
+							if (Array.isArray(this.ordering["y"][i]) && Array.isArray(inner)) {
+								console.log("Inner is a list");
+								console.log("inner", inner);
+								for (var m = 0; m < inner.length ; m++) {
+									if (inner[m] === left) {
+										console.log("We have to move what's here");
+										innerMove = true;
+										for (var thing of inner) {
+											console.log("Moving", this.ordering["y"][i]);
+											this.ordering["y"][i].push(thing);
+										}
+										this.ordering["y"].splice(k, 1);
+									}
+								}
+								
+							}
+							
+						}
+						if (!innerMove) {
+							this.ordering["y"][i].push(left);
+						}
 						if (this.ordering["y"].indexOf(left) != -1) {
 							this.ordering["y"].splice(this.ordering["y"].indexOf(left), 1);
 						}
@@ -415,6 +522,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 						found = true;
 						break;
 					}
+					
 					if (Array.isArray(ordering)) {
 						console.log("Multiple things in the same Y");
 						var size = ordering.length;
@@ -443,7 +551,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				
 				if (!found) {
 					this.ordering["y"].push([left, right]);
-					console.log(this.ordering["y"]);
+					console.log(JSON.stringify(this.ordering["y"]));
 					console.log("We need to introduce into Y");
 					
 				}
@@ -459,24 +567,32 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					this.lookup[item][coordinate] = i + 1;
 				}
 			} else {
-				console.log(current);
+				
 				this.lookup[current][coordinate] = i + 1;
 			}
 			
 		}
 		
 		console.log("y", this.ordering["y"]);
-		console.log("x", this.ordering["x"]);
-		this.rules.push([left, right, mutator, comparator]);
+		// console.log("x", this.ordering["x"]);
+		var ruleKey = coordinate + rule + left + right;
+		if (!this.ruleIndex.hasOwnProperty(ruleKey)) {
+			this.rules.push([coordinate, rule, left, right]);
+			this.ruleIndex[ruleKey] = true;
+		}
 		
 	}
 
 	Problem.prototype.solve = function () {
+		/* Re-apply rules to catch errors */
+		for (var i = 0 ; i < this.rules.length; i++) {
+			this.addRule.apply(this, this.rules[i]);
+		}
 		return this.variables;
 	}
 
 
-	// data = shuffle(data);
+	
 
 	for (var i = 0 ; i < data.length; i++) {
 		var item = data[i];
@@ -486,56 +602,15 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			// rule
 			if (components[1] === "above") {
 			
-				problem.addRule("y", components[1], components[0], components[2],
-						function mutator(left, right) {
-							var difference = 1;
-							if (left.y > right.y) {
-								difference = left.y - right.y;
-								
-							}
-							left.y -= difference; right.y++;
-				
-							
-						},
-					function (left, right) {
-					if (left.y < right.y) { return -1; } 
-					if (right.y > left.y) { return 1; }
-					return 0;
-				});
+				problem.addRule("y", components[1], components[0], components[2]);
 			}
 			if (components[1] === "leftOf") {
 				
-				problem.addRule("x", components[1], components[0], components[2],
-						function mutator(left, right) {
-							var difference = 1;
-							if (left.x > right.x) {
-								difference = left.x - right.x;
-								
-							}
-							left.x -= difference + 1; right.x++
-						},
-					function (left, right) {
-					if (left.x < right.x) { return -1; } 
-					if (right.x > left.x) { return 1; }
-					return 0;
-				});
+				problem.addRule("x", components[1], components[0], components[2]);
 			}
 			if (components[1] === "rightOf") {
 			
-				problem.addRule("x", components[1], components[2], components[0],
-						function mutator(left, right) {
-							var difference = 1;
-							if (left.x < right.x) {
-								difference = left.x - right.x;
-								
-							}
-							left.x += difference; right.x--;
-						},
-					function (left, right) {
-					if (left.x < right.x) { return 1; } 
-					if (right.x > left.x) { return -1; }
-					return 0;
-				});
+				problem.addRule("x", components[1], components[2], components[0]);
 			}
 			if (components[1] === "mappedTo") {
 				problem.addProperty("mappedTo", components[0],
@@ -549,7 +624,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					function (field) {
 						return function (data) {
 							if (field.length > 1) {
-								console.log(field);
+								
 								return data[field.replace(".", "")];
 							}
 							return data;
@@ -599,24 +674,24 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				renderData = template.widgets[cell.name];
 			}
 			// dynamic rules
-			console.log(cell.name);
+			// console.log(cell.name);
 			if (problem.hasProperty(cell.name)) {
 				if (problem.properties[cell.name].hasOwnProperty("hasClass")) {
 				
 					attr["className"] += " " + problem.properties[cell.name].hasClass;
 				}
-				console.log("Dynamic rule", cell.name, problem.properties[cell.name]);
+				// console.log("Dynamic rule", cell.name, problem.properties[cell.name]);
 				if (problem.properties[cell.name].hasOwnProperty("mappedTo") && (problem.properties[cell.name].hasOwnProperty("backedBy") ||  (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")))) {
-					console.log("Can map");
+					// console.log("Can map");
 					var dataSource;
 					if (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")) {
-						console.log("Mapping", cell.name, environment.data);
-						console.log(cell.name);
+						// console.log("Mapping", cell.name, environment.data);
+						// console.log(cell.name);
 						dataSource = environment.data[cell.name] || [];
-						console.log(dataSource);
+						// console.log(dataSource);
 					} else {
 						dataSource = problem.properties[cell.name].backedBy(values)
-						console.log(dataSource);
+						// console.log(dataSource);
 					}
 					if (Array.isArray(dataSource)) {
 						var screenItems = dataSource.map(function (dataItem) {
@@ -625,7 +700,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 						return contents;
 					});
 					
-					console.log(screenItems);
+					// console.log(screenItems);
 					attr["key"] = cell.name;
 					return React.createElement("div", attr, screenItems);
 
@@ -639,7 +714,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				
 				}
 				if (problem.properties[cell.name].hasOwnProperty("emits")) {
-					console.log("Creating event handler for", cell.name);
+					// console.log("Creating event handler for", cell.name);
 					attr["onClick"] = function (problem, environment, cell) {
 						return function () {
 							var emits = problem.properties[cell.name].emits;
@@ -649,8 +724,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 							} else {
 								toRender = values[emits.replace(".", "")];
 							}
-							console.log("Mapping", toRender);
-							console.log("Register data", cell.name);
+							// console.log("Mapping", toRender);
+							// console.log("Register data", cell.name);
 							environment.registerData(environment.properties[cell.name].selects, toRender);
 							rerender();
 						}
@@ -696,7 +771,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		});
 		return React.createElement("div", {key: item.key, className: "row"},colChildren);
 	})
-	console.log(keyPostfix);
+	
 	var container = React.createElement('div', {key: keyPostfix, className: "container " + classes }, rows);
 	return container;
 }
