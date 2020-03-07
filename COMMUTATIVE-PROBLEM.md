@@ -1,5 +1,10 @@
 
 # commutative-problem
 
-How do you plot widgets on the screen according to basic rules commutatively?
+Imagine you have a propositional language that looks like this:
+
+todoField leftOf todoButton
+todoField above todoList
+
+
 
