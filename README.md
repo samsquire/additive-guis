@@ -12,7 +12,7 @@ Why is it important that the tuples are monotonically increasing? This is due to
 
 # GUIs are data
 
-As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor.
+As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor. Try changing the order of your commands and your GUI will still appear the same way.
 
 ## Email viewer 
 
