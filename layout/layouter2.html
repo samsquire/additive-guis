@@ -65,7 +65,7 @@ function shuffle(a) {
 }
 // Sam Squire
 var template = {
-    "predicates":  ["menu","menu hasSize 12","blogs hasSize 8","blogSidebar hasSize 4","blah2 rightOf heroPost","featuredPosts above blogSidebar","header above heroPost","heroPost","blah rightOf heroPost","header above featuredPosts","heroPost hasSize 6","menu above heroPost","header above menu","header","blah2 leftOf blah","heroPost above featuredPosts","blogSidebar rightOf blogs","featuredPosts above blogs","featuredPosts"],
+    "predicates":  ["blogSidebar rightOf blogs","menu","blogs hasSize 8","menu hasSize 12","blogSidebar hasSize 4","header above featuredPosts","blah2 rightOf heroPost","header","blah rightOf heroPost","menu above heroPost","heroPost hasSize 6","header above menu","heroPost","blah2 leftOf blah","featuredPosts above blogs","featuredPosts","header above heroPost","featuredPosts above blogSidebar","heroPost above featuredPosts"],
     "widgets": {
         "header": {
             "predicates": [
@@ -418,7 +418,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				
 				if (isCollection) {
 					backup = this.ordering[coordinate][leftPos];
-					console.log(backup);
+					console.log("backup", backup);
 				}
 				// delete left
 				this.ordering[coordinate].splice(leftPos, 1);
@@ -432,8 +432,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					this.ordering[coordinate][rightPos] = left;
 					
 				}
+				console.log("rightbackup", rightBackup);
 				console.log("insert", right);
-				this.ordering[coordinate].splice(rightPos + 1, 0, right);
+				this.ordering[coordinate].splice(rightPos + 1, 0, rightBackup);
 				
 				
 				console.log("swap", this.ordering[coordinate]);
