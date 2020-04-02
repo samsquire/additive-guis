@@ -478,7 +478,7 @@ predicates = [
 
 ```
 predicates = [
-   "overlayDirtyIcon is image(unchecked_changes.png)"
+   "overlayDirtyIcon isA image(unchecked_changes.png)"
    "overlayDirtyIcon over file{dirty==true}"	
 ]
 ```
