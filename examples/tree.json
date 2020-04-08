@@ -1,0 +1,36 @@
+{
+	"data": {
+		"files": [
+			{
+				"name": "folder1",
+				"children": [
+					{
+						"name": "folder2",
+						"children": [
+							{
+								"name": "file1",
+								"children": []
+							}
+						]
+					}
+				]
+			}
+		]
+	},
+	"predicates": [
+		"filesView backedBy .files",
+		"filesView mappedTo fileItems",
+		"filesView key .name"
+	],
+	"widgets": {
+		"fileItems": {
+			"predicates": [
+				"label hasContent .name",
+				"moreItems backedBy .children",
+				"moreItems mappedTo fileItems",
+				"label above moreItems",
+				"moreItems key .name"
+			]
+		}
+	}
+}
