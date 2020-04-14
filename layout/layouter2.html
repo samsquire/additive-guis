@@ -541,17 +541,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					
 				}
 				
-				for (var i = 0 ; i < this.ordering["y"].length ; i++) {
-					var current = this.ordering["y"][i];
-					if (Array.isArray(current)) {
-						for (var item of current) {
-							this.lookup[item]["y"] = i + 1;
-						}
-					} else {
-						this.lookup[current]["y"] = i + 1;
-					}
-					
-				}
+	
 				
 				if (!found) {
 					// this.ordering["y"].push([left, right]);
@@ -589,9 +579,17 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 
 	Problem.prototype.solve = function () {
 		/* Re-apply rules to catch errors */
-		for (var i = 0 ; i < this.rules.length; i++) {
-			this.addRule.apply(this, this.rules[i]);
-		}
+		var lastOrderingX = this.ordering.x
+		var lastOrderingY = this.ordering.y
+		
+		do {
+			for (var i = 0 ; i < this.rules.length; i++) {
+				this.addRule.apply(this, this.rules[i]);
+			}
+			lastorderingX = this.ordering.x;
+			lastOrderingY = this.ordering.y;
+		} while (lastOrderingX != this.ordering.x || lastOrderingY != this.ordering.y)
+		
 		return this.variables;
 	}
 
