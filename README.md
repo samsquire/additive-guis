@@ -63,7 +63,7 @@ This data produces an email viewer whereby you can select folders and select ema
 		"mailArea rightOf folderList",
 		"folderList backedBy .folders",
 		"folderList mappedTo folderItem",
-		"folderList key name",
+		"folderList key .name",
 		"folderList hasClass folder-list"
 	],
 	
@@ -75,10 +75,11 @@ This data produces an email viewer whereby you can select folders and select ema
 				"emailList above mailPreview",
 				"emailList mappedTo emailItem",
 				"emailList is grid",
-				"emailList key subject",
+				"emailList key .subject",
 				"mailPreview mappedTo email",
 				"emailList hasClass email-list",
-				"mailPreview hasClass mail-preview"
+				"mailPreview hasClass mail-preview",
+				"mailPreview key .subject"
 			]
 		
 		},
@@ -112,7 +113,7 @@ This data produces an email viewer whereby you can select folders and select ema
 				"subject selects mailPreview",
 				"subject emits .",
 				"from selects mailPreview",
-				"from emits .",
+				"from emits ."
 			]
 		},
 		"email": {
