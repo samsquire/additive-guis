@@ -205,7 +205,7 @@ Emits the data that was used to render this element when clicked. Used to change
 
 Configures which widget an emitted item goes into
 
-## mappedBy
+## mappedTo
 
 Configures what widget to map the data as.
 
@@ -220,7 +220,7 @@ data.map(mappedBy);
 The data used to render this widget. Equivalent to:
 
 ```
-backedBy.map(mappedBy);
+backedBy.map(mappedTo);
 ```
 
 
