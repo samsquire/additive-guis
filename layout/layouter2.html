@@ -40,6 +40,17 @@
 	.mail-preview {
 		border: 3px inset;
 	}
+	
+	.header {
+		background-color: black;
+		color: white
+	}
+	.content {
+		align-items: center;
+		justify-content: center;
+		 float: none;
+		margin: 0 auto;
+	}
 
 	</style>
 
@@ -92,8 +103,66 @@ class ImageBComponent extends React.Component {
 		return (<img className="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style={{"width": "200px", "height": "250px"}} src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>);
 	}
 }
+
+class BlogTitle extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return <h2>{this.props.title}</h2>;
+	}
+	
+}
  
 // Sam Squire
+var blogTemplate = {
+	"data": {
+		"posts": [
+			{
+				"title": "Additive GUI blog",
+				"body": "It's great to use additive GUIs to blog."
+			},
+				{
+				"title": "Additive GUI blog",
+				"body": "It's great to use additive GUIs to blog."
+			}
+		]
+	},
+	"predicates": [
+		"header above content",
+		"header hasClass header"
+	
+	],
+	"widgets": {
+		"header": {
+			"predicates": [
+				"logo leftOf search"
+			]
+		},
+		"content": {
+			"predicates": [
+				"title",
+				"blogs",
+				"title above blogs",
+				"blogs backedBy .posts",
+				"blogs mappedTo blogItem",
+				"title hasContent Sams Blog",
+				"blogs key .title",
+				"blogs hasClass offset-md-2"
+			]
+		},
+		"blogTitle": {"react": BlogTitle}
+		,
+		"blogItem": {
+			"predicates": [
+				"blogTitle above blogBody",
+				"blogBody hasContent .body",
+			
+			],
+		}
+	}
+};
+
 var template = {
 	data: {
 		"hello": "world"
@@ -788,7 +857,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		var item = data[i];
 		
 		var components = item.split(" ");
-		if (components.length == 3) {
+		
 			// rule
 			if (components[1] === "above") {
 			
@@ -822,7 +891,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				}(components[2]));
 			}
 			if (components[1] === "hasContent") {
-				problem.addProperty("hasContent", components[0], components[2]);
+				console.log("Adding hasContent for", components[0]);
+				problem.addProperty("hasContent", components[0], components.slice(2).join(" "));
 			}
 			if (components[1] === "emits") {
 				problem.addProperty("emits", components[0], components[2]);
@@ -841,11 +911,13 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				problem.addProperty("is", components[0], components[2]);
 			}
 			
-		}
+		
 	}
 	var ordered = problem.solve();
 	
 	var grouped = groupBy(ordered, 'y');
+	
+	console.log(grouped);
 	
 	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
 		console.log(item);
@@ -854,6 +926,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		var colChildren = item.items.sort(function (a, b)  { return Number(a.x) < Number(b.x) ? -1 : 1 }).map(function (cell) {
 			
 			var contents = cell.name;
+			console.log("contents is", contents);
 			
 			var attr = {key: cell.name + keyPostfix, className: "col"}
 			
@@ -874,6 +947,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				if (problem.properties[cell.name].hasOwnProperty("hasClass")) {
 				
 					attr["className"] += " " + problem.properties[cell.name].hasClass;
+					console.log("Adding class ", problem.properties[cell.name].hasClass, "to field", cell.name);
 				}
 				// console.log("Dynamic rule", cell.name, problem.properties[cell.name]);
 				
@@ -897,7 +971,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 							return contents;
 					});
 					
-					// console.log(screenItems);
+					
 					attr["key"] = cell.name + item.key;
 					return React.createElement("div", attr, screenItems);
 
@@ -935,6 +1009,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					}(problem, environment, cell);
 				}
 				if (problem.properties[cell.name].hasOwnProperty("hasContent")) {
+					console.log(cell.name, "has content");
 					var contentSpecifier = problem.properties[cell.name]["hasContent"];
 					var content;
 					if (contentSpecifier.indexOf(".") != -1) {
@@ -942,6 +1017,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					} else {
 						content = contentSpecifier;
 					}
+					console.log(attr);
 					attr["key"] = content;
 					/* attr["dangerouslySetInnerHTML"] = {
 						"__html": 
@@ -988,8 +1064,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		
 		var gridStyles = "";
 		gridStyles = "row"
-		
-		
+		console.log(item);
+		console.log("coldchildern", colChildren);
 		return React.createElement("div", {key: item.key, className: gridStyles}, colChildren);
 		
 	})
