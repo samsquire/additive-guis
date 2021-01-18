@@ -608,7 +608,6 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					}
 				}
 			}
-			console.log("rightPos", rightPos);
 			
 			if (! (leftPos < rightPos)) {
 				var backup;
@@ -787,7 +786,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 
 	for (var i = 0 ; i < data.length; i++) {
 		var item = data[i];
-		console.log(item);
+		
 		var components = item.split(" ");
 		if (components.length == 3) {
 			// rule
@@ -1001,16 +1000,13 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 
 function replaceFnReferences(template) {
 	var widgets = template["widgets"];
-	console.log("widgets", widgets);
+	
 	for (var widget of Object.keys(widgets)) {
 		var specifier = template["widgets"][widget];
-		console.log(specifier);
 		if (specifier.hasOwnProperty("react")) {
-			console.log("widgets", specifier["react"].name);
 			template["widgets"][widget]["react"] = specifier["react"].name;
 		}
 	}
-	console.log("changed", template);
 }
 
 var output = document.getElementById("output");
@@ -1023,7 +1019,6 @@ var inputField = document.getElementById("input");
 inputField.addEventListener('change', function () {
 	
 	template = JSON.parse(inputField.value);
-	console.log(template);
 	for (var widget of Object.keys(template["widgets"])) {
 		if (template["widgets"][widget].hasOwnProperty("react")) {
 			var controllerName = template["widgets"][widget]["react"];
