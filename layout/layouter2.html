@@ -8,6 +8,7 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.10.2/umd/react.development.js"></script>
  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.10.2/umd/react-dom.development.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -47,7 +48,7 @@
 <body>
 <textarea id="input"></textarea>
 <div id="output"></div>
-<script type="text/javascript">
+<script type="text/babel">
 var groupBy = function(xs, key) {
   return xs.reduce(function(rv, x) {
     (rv[x[key]] = rv[x[key]] || []).push(x);
@@ -64,8 +65,39 @@ function shuffle(a) {
     }
     return a;
 }
+
+class AboutTextComponent extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return <div key="hello">Lorem ipsum {this.props.hello}</div>;
+	}
+}
+
+class ImageAComponent extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return (<img className="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style={{"width": "200px", "height": "250px"}} src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>);
+	}
+}
+ 
+class ImageBComponent extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return (<img className="card-img-right flex-auto d-none d-md-block" data-src="holder.js/200x250?theme=thumb" alt="Thumbnail [200x250]" style={{"width": "200px", "height": "250px"}} src="data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E"/>);
+	}
+}
+ 
 // Sam Squire
-var template = {
+var defaultTemplate = {
+	data: {
+		"hello": "world"
+	},
     "predicates": [
 		"blogSidebar hasSize 4",
         "menu above heroPost",
@@ -203,10 +235,10 @@ var template = {
             "html": "<div class=\"mb-1 text-muted\">Nov 12</div>"
         },
         "imageA": {
-            "html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+            "react": ImageAComponent
         },
         "imageB": {
-            "html": "<img class=\"card-img-right flex-auto d-none d-md-block\" data-src=\"holder.js/200x250?theme=thumb\" alt=\"Thumbnail [200x250]\" style=\"width: 200px; height: 250px;\" src=\"data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%22200%22%20height%3D%22250%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20250%22%20preserveAspectRatio%3D%22none%22%3E%3Cdefs%3E%3Cstyle%20type%3D%22text%2Fcss%22%3E%23holder_16e60efb6c9%20text%20%7B%20fill%3A%23eceeef%3Bfont-weight%3Abold%3Bfont-family%3AArial%2C%20Helvetica%2C%20Open%20Sans%2C%20sans-serif%2C%20monospace%3Bfont-size%3A13pt%20%7D%20%3C%2Fstyle%3E%3C%2Fdefs%3E%3Cg%20id%3D%22holder_16e60efb6c9%22%3E%3Crect%20width%3D%22200%22%20height%3D%22250%22%20fill%3D%22%2355595c%22%3E%3C%2Frect%3E%3Cg%3E%3Ctext%20x%3D%2256.1953125%22%20y%3D%22131%22%3EThumbnail%3C%2Ftext%3E%3C%2Fg%3E%3C%2Fg%3E%3C%2Fsvg%3E\" data-holder-rendered=\"true\">"
+            "react": ImageBComponent
         },
         "heroText": {
             "html": "<h2>Title of a longer featured blog post</h2>"
@@ -221,12 +253,168 @@ var template = {
             "html": "<h3>Some interesting article 2</h3>"
         },
         "aboutText": {
-            "html": "Etiam porta sem malesuada magna mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur."
+            "react": AboutTextComponent
         },
         "aboutTitle": {
             "html": "<h4 class=\"font-italic\">About</h4>"
         }
     }
+}
+
+class FromComponent extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return <div key="{this.props.from}">{this.props.from}</div>;
+	}
+}
+
+var template = {
+	"data": {
+		"folders": [{
+				"name": "inbox",
+				"label": "Inbox",
+				"emails": [{
+						"subject": "Additive GUIs are compact",
+						"from": "Samuel Squire",
+						"body": "You can get a lot of behaviour for free",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"sentDate": "yesterday"
+					},
+					{
+						"subject": "Re: Additive GUIs",
+						"from": "Frank Joy",
+						"body": "Sure are compact",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"sentDate": "yesterday"
+					}
+
+				]
+			},
+			{
+				"name": "important",
+				"label": "Important",
+				"emails": [{
+						"subject": "An important email",
+						"from": "Samuel Squire <sam@samsquire.com>",
+						"body": "Hello Samuel, this is an important email",
+						"to": "Samuel Squire <sam@samsquire.com>",
+						"sentDate": "yesterday"
+					}
+
+				]
+			}
+
+		]
+	},
+	"predicates": [
+		"folderList",
+		"mailArea",
+		"folderList hasSize 2",
+		"mailArea rightOf folderList",
+		"folderList backedBy .folders",
+		"folderList mappedTo folderItem",
+		"folderList key .name",
+		"folderList hasClass folder-list"
+	],
+
+	"widgets": {
+		"mailArea": {
+			"predicates": [
+				"emailList",
+				"mailPreview",
+				"emailList above mailPreview",
+				"emailList mappedTo emailItem",
+				"emailList is grid",
+				"emailList key .subject",
+				"mailPreview mappedTo email",
+				"emailList hasClass email-list",
+				"mailPreview hasClass mail-preview",
+				"mailPreview key .subject"
+			]
+
+		},
+		"from": {
+			"react": FromComponent
+		},
+
+		"folderItem": {
+			"predicates": [
+				"folderName",
+
+				"folderName is label",
+				"folderName hasContent .label",
+				"folderName selects emailList",
+				"folderName emits .emails"
+			]
+		},
+		"emailItem": {
+			"predicates": [
+				"from hasSize 5",
+				"subject hasSize 4",
+				"from",
+				"subject",
+				"sentDate",
+				"from is label",
+				"subject is label",
+				"sentDate is label",
+				"from hasContent .from",
+				"subject hasContent .subject",
+				"sentDate hasContent .sentDate",
+				"from leftOf subject",
+				"subject leftOf sentDate",
+				"subject selects mailPreview",
+				"subject emits .",
+				"from selects mailPreview",
+				"from emits ."
+			]
+		},
+		"email": {
+			"predicates": [
+				"toLabel",
+				"to",
+				"fromLabel",
+				"from",
+				"subject",
+				"to hasSize 5",
+				"toLabel hasSize 1",
+				"subjectLabel",
+				"subject hasSize 5",
+				"subjectLabel hasSize 2",
+				"mailBody",
+				"toLabel is label",
+				"to is label",
+				"subjectLabel is label",
+				"subject is label",
+				"mailBody is html",
+				"from rightOf fromLabel",
+				"fromLabel above toLabel",
+				
+				"fromLabel hasContent From",
+				"fromLabel hasSize 1",
+				"from above subject",
+				"from above subjectLabel",
+				"from above mailBody",
+				"to above mailBody",
+				"to above subject",
+				"toLabel above subject",
+				"subject above mailBody",
+				"subjectLabel above mailBody",
+
+				"toLabel leftOf to",
+				"toLabel hasContent To",
+				"subjectLabel leftOf subject",
+				"subjectLabel hasContent Subject",
+				"to hasContent .to",
+				"subject hasContent .subject",
+				"mailBody hasContent .body"
+
+
+
+			]
+		}
+	}
 }
 
 function Environment() {
@@ -398,6 +586,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			var rightPos = this.ordering[coordinate].indexOf(right);
 			var foundRight = false;
 			var isCollection = false;
+			var foundLeft = false;
 			for (var i = 0; i < this.ordering[coordinate].length; i++) {
 				if (Array.isArray(this.ordering[coordinate][i])) {
 					if (this.ordering[coordinate][i].indexOf(right) != -1) {
@@ -552,7 +741,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 								
 			}
 		}
-		for (var i = 0 ; i < this.ordering[coordinate].length ; i++) {
+		for (var i = 0 ; i < this.ordering[coordinate].length; i++) {
 			var current = this.ordering[coordinate][i];
 			
 			if (Array.isArray(current)) {
@@ -586,7 +775,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			for (var i = 0 ; i < this.rules.length; i++) {
 				this.addRule.apply(this, this.rules[i]);
 			}
-			lastorderingX = this.ordering.x;
+			lastOrderingX = this.ordering.x;
 			lastOrderingY = this.ordering.y;
 		} while (lastOrderingX != this.ordering.x || lastOrderingY != this.ordering.y)
 		
@@ -660,7 +849,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 	var grouped = groupBy(ordered, 'y');
 	
 	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
-		
+		console.log(item);
 		return {key: item, items: grouped[item]};
 	}).map(function (item) {
 		var colChildren = item.items.sort(function (a, b)  { return Number(a.x) < Number(b.x) ? -1 : 1 }).map(function (cell) {
@@ -668,6 +857,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			var contents = cell.name;
 			
 			var attr = {key: cell.name + keyPostfix, className: "col"}
+			
 			var size;
 			
 			size = cell.size;
@@ -687,6 +877,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					attr["className"] += " " + problem.properties[cell.name].hasClass;
 				}
 				// console.log("Dynamic rule", cell.name, problem.properties[cell.name]);
+				
 				if (problem.properties[cell.name].hasOwnProperty("mappedTo") && (problem.properties[cell.name].hasOwnProperty("backedBy") ||  (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")))) {
 					// console.log("Can map");
 					var dataSource;
@@ -702,19 +893,25 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					if (Array.isArray(dataSource)) {
 						var screenItems = dataSource.map(function (dataItem) {
 							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
+							
 							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
 							return contents;
 					});
 					
 					// console.log(screenItems);
-					attr["key"] = cell.name;
+					attr["key"] = cell.name + item.key;
 					return React.createElement("div", attr, screenItems);
 
 					} else {
 						var dataItem = dataSource;
 						var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 						
+						
 						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
+						attr["key"] = cell.name;
+				
+						
+						
 						return React.createElement("div", attr, contents);
 					}
 				
@@ -723,6 +920,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					// console.log("Creating event handler for", cell.name);
 					attr["onClick"] = function (problem, environment, cell) {
 						return function () {
+							var toRender;
 							var emits = problem.properties[cell.name].emits;
 							console.log("Need to re-render", environment.properties[cell.name].selects, "with", emits);
 							if (emits === ".") {
@@ -754,6 +952,13 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				}
 				
 			}
+			if (renderData.hasOwnProperty("react")) {
+				
+				
+				contents = new renderData["react"](values).render();
+				attr["key"] = cell.name + item.key;
+				
+			}
 			
 			if (renderData.hasOwnProperty("html")) {
 				attr["dangerouslySetInnerHTML"] = {
@@ -767,11 +972,17 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 					classes = renderData["classes"];
 					
 				}
+				attr["key"] = cell.name + item.key;
+				
+				
+				
+				
 				contents = layout_page(environment, values, template, renderData["predicates"], classes, cell.name);
 				
 				return React.createElement("div", attr, contents);
 				
 			}
+			
 			
 			return React.createElement("div", attr, contents);
 		});
@@ -780,23 +991,47 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 		gridStyles = "row"
 		
 		
-		return React.createElement("div", {key: item.key, className: gridStyles},colChildren);
+		return React.createElement("div", {key: item.key, className: gridStyles}, colChildren);
+		
 	})
 	
 	var container = React.createElement('div', {key: keyPostfix, className: "container " + classes }, rows);
 	return container;
 }
 
+function replaceFnReferences(template) {
+	var widgets = template["widgets"];
+	console.log("widgets", widgets);
+	for (var widget of Object.keys(widgets)) {
+		var specifier = template["widgets"][widget];
+		console.log(specifier);
+		if (specifier.hasOwnProperty("react")) {
+			console.log("widgets", specifier["react"].name);
+			template["widgets"][widget]["react"] = specifier["react"].name;
+		}
+	}
+	console.log("changed", template);
+}
 
 var output = document.getElementById("output");
+var copy = JSON.parse(JSON.stringify(template));
+replaceFnReferences(copy);
+var stringified = JSON.stringify(copy, null, 4);
 
-document.getElementById("input").value = JSON.stringify(template, null, 4);
+document.getElementById("input").value = stringified;
 var inputField = document.getElementById("input");
 inputField.addEventListener('change', function () {
 	
 	template = JSON.parse(inputField.value);
-	widgets = template["widgets"];
-	all_predicates = template["predicates"];
+	console.log(template);
+	for (var widget of Object.keys(template["widgets"])) {
+		if (template["widgets"][widget].hasOwnProperty("react")) {
+			var controllerName = template["widgets"][widget]["react"];
+			template["widgets"][widget]["react"] = window[controllerName];
+		}
+	}
+	var widgets = template["widgets"];
+	var all_predicates = template["predicates"];
 	rerender();
 });
 var environment = new Environment();
@@ -804,6 +1039,7 @@ function rerender() {
 	
 	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", "root"), output);
 }
+
 rerender();
 </script>
 
