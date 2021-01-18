@@ -430,6 +430,8 @@ And we can produce the following HTML page from the above predicates.
 
  # Interactive predicate join
  
+This is not implemented yet.
+ 
 Imagine that you have a screenful of widgets, such as a mail client. On the left is a set of email folders. In the middle is a list of emails and below the list of emails is an email viewer. We could have components such as Layout, FolderList, FolderItem, EmailList, EmailItem, EmailViewer components. As a power user, I want to extend this GUI to add a new feature. For example, I want to add a widget to the screen next to each email item in the email list. Imagine I want to insert an attachment icon if an email has an attachment. To introduce this widget in a traditional architecture, I would have to find the code for the gridview and add a column to the gridview.
 
 There are a number of ways a declarative UI would allow changes online, while the GUI is running:
@@ -437,27 +439,7 @@ There are a number of ways a declarative UI would allow changes online, while th
 * In a declarative additive GUI, I should be able to right click the email list view on the email list and a context menu would appear. I can click 'Insert rightOf'.
 
 * After selecting 'Insert rightof', I should be able to interrogate what context is available at a point I selected. The context is the lists being mapped over to generate this part of the GUI. For the list of emails, this data is the currently selected folder, the list of emails being rendered plus the current email on the screen being rendered.
- 
-# Example of a predicate join
- 
- This is not implemented yet.
- 
- This is an example, you have a form object with fields inside and you have an errors object with errors for each field. To join them together, you could use a predicate like this:
- 
 
- ```
- predicates = [
-    "errors.lastName above form.fields.lastName",
-    "errors.lastName on:click my.form.fields.lastName.focus()
- ]
- ```
-From the errors predicates you have available the form.fields.lastName context from errors.lastName predicates due to the above predicate. And from the fields object, you should be able to access the current error. It's cyclical. How errors.lastName and form.fields.lastName renders is dependent on that react widget.
-
-
-
-# Predicate join
-
-You have two independent collections that you are mapping over to produce HTML with JSX, as you do in a React render method. Now I want to introduce a new element into the JSX output. If you have a predicate that states it must appear within the output of an existing mapped collection. How do you implement this?
 
 
 # What I want to see in the future with additive guis
