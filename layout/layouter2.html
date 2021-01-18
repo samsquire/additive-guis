@@ -612,7 +612,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			if (! (leftPos < rightPos)) {
 				var backup;
 				console.log("Swap needed", left, right);
-				console.log("swap", rightPos);
+				console.log("swap", rightPos);	
 				
 				if (isCollection) {
 					backup = this.ordering[coordinate][leftPos];
@@ -1000,18 +1000,23 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 
 function replaceFnReferences(template) {
 	var widgets = template["widgets"];
-	
+	var copy = Object.assign({}, template);
 	for (var widget of Object.keys(widgets)) {
-		var specifier = template["widgets"][widget];
+		var specifier = copy["widgets"][widget];
+		console.log("specifier", widget, specifier);
 		if (specifier.hasOwnProperty("react")) {
-			template["widgets"][widget]["react"] = specifier["react"].name;
+		console.log("Found react widget");
+			copy["widgets"]["widget"] = {}
+			copy["widgets"][widget]["react"] = specifier["react"].name;
 		}
 	}
 }
 
 var output = document.getElementById("output");
-var copy = JSON.parse(JSON.stringify(template));
+var copy = Object.assign({}, template);
 replaceFnReferences(copy);
+
+console.log("copy", copy);
 var stringified = JSON.stringify(copy, null, 4);
 
 document.getElementById("input").value = stringified;
