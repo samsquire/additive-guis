@@ -94,7 +94,7 @@ class ImageBComponent extends React.Component {
 }
  
 // Sam Squire
-var defaultTemplate = {
+var template = {
 	data: {
 		"hello": "world"
 	},
@@ -270,7 +270,7 @@ class FromComponent extends React.Component {
 	}
 }
 
-var template = {
+var otherTemplate = {
 	"data": {
 		"folders": [{
 				"name": "inbox",
@@ -1021,15 +1021,22 @@ var stringified = JSON.stringify(copy, null, 4);
 
 document.getElementById("input").value = stringified;
 var inputField = document.getElementById("input");
+
+function loadWidgets() {
+	for (var widget of Object.keys(template["widgets"])) {
+			if (template["widgets"][widget].hasOwnProperty("react")) {
+				var controllerName = template["widgets"][widget]["react"];
+				template["widgets"][widget]["react"] = window[controllerName];
+			}
+	}
+}
+
+loadWidgets();
+	
 inputField.addEventListener('change', function () {
 	
 	template = JSON.parse(inputField.value);
-	for (var widget of Object.keys(template["widgets"])) {
-		if (template["widgets"][widget].hasOwnProperty("react")) {
-			var controllerName = template["widgets"][widget]["react"];
-			template["widgets"][widget]["react"] = window[controllerName];
-		}
-	}
+	loadWidgets();
 	var widgets = template["widgets"];
 	var all_predicates = template["predicates"];
 	rerender();
