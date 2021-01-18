@@ -113,9 +113,19 @@ class BlogTitle extends React.Component {
 	}
 	
 }
+
+class Title extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+	render() {
+		return <h1>Sam's Blog</h1>;
+	}
+	
+}
  
 // Sam Squire
-var blogTemplate = {
+var template = {
 	"data": {
 		"posts": [
 			{
@@ -146,12 +156,12 @@ var blogTemplate = {
 				"title above blogs",
 				"blogs backedBy .posts",
 				"blogs mappedTo blogItem",
-				"title hasContent Sams Blog",
 				"blogs key .title",
 				"blogs hasClass offset-md-2"
 			]
 		},
-		"blogTitle": {"react": BlogTitle}
+		"blogTitle": {"react": BlogTitle},
+		"title": {"react": Title}
 		,
 		"blogItem": {
 			"predicates": [
@@ -163,7 +173,7 @@ var blogTemplate = {
 	}
 };
 
-var template = {
+var otherTemplate = {
 	data: {
 		"hello": "world"
 	},
