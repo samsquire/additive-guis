@@ -141,67 +141,43 @@ class PriceComponent extends React.Component {
 		super(props)
 	}
 	render() {
-		return <h1 className="card-title pricing-card-title">$0 <small className="text-muted">/ mo</small></h1>
+		return <h1 className="card-title pricing-card-title">${this.props.price} <small className="text-muted">/ mo</small></h1>
 	}
 }
 
-
-
-class PriceTable extends React.Component {
+class FeaturesComponent extends React.Component {
 	constructor(props) {
 		super(props)
 	}
 	render() {
-		return <div><div className="card-deck mb-3 text-center">
-        <div className="card mb-4 box-shadow">
-          <div className="card-header">
-            <h4 className="my-0 font-weight-normal">Free</h4>
-          </div>
-          <div className="card-body">
-            <h1 className="card-title pricing-card-title">$0 <small className="text-muted">/ mo</small></h1>
-            <ul className="list-unstyled mt-3 mb-4">
-              <li>10 users included</li>
-              <li>2 GB of storage</li>
-              <li>Email support</li>
-              <li>Help center access</li>
+		var listItems = this.props.features.map(function (item) {
+			return <li>{item}</li>
+		});
+		return <ul className="list-unstyled mt-3 mb-4">
+              {listItems}
             </ul>
-            <button type="button" className="btn btn-lg btn-block btn-outline-primary">Sign up for free</button>
-          </div>
-        </div>
-        <div className="card mb-4 box-shadow">
-          <div className="card-header">
-            <h4 className="my-0 font-weight-normal">Pro</h4>
-          </div>
-          <div className="card-body">
-            <h1 className="card-title pricing-card-title">$15 <small className="text-muted">/ mo</small></h1>
-            <ul className="list-unstyled mt-3 mb-4">
-              <li>20 users included</li>
-              <li>10 GB of storage</li>
-              <li>Priority email support</li>
-              <li>Help center access</li>
-            </ul>
-            <button type="button" className="btn btn-lg btn-block btn-primary">Get started</button>
-          </div>
-        </div>
-        <div className="card mb-4 box-shadow">
-          <div className="card-header">
-            <h4 className="my-0 font-weight-normal">Enterprise</h4>
-          </div>
-          <div className="card-body">
-            <h1 className="card-title pricing-card-title">$29 <small className="text-muted">/ mo</small></h1>
-            <ul className="list-unstyled mt-3 mb-4">
-              <li>30 users included</li>
-              <li>15 GB of storage</li>
-              <li>Phone and email support</li>
-              <li>Help center access</li>
-            </ul>
-            <button type="button" className="btn btn-lg btn-block btn-primary">Contact us</button>
-          </div>
-        </div>
-      </div>
-	  </div>
 	}
 }
+
+class MenuLink extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+	render() {
+		return <a href={ "#" + this.props.name}>{this.props.name}</a>
+	}
+}
+
+class ActionComponent extends React.Component {
+	constructor(props) {
+		super(props)
+	}
+	render() {
+		return <button type="button" className="btn btn-lg btn-block btn-outline-primary">{this.props.buttonText}</button>
+	}
+}
+
+
 
 var template = {
 	"data": {
@@ -226,11 +202,17 @@ var template = {
 		"topMenu": {
 			"predicates": [
 				"Features leftOf Enterprise",
-				"Support rightOf Enterprise",
-				"Pricing leftOf Signup",
+				"Enterprise leftOf Support",
+				"Support leftOf Pricing",
 				"Signup hasClass btn btn-outline-primary",
-				"Signup rightOf Support"
+				"Signup rightOf Pricing"
 			]
+		},
+		"Features": {
+			"react": MenuLink,
+			"data": {
+				"name": "Features"
+			}
 		},
 		"pricing": {
 			"predicates": [
@@ -245,56 +227,75 @@ var template = {
 		},
 		"priceTable": {
 			"predicates": [
-				"free hasClass card mb-4 box-shadow",
+				"free hasClass text-center card mb-4 box-shadow",
 				"free withoutClass col",
-				"pro hasClass card mb-4 box-shadow",
+				"pro hasClass text-center card mb-4 box-shadow",
 				"pro withoutClass col",
 				"enterprise withoutClass col",
-				"enterprise hasClass card mb-4 box-shadow",
+				"enterprise hasClass text-center card mb-4 box-shadow",
 				"free leftOf pro",
 				"enterprise rightOf pro"
 			]
 		},
 		"free": {
 			"predicates": [
-				"planTitle above cardBody",
+				"planTitle above price",
 				"planTitle withoutClass col",
-				"planTitle hasClass planTitle"
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
+				
 			],
 			"data": {
-				"title": "Free"
+				"title": "Free",
+				"price": "0",
+				"features": ["10 users included"],
+				"buttonText": "Sign up free"
 			}
 		},
 		"pro": {
 			"predicates": [
-				"planTitle above cardBody",
+				"planTitle above price",
 				"planTitle withoutClass col",
-				"planTitle hasClass planTitle"
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
 			],
 			"data": {
-				"title": "Pro"
+				"title": "Pro",
+				"price": "24",
+				"features": ["20 users included"],
+				"buttonText": "Get started"
 			}
 		},
 		"enterprise": {
 			"predicates": [
-				"planTitle above cardBody",
+				"planTitle above price",
 				"planTitle withoutClass col",
-				"planTitle hasClass planTitle"
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
+				
 			],
 			"data": {
-				"title": "Enterprise"
+				"title": "Enterprise",
+				"price": "250",
+				"features": ["30 users included"],
+				"buttonText": "Contact us"
 			}
 		},
 		"planTitle": {
 			"react": PlanTitle
 		},
-		"cardBody": {
-			"predicates": [
-				"price above features"
-			]
-		},
+	
 		"price": {
 			"react": PriceComponent
+		},
+		"features": {
+			"react": FeaturesComponent
+		},
+		"callToActionButton": {
+			"react": ActionComponent
 		}
 	}
 
@@ -1320,6 +1321,13 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				parentConfiguration.data !== undefined) {
 					overrides = parentConfiguration.data
 					values = Object.assign(values, overrides);
+				}
+				if (template.widgets.hasOwnProperty(cell.name)) {
+					overrides = template.widgets[cell.name];
+					console.log("overrides is ", overrides);
+					if (overrides.hasOwnProperty("data")) {
+						values = Object.assign(values, overrides.data);
+					}
 				}
 			
 				
