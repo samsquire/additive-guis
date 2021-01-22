@@ -131,7 +131,7 @@ class PlanTitle extends React.Component {
 	}
 	render() {
 		return <div className="card-header">
-            <h4 className="my-0 font-weight-normal">Pro</h4>
+            <h4 className="my-0 font-weight-normal">{this.props.title}</h4>
           </div>
 	}
 }	
@@ -141,7 +141,7 @@ class PriceComponent extends React.Component {
 		super(props)
 	}
 	render() {
-		return <h1 className="card-title pricing-card-title">$0 <small class="text-muted">/ mo</small></h1>
+		return <h1 className="card-title pricing-card-title">$0 <small className="text-muted">/ mo</small></h1>
 	}
 }
 
@@ -204,6 +204,9 @@ class PriceTable extends React.Component {
 }
 
 var template = {
+	"data": {
+	
+	},
 	"predicates": [
 		"header above pricing",
 		"header hasClass d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow",
@@ -257,21 +260,30 @@ var template = {
 				"planTitle above cardBody",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle"
-			]
+			],
+			"data": {
+				"title": "Free"
+			}
 		},
 		"pro": {
 			"predicates": [
 				"planTitle above cardBody",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle"
-			]
+			],
+			"data": {
+				"title": "Pro"
+			}
 		},
 		"enterprise": {
 			"predicates": [
 				"planTitle above cardBody",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle"
-			]
+			],
+			"data": {
+				"title": "Enterprise"
+			}
 		},
 		"planTitle": {
 			"react": PlanTitle
@@ -742,7 +754,7 @@ Environment.prototype.addProperty = function (property, widget, fn) {
 }
 
 
-function layout_page(environment, values, template, data, classes, keyPostfix) {
+function layout_page(environment, values, template, data, classes, keyPostfix, parentConfiguration) {
 	data = shuffle(data);
 	console.log("data", JSON.stringify(data));
 	var Problem = function() {
@@ -792,8 +804,10 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			if (components[0] == "siblings") { continue }
 			
 			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
+			if (components[0] == "set") { continue }
 			if (components[1] == "hasSize") { continue }
 			if (components[1] == "is") { continue }
+			if (components[1] == "isA") { continue }
 			if (components[1] == "key") { continue }
 			if (components[1] == "mappedTo") { continue }
 			if (components[1] == "withoutClass") { continue }
@@ -1152,7 +1166,6 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			if (components[1] === "is") {
 				problem.addProperty("is", components[0], components[2]);
 			}
-			
 		
 	}
 	var ordered = problem.solve();
@@ -1188,7 +1201,6 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			if (template.widgets.hasOwnProperty(cell.name)) { 
 				renderData = template.widgets[cell.name];
 			}
-			
 			
 			
 			// dynamic rules
@@ -1239,7 +1251,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 						var screenItems = dataSource.map(function (dataItem) {
 							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 							
-							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
+							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
 							return contents;
 					});
 					
@@ -1252,7 +1264,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 						var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 						
 						
-						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix);
+						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
 						attr["key"] = cell.name;
 				
 						
@@ -1301,6 +1313,15 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 			}
 			if (renderData.hasOwnProperty("react")) {
 				
+				var overrides = {};
+				console.log("checkingfor overrides", parentConfiguration.data	);
+				
+				if (template.widgets.hasOwnProperty(cell.name) &&
+				parentConfiguration.data !== undefined) {
+					overrides = parentConfiguration.data
+					values = Object.assign(values, overrides);
+				}
+			
 				
 				contents = new renderData["react"](values).render();
 				attr["key"] = cell.name + item.key;
@@ -1324,7 +1345,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix) {
 				
 				
 				
-				contents = layout_page(environment, values, template, renderData["predicates"], classes, cell.name);
+				contents = layout_page(environment, values, template, renderData["predicates"], classes, cell.name, template.widgets[cell.name]);
 				
 				return React.createElement("div", attr, contents);
 				
@@ -1392,7 +1413,7 @@ inputField.addEventListener('change', function () {
 var environment = new Environment();
 function rerender() {
 	
-	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", "root"), output);
+	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", "root", template), output);
 }
 
 rerender();
