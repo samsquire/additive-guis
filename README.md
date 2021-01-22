@@ -1,6 +1,6 @@
 # additive-guis
 
-This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) using [ORTools](https://developers.google.com/optimization) in Python. This is a prototype. There is also a live Javascript demo in `layout/layouter2.html`. They are both still in development.
+This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) as a [constraint satisfaction problem](https://en.wikipedia.org/wiki/Constraint_satisfaction_problem) This is a prototype. There is a live Javascript demo in `layout/layouter2.html`. They are both still in development.
 This project should probably be called commutative GUIs as the goal is for the ordering of rule statements not to matter.
 
 
@@ -253,72 +253,6 @@ You have this set of predicates - a bit like N3 tuples - of how your page should
 
 blog_post.json
 ```
-class PricingIntro extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	render() {
-		return <div>
-      <h1 className="display-4">Pricing</h1>
-      <p className="lead">Quickly build an effective pricing table for your potential customers with this Bootstrap example. It's built with default Bootstrap components and utilities with little customization.</p>
-    </div>;
-	}
-}
-
-class PlanTitle extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
-		return <div className="card-header">
-            <h4 className="my-0 font-weight-normal">{this.props.title}</h4>
-          </div>
-	}
-}	
-
-class PriceComponent extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
-		return <h1 className="card-title pricing-card-title">${this.props.price} <small className="text-muted">/ mo</small></h1>
-	}
-}
-
-class FeaturesComponent extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
-		var listItems = this.props.features.map(function (item) {
-			return <li>{item}</li>
-		});
-		return <ul className="list-unstyled mt-3 mb-4">
-              {listItems}
-            </ul>
-	}
-}
-
-class MenuLink extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
-		return <a href={ "#" + this.props.name}>{this.props.name}</a>
-	}
-}
-
-class ActionComponent extends React.Component {
-	constructor(props) {
-		super(props)
-	}
-	render() {
-		return <button type="button" className="btn btn-lg btn-block btn-outline-primary">{this.props.buttonText}</button>
-	}
-}
-
-
-
 var template = {
 	"data": {
 	
