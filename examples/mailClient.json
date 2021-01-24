@@ -1,38 +1,35 @@
 {
 	"data": {
-		"folders": [
-			{
+		"folders": [{
 				"name": "inbox",
 				"label": "Inbox",
-				"emails": [
-					{
+				"emails": [{
 						"subject": "Additive GUIs are compact",
 						"from": "Samuel Squire",
 						"body": "You can get a lot of behaviour for free",
 						"to": "Samuel Squire <sam@samsquire.com>"
 					},
-						{
+					{
 						"subject": "Re: Additive GUIs",
 						"from": "Frank Joy",
 						"body": "Sure are compact",
 						"to": "Samuel Squire <sam@samsquire.com>"
 					}
-				
+
 				]
 			},
 			{
 				"name": "important",
 				"label": "Important",
-				"emails": [
-					{
+				"emails": [{
 						"subject": "An important email",
 						"from": "Samuel Squire <sam@samsquire.com>",
 						"body": "Hello Samuel, this is an important email"
 					}
-				
+
 				]
 			}
-		
+
 		]
 	},
 	"predicates": [
@@ -45,7 +42,7 @@
 		"folderList key .name",
 		"folderList hasClass folder-list"
 	],
-	
+
 	"widgets": {
 		"mailArea": {
 			"predicates": [
@@ -60,14 +57,14 @@
 				"mailPreview hasClass mail-preview",
 				"mailPreview key .subject"
 			]
-		
+
 		},
-		
-	
+
+
 		"folderItem": {
 			"predicates": [
 				"folderName",
-				
+
 				"folderName is label",
 				"folderName hasContent .label",
 				"folderName selects emailList",
@@ -76,7 +73,7 @@
 		},
 		"emailItem": {
 			"predicates": [
-			    "from hasSize 5",
+				"from hasSize 5",
 				"subject hasSize 4",
 				"from",
 				"subject",
@@ -92,7 +89,7 @@
 				"subject selects mailPreview",
 				"subject emits .",
 				"from selects mailPreview",
-				"from emits .",
+				"from emits ."
 			]
 		},
 		"email": {
@@ -126,7 +123,7 @@
 				"toLabel above subject",
 				"subject above mailBody",
 				"subjectLabel above mailBody",
-			
+
 				"toLabel leftOf to",
 				"toLabel hasContent To",
 				"subjectLabel leftOf subject",
@@ -135,8 +132,8 @@
 				"subject hasContent .subject",
 				"mailBody hasContent .body"
 
-	
-				
+
+
 			]
 		}
 	}
