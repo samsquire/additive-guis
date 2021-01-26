@@ -1,6 +1,6 @@
 # additive-guis
 
-This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) This is a prototype. There is a live Javascript demo in `layout/layouter2.html`. They are both still in development.
+This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) This is a prototype. There is a live Javascript demo in `layout/layouter2.html`. There's an older python version too. They are both still in development.
 This project should probably be called commutative GUIs as the goal is for the ordering of rule statements not to matter.
 
 
