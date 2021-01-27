@@ -10,9 +10,7 @@ GUIs are buildable through declarative tuples where each statement changes the l
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) sets whereby they can be changed independently on different machines and unlike HTML, can be merged safely without conflict. HTML is difficult to diff as it is not line based. I plan to use [Automerge](https://github.com/automerge/automerge) to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
-# GUIs are data
 
-As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor. Try changing the order of your commands and your GUI will still appear the same way.
 
 # Example
 
@@ -146,6 +144,9 @@ This prototype example (layout/layouter2.html) tries to place things into a Boot
 
 ![pricingexample.png](pricingexample.png)
 
+# GUIs are data
+
+As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor. Try changing the order of your commands and your GUI will still appear the same way.
 
 ## Email viewer 
 
