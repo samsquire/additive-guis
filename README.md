@@ -16,7 +16,7 @@ As a demonstration of how compact additive guis are to render interactive displa
 
 ## Email viewer 
 
-This data produces an email viewer whereby you can select folders and select emails. It will look terrible because it's not styled. But see the example furthur down for a Bootstrap example.
+This data produces an email viewer whereby you can select folders and select emails. It will look terrible because it's not styled. But see the example further down for a Bootstrap example.
 
 ```
 {
