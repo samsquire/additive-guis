@@ -14,6 +14,139 @@ Why is it important that the tuples are monotonically increasing? This is due to
 
 As a demonstration of how compact additive guis are to render interactive displays, this is an example Email viewer written as an additive GUI. You can run this yourself in `layout/layouter2.html`. Feel free to experiment with the syntax on the left of the live additive GUI editor. Try changing the order of your commands and your GUI will still appear the same way.
 
+# Example
+
+You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. The following is a port of the [Bootstrap's Pricing example](https://getbootstrap.com/docs/4.0/examples/pricing/) as an additive GUI. Please note that the HTML leaf nodes are a temporary solution. Ideally these will be React components.
+
+```
+var template = {
+	"data": {
+	
+	},
+	"predicates": [
+		"header above pricing",
+		"header hasClass d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow",
+		"footer below pricing"
+		
+	],
+	"widgets": {
+		"header": {
+			"predicates": [
+				"companyName leftOf topMenu",
+				"companyName hasSize 3"
+			]
+		},
+		"companyName": {
+				"react": CompanyName
+		},
+		"topMenu": {
+			"predicates": [
+				"Features leftOf Enterprise",
+				"Enterprise leftOf Support",
+				"Support leftOf Pricing",
+				"Signup hasClass btn btn-outline-primary",
+				"Signup rightOf Pricing"
+			]
+		},
+		"Features": {
+			"react": MenuLink,
+			"data": {
+				"name": "Features"
+			}
+		},
+		"pricing": {
+			"predicates": [
+				"pricingIntro above priceTable",
+				"pricingIntro hasClass pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center",
+				"priceTable isA row",
+				"priceTable hasClass card-deck"
+			]
+		},
+		"pricingIntro": {
+			"react": PricingIntro
+		},
+		"priceTable": {
+			"predicates": [
+				"free hasClass text-center card mb-4 box-shadow",
+				"free withoutClass col",
+				"pro hasClass text-center card mb-4 box-shadow",
+				"pro withoutClass col",
+				"enterprise withoutClass col",
+				"enterprise hasClass text-center card mb-4 box-shadow",
+				"free leftOf pro",
+				"enterprise rightOf pro"
+			]
+		},
+		"free": {
+			"predicates": [
+				"planTitle above price",
+				"planTitle withoutClass col",
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
+				
+			],
+			"data": {
+				"title": "Free",
+				"price": "0",
+				"features": ["10 users included"],
+				"buttonText": "Sign up free"
+			}
+		},
+		"pro": {
+			"predicates": [
+				"planTitle above price",
+				"planTitle withoutClass col",
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
+			],
+			"data": {
+				"title": "Pro",
+				"price": "24",
+				"features": ["20 users included"],
+				"buttonText": "Get started"
+			}
+		},
+		"enterprise": {
+			"predicates": [
+				"planTitle above price",
+				"planTitle withoutClass col",
+				"planTitle hasClass planTitle",
+				"features below price",
+				"callToActionButton below features"
+				
+			],
+			"data": {
+				"title": "Enterprise",
+				"price": "250",
+				"features": ["30 users included"],
+				"buttonText": "Contact us"
+			}
+		},
+		"planTitle": {
+			"react": PlanTitle
+		},
+	
+		"price": {
+			"react": PriceComponent
+		},
+		"features": {
+			"react": FeaturesComponent
+		},
+		"callToActionButton": {
+			"react": ActionComponent
+		}
+	}
+
+}
+```
+
+This prototype example (layout/layouter2.html) tries to place things into a Bootstrap grid.
+
+![pricingexample.png](pricingexample.png)
+
+
 ## Email viewer 
 
 This data produces an email viewer whereby you can select folders and select emails. It will look terrible because it's not styled. But see the example further down for a Bootstrap example.
@@ -247,137 +380,6 @@ If the layout is not how you want it to appear - such as spacing is missing, you
 * add more rules to get the layout you want
 * add additional classes
 
-# Example
-
-You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. The following is a port of the [Bootstrap's Pricing example](https://getbootstrap.com/docs/4.0/examples/pricing/) as an additive GUI. Please note that the HTML leaf nodes are a temporary solution. Ideally these will be React components.
-
-```
-var template = {
-	"data": {
-	
-	},
-	"predicates": [
-		"header above pricing",
-		"header hasClass d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow",
-		"footer below pricing"
-		
-	],
-	"widgets": {
-		"header": {
-			"predicates": [
-				"companyName leftOf topMenu",
-				"companyName hasSize 3"
-			]
-		},
-		"companyName": {
-				"react": CompanyName
-		},
-		"topMenu": {
-			"predicates": [
-				"Features leftOf Enterprise",
-				"Enterprise leftOf Support",
-				"Support leftOf Pricing",
-				"Signup hasClass btn btn-outline-primary",
-				"Signup rightOf Pricing"
-			]
-		},
-		"Features": {
-			"react": MenuLink,
-			"data": {
-				"name": "Features"
-			}
-		},
-		"pricing": {
-			"predicates": [
-				"pricingIntro above priceTable",
-				"pricingIntro hasClass pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center",
-				"priceTable isA row",
-				"priceTable hasClass card-deck"
-			]
-		},
-		"pricingIntro": {
-			"react": PricingIntro
-		},
-		"priceTable": {
-			"predicates": [
-				"free hasClass text-center card mb-4 box-shadow",
-				"free withoutClass col",
-				"pro hasClass text-center card mb-4 box-shadow",
-				"pro withoutClass col",
-				"enterprise withoutClass col",
-				"enterprise hasClass text-center card mb-4 box-shadow",
-				"free leftOf pro",
-				"enterprise rightOf pro"
-			]
-		},
-		"free": {
-			"predicates": [
-				"planTitle above price",
-				"planTitle withoutClass col",
-				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
-				
-			],
-			"data": {
-				"title": "Free",
-				"price": "0",
-				"features": ["10 users included"],
-				"buttonText": "Sign up free"
-			}
-		},
-		"pro": {
-			"predicates": [
-				"planTitle above price",
-				"planTitle withoutClass col",
-				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
-			],
-			"data": {
-				"title": "Pro",
-				"price": "24",
-				"features": ["20 users included"],
-				"buttonText": "Get started"
-			}
-		},
-		"enterprise": {
-			"predicates": [
-				"planTitle above price",
-				"planTitle withoutClass col",
-				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
-				
-			],
-			"data": {
-				"title": "Enterprise",
-				"price": "250",
-				"features": ["30 users included"],
-				"buttonText": "Contact us"
-			}
-		},
-		"planTitle": {
-			"react": PlanTitle
-		},
-	
-		"price": {
-			"react": PriceComponent
-		},
-		"features": {
-			"react": FeaturesComponent
-		},
-		"callToActionButton": {
-			"react": ActionComponent
-		}
-	}
-
-}
-```
-
-This prototype example (layout/layouter2.html) tries to place things into a Bootstrap grid.
-
-![pricingexample.png](pricingexample.png)
 
  # Interactive predicate join
  
