@@ -14,7 +14,7 @@ Why is it important that the tuples are monotonically increasing? This is due to
 
 # Example
 
-You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. The following is a port of the [Bootstrap's Pricing example](https://getbootstrap.com/docs/4.0/examples/pricing/) as an additive GUI. Please note that the HTML leaf nodes are a temporary solution. Ideally these will be React components.
+You have this set of predicates - a bit like N3 tuples - of how your page should be put together and behave. The following is a port of the [Bootstrap's Pricing example](https://getbootstrap.com/docs/4.0/examples/pricing/) as an additive GUI.
 
 ```
 var template = {
