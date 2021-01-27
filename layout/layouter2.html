@@ -69,6 +69,10 @@
 		margin-right: 15px;
 	}
 	
+	.card-body {
+		padding: 1.25rem
+	}
+	
 	.card-deck .card {
 		min-width: 220px;
 	}
@@ -319,11 +323,11 @@ var template = {
 		},
 		"free": {
 			"predicates": [
-				"planTitle above price",
+				"cardBody below planTitle",
+				"cardBody hasClass card-body",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
+				"planTitle above cardBody"
 				
 			],
 			"data": {
@@ -335,11 +339,11 @@ var template = {
 		},
 		"pro": {
 			"predicates": [
-				"planTitle above price",
+				"cardBody below planTitle",
+				"cardBody hasClass card-body",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
+				"planTitle above cardBody"
 			],
 			"data": {
 				"title": "Pro",
@@ -350,11 +354,11 @@ var template = {
 		},
 		"enterprise": {
 			"predicates": [
-				"planTitle above price",
+				"cardBody below planTitle",
+				"cardBody hasClass card-body",
 				"planTitle withoutClass col",
 				"planTitle hasClass planTitle",
-				"features below price",
-				"callToActionButton below features"
+				"planTitle above cardBody"
 				
 			],
 			"data": {
@@ -363,6 +367,11 @@ var template = {
 				"features": ["30 users included"],
 				"buttonText": "Contact us"
 			}
+		},
+		"cardBody": {
+			"predicates": [
+			
+				"callToActionButton below features"]
 		},
 		"planTitle": {
 			"react": PlanTitle
