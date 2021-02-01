@@ -3,32 +3,37 @@
 		"folders": [
 			{ "name": "additive-guis",
 				"files": [
-					{ "name": "package.json", "contents": "Blah" }
-				],
+					{ "name": "package.json", "contents": "Blah",
 				"structure": [
-					{ name: "method1" },
-					{ name: "method2" },
-					{ name: "method3" }
+					{ "name": "method1" },
+					{ "name": "method2" },
+					{ "name": "method3" }
 				]
+					}
+				]
+				
 			},
 			{ "name": "gui-thunks",
 				"files": [
-					{ "name": "package.json", "contents": "Blah2" }
-				],
-				"structure": [
-					{ name: "method1" },
-					{ name: "method2" },
-					{ name: "method3" }
+					{ "name": "package.json", "contents": "Blah2",
+					"structure": [
+					{ "name": "method4" },
+					{ "name": "method5" },
+					{ "name": "method6" }
 				]
+					}
+				]
+				
 			},
 			{ "name": "human-query-engine",
 				"files": [
-					{ "name": "package.json", "contents": "Blah3" }
-				],
-				"structure": [
-					{ name: "method1" },
-					{ name: "method2" },
-					{ name: "method3" }
+					{ "name": "package.json", "contents": "Blah3",
+					"structure": [
+					{ "name": "method7" },
+					{ "name": "method8" },
+					{ "name": "method9" }				
+				]}
+				
 				]
 			}
 		]
@@ -58,11 +63,12 @@
 				"label",
 				"folderContents",
 				"label hasContent .name",
-				"label selects methodList",
+			
 				"label emits .structure",
 				"folderContents backedBy .files",
 				"folderContents mappedTo fileItem",
-				"folderContents key .name"
+				"folderContents key .name",
+				"label above folderContents"
 			]
 		},
 		"fileItem": {
@@ -70,12 +76,14 @@
 				"fileLabel",
 				"fileLabel hasContent .name",
 				"fileLabel selects editor",
+				"fileLabel selects methodList",
 				"fileLabel emits ."
 			]
 		},
 		"structureViewer": {
 			"predicates": [
 				"methodList",
+				"methodList backedBy .structure",
 				"methodList mappedTo methodItem",
 				"methodList key .name"
 			]
@@ -89,7 +97,8 @@
 		"editorArea": {
 			"predicates": [
 				"centralArea",
-				"structureViewer"	
+				"structureViewer",
+				"centralArea leftOf structureViewer"
 			]
 		},
 		"centralArea": {
@@ -101,7 +110,8 @@
 				"feed above console",
 				"events rightOf console",
 				"editor mappedTo editText",
-				"editor key .name"
+				"editor key .name",
+				"editor leftOf feed"
 				]
 		},
 		"editText": {

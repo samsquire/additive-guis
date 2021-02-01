@@ -861,7 +861,7 @@ function Environment() {
 
 Environment.prototype.registerData = function (widget, data) {
 		this.data[widget] = data;
-		console.log("Registering data for ", widget);
+		
 }
 
 Environment.prototype.hasProperty = function (widget) {
@@ -876,14 +876,20 @@ Environment.prototype.addProperty = function (property, widget, fn) {
 		this.properties[widget] = {};
 		properties = this.properties[widget];
 	}
-	properties[property] = fn;
+	if (Array.isArray(properties[property])) {
+		properties[property].push(fn);
+	} else {
+		properties[property] = [fn];
+	}
+	
 	
 }
 
 
 function layout_page(environment, values, template, data, classes, keyPostfix, parentConfiguration) {
+	var others = [];
 	data = shuffle(data);
-	console.log("data", JSON.stringify(data));
+	
 	var Problem = function() {
 		this.variables = [];
 		this.lookup = {};
@@ -1051,12 +1057,11 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			
 			if (! (leftPos < rightPos)) {
 				var backup;
-				console.log("Swap needed", left, right);
-				console.log("swap", rightPos);	
+			
 				
 				if (isCollection) {
 					backup = this.ordering[coordinate][leftPos];
-					console.log("backup", backup);
+					
 				}
 				// delete left
 				this.ordering[coordinate].splice(leftPos, 1);
@@ -1070,8 +1075,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					this.ordering[coordinate][rightPos] = left;
 					
 				}
-				console.log("rightbackup", rightBackup);
-				console.log("insert", right);
+				
 				this.ordering[coordinate].splice(rightPos + 1, 0, rightBackup);
 				
 				
@@ -1081,26 +1085,25 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 		}
 		if (coordinate === "x") {
 			if (rule === "leftOf" || rule === "rightOf") {
-				console.log("Left", left, "and right", right, "have the same y");
+				
 				var found = false;
 				for (var i = 0 ; i < this.ordering["y"].length ; i++) {
 					var ordering = this.ordering["y"][i];
 					var innerMove = false;
 					if (ordering == left) {
-						console.log("Found on the left");
+						
 						this.ordering["y"][i] = [left];
 						// look for right in list
 						for (var k = 0 ; k < this.ordering["y"].length; k++) {
 							var inner = this.ordering["y"][k];
 							if (Array.isArray(this.ordering["y"][i]) && Array.isArray(inner)) {
-								console.log("Inner is a list");
-								console.log("inner", inner);
+								
 								for (var m = 0; m < inner.length ; m++) {
 									if (inner[m] === right) {
-										console.log("We have to move what's here");
+										
 										innerMove = true;
 										for (var thing of inner) {
-											console.log("Moving", this.ordering["y"][i]);
+											
 											this.ordering["y"][i].push(thing);
 										}
 										this.ordering["y"].splice(k, 1);
@@ -1121,20 +1124,19 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 						found = true;
 						break;
 					} else if (ordering == right) {
-						console.log("Found on the right");
+						
 						this.ordering["y"][i] = [right];
 						// look for right in list
 						for (var k = 0 ; k < this.ordering["y"].length; k++) {
 							var inner = this.ordering["y"][k];
 							if (Array.isArray(this.ordering["y"][i]) && Array.isArray(inner)) {
-								console.log("Inner is a list");
-								console.log("inner", inner);
+								
 								for (var m = 0; m < inner.length ; m++) {
 									if (inner[m] === left) {
-										console.log("We have to move what's here");
+										
 										innerMove = true;
 										for (var thing of inner) {
-											console.log("Moving", this.ordering["y"][i]);
+											
 											this.ordering["y"][i].push(thing);
 										}
 										this.ordering["y"].splice(k, 1);
@@ -1156,7 +1158,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					}
 					
 					if (Array.isArray(ordering)) {
-						console.log("Multiple things in the same Y");
+				
 						var size = ordering.length;
 					
 						for (var j = 0 ; j < size ; j++) {
@@ -1173,8 +1175,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				
 				if (!found) {
 					// this.ordering["y"].push([left, right]);
-					console.log(JSON.stringify(this.ordering["y"]));
-					console.log("We need to introduce into Y");
+					
 					
 				}
 								
@@ -1195,8 +1196,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			
 		}
 		
-		console.log("y", JSON.stringify(this.ordering["y"]));
-		// console.log("x", this.ordering["x"]);
+		
+		
 		var ruleKey = coordinate + rule + left + right;
 		if (!this.ruleIndex.hasOwnProperty(ruleKey)) {
 			this.rules.push([coordinate, rule, left, right]);
@@ -1285,7 +1286,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			}
 			if (components[1] === "selects") {
 				environment.addProperty("selects", components[0], components[2]);
+				
 				environment.addProperty("receives", components[2]);
+				
 			}
 			if (components[1] === "hasClass") {
 				problem.addProperty("hasClass", components[0], components.slice(2).join(" "));
@@ -1296,10 +1299,21 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 		
 	}
 	var ordered = problem.solve();
+	console.log("others", others);
 	
-	var grouped = groupBy(ordered, 'y');
+	return [ordered, problem, values, keyPostfix, classes, parentConfiguration];
+	}
 	
-	console.log(grouped);
+	function render(inputs) {
+		var ordered = inputs[0];
+		var problem = inputs[1];
+		var values = inputs[2];
+		var keyPostfix = inputs[3];
+		var classes = inputs[4];
+		var parentConfiguration = inputs[5];
+		var grouped = groupBy(ordered, 'y');
+	
+	
 	
 	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
 		console.log(item);
@@ -1363,23 +1377,29 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				// console.log("Dynamic rule", cell.name, problem.properties[cell.name]);
 				
 				if (problem.properties[cell.name].hasOwnProperty("mappedTo") && (problem.properties[cell.name].hasOwnProperty("backedBy") ||  (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")))) {
-					// console.log("Can map");
+					console.log("Can map");
 					var dataSource;
 					if (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")) {
-						// console.log("Mapping", cell.name, environment.data);
-						// console.log(cell.name);
+						console.log("Mapping", cell.name, environment.data);
+						
 						dataSource = environment.data[cell.name] || [];
-						// console.log(dataSource);
+						if (problem.properties[cell.name].hasOwnProperty("backedBy")) {
+							console.log("data is", dataSource);
+							dataSource = problem.properties[cell.name].backedBy(dataSource)
+						}
+						console.log("data source is ", dataSource);
 					} else {
 						dataSource = problem.properties[cell.name].backedBy(values)
-						// console.log(dataSource);
+						console.log(dataSource);
 					}
 					if (Array.isArray(dataSource)) {
 						var screenItems = dataSource.map(function (dataItem) {
 							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 							
 							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
-							return contents;
+							
+					
+							return render(contents);
 					});
 					
 					
@@ -1388,15 +1408,17 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 
 					} else {
 						var dataItem = dataSource;
-						var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
-						
-						
-						var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
-						attr["key"] = cell.name;
-				
-						
-						
-						return React.createElement("div", attr, contents);
+						if (dataItem != undefined) {
+							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
+							
+							
+							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
+							attr["key"] = cell.name;
+					
+							
+							
+							return React.createElement("div", attr, render(contents));
+						}
 					}
 				
 				}
@@ -1414,13 +1436,16 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 							}
 							// console.log("Mapping", toRender);
 							// console.log("Register data", cell.name);
-							environment.registerData(environment.properties[cell.name].selects, toRender);
+							for (var selection of environment.properties[cell.name].selects) {
+								environment.registerData(selection, toRender);
+							}
+							
 							rerender();
 						}
 					}(problem, environment, cell);
 				}
 				if (problem.properties[cell.name].hasOwnProperty("hasContent")) {
-					console.log(cell.name, "has content");
+					
 					var contentSpecifier = problem.properties[cell.name]["hasContent"];
 					var content;
 					if (contentSpecifier.indexOf(".") != -1) {
@@ -1428,7 +1453,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					} else {
 						content = contentSpecifier;
 					}
-					console.log(attr);
+					
 					attr["key"] = content;
 					/* attr["dangerouslySetInnerHTML"] = {
 						"__html": 
@@ -1441,7 +1466,6 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			if (renderData.hasOwnProperty("react")) {
 				
 				var overrides = {};
-				console.log("checkingfor overrides", parentConfiguration.data	);
 				
 				if (template.widgets.hasOwnProperty(cell.name) &&
 				parentConfiguration.data !== undefined) {
@@ -1450,7 +1474,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				}
 				if (template.widgets.hasOwnProperty(cell.name)) {
 					overrides = template.widgets[cell.name];
-					console.log("overrides is ", overrides);
+					
 					if (overrides.hasOwnProperty("data")) {
 						values = Object.assign(values, overrides.data);
 					}
@@ -1481,7 +1505,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				
 				contents = layout_page(environment, values, template, renderData["predicates"], classes, cell.name, template.widgets[cell.name]);
 				
-				return React.createElement("div", attr, contents);
+				return React.createElement("div", attr, render(contents));
 				
 			}
 			
@@ -1491,8 +1515,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 		
 		var gridStyles = "";
 		gridStyles = "row"
-		console.log(item);
-		console.log("coldchildern", colChildren);
+		
 		return React.createElement("div", {key: item.key, className: gridStyles}, colChildren);
 		
 	})
@@ -1506,9 +1529,9 @@ function replaceFnReferences(template) {
 	var copy = Object.assign({}, template);
 	for (var widget of Object.keys(widgets)) {
 		var specifier = copy["widgets"][widget];
-		console.log("specifier", widget, specifier);
+		
 		if (specifier.hasOwnProperty("react")) {
-		console.log("Found react widget");
+		
 			copy["widgets"]["widget"] = {}
 			copy["widgets"][widget]["react"] = specifier["react"].name;
 		}
@@ -1519,7 +1542,7 @@ var output = document.getElementById("output");
 var copy = Object.assign({}, template);
 replaceFnReferences(copy);
 
-console.log("copy", copy);
+
 var stringified = JSON.stringify(copy, null, 4);
 
 document.getElementById("input").value = stringified;
@@ -1546,8 +1569,8 @@ inputField.addEventListener('change', function () {
 });
 var environment = new Environment();
 function rerender() {
-	
-	ReactDOM.render(layout_page(environment, template.data, template, template.predicates, "", "root", template), output);
+	var rootElement = render(layout_page(environment, template.data, template, template.predicates, "", "root", template))
+	ReactDOM.render(rootElement, output);	
 }
 
 rerender();
