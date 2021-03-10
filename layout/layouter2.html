@@ -81,6 +81,9 @@
 		width: 100%;
 	}
 
+	.hidden {
+		display: none;
+	}
 	</style>
 
 </head>
@@ -426,6 +429,15 @@ var template = {
 	}
 
 }
+
+var old = {
+	"predicates": [
+		"MenuItem toggles HiddenArea",
+		"Areas hasProperty contenteditable",
+		"HiddenArea is hidden"
+	],
+	"widgets": {}
+};
 
 class AboutTextComponent extends React.Component {
 	constructor(props) {
@@ -877,7 +889,10 @@ Environment.prototype.addProperty = function (property, widget, fn) {
 		properties = this.properties[widget];
 	}
 	if (Array.isArray(properties[property])) {
-		properties[property].push(fn);
+		var found = properties[property].indexOf(fn);
+		if (found == -1) {
+			properties[property].push(fn);
+		}
 	} else {
 		properties[property] = [fn];
 	}
@@ -946,9 +961,13 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			if (components[1] == "withoutClass") { continue }
 			if (components[1] == "backedBy") { continue }
 			if (components[1] == "hasClass") { continue }
+			if (components[1] == "toggles") { continue }
+			
 			if (components[1] == "selects") { continue }
 			if (components[1] == "emits") { continue }
 			if (components[1] == "hasContent") { continue }
+			if (components[1] == "hasProperty") { continue }
+		
 			if (!problem.lookup.hasOwnProperty(components[2])) { problem.addDeclaration(components[2]); }
 			
 		}
@@ -1250,6 +1269,15 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			
 				problem.addProperty("withoutClass", components[0], components[2]);
 			}
+			if (components[1] === "is") {
+			
+				problem.addProperty("is", components[0], components[2]);
+			}
+			if (components[1] === "toggles") {
+			
+				environment.addProperty("toggles", components[0], components[2]);
+				problem.addProperty("toggles", components[0], components[2]);
+			}
 			if (components[1] === "mappedTo") {
 				problem.addProperty("mappedTo", components[0],
 					
@@ -1295,6 +1323,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			}
 			if (components[1] === "is") {
 				problem.addProperty("is", components[0], components[2]);
+			}
+			if (components[1] === "hasProperty") {
+				problem.addProperty("hasProperty", components[0], components[2]);
 			}
 		
 	}
@@ -1348,6 +1379,21 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			// console.log(cell.name);
 			console.log("cell name", cell.name);
 			if (problem.hasProperty(cell.name)) {
+			
+				if (problem.properties[cell.name].hasOwnProperty("is")) {
+					
+					var is = problem.properties[cell.name]["is"];
+					if (is === "hidden") {
+						if (!environment.properties.hasOwnProperty(cell.name)) {
+							environment.properties[cell.name] = {};
+						}
+						if (!environment.properties[cell.name].hasOwnProperty("classes")) {
+							environment.properties[cell.name].classes = "hidden"
+						}
+						
+						attr["className"] = attr["className"] +  " " + environment.properties[cell.name].classes
+					}
+				}
 			
 				if (problem.properties[cell.name].hasOwnProperty("withoutClass")) {
 					var classesToRemove = problem.properties[cell.name]["withoutClass"].split(" ");
@@ -1422,24 +1468,33 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					}
 				
 				}
-				if (problem.properties[cell.name].hasOwnProperty("emits")) {
+				
+				if (problem.properties[cell.name].hasOwnProperty("emits") || environment.properties.hasOwnProperty(cell.name)) {
+				
 					// console.log("Creating event handler for", cell.name);
 					attr["onClick"] = function (problem, environment, cell) {
 						return function () {
-							var toRender;
-							var emits = problem.properties[cell.name].emits;
-							console.log("Need to re-render", environment.properties[cell.name].selects, "with", emits);
-							if (emits === ".") {
-								toRender = values;
-							} else {
-								toRender = values[emits.replace(".", "")];
-							}
-							// console.log("Mapping", toRender);
-							// console.log("Register data", cell.name);
-							for (var selection of environment.properties[cell.name].selects) {
-								environment.registerData(selection, toRender);
-							}
 							
+							if (environment.properties[cell.name].hasOwnProperty("toggles")) {
+								var toToggle = environment.properties[cell.name]["toggles"];
+								console.log(toToggle);
+								environment.properties[toToggle].classes = ""
+							} else if (problem.properties[cell.name].hasOwnProperty("emits")) {
+						
+								var toRender;
+								var emits = problem.properties[cell.name].emits;
+								console.log("Need to re-render", environment.properties[cell.name].selects, "with", emits);
+								if (emits === ".") {
+									toRender = values;
+								} else {
+									toRender = values[emits.replace(".", "")];
+								}
+								// console.log("Mapping", toRender);
+								// console.log("Register data", cell.name);
+								for (var selection of environment.properties[cell.name].selects) {
+									environment.registerData(selection, toRender);
+								}
+							}
 							rerender();
 						}
 					}(problem, environment, cell);
