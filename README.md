@@ -1,7 +1,7 @@
 # additive-guis
 
 This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) This is a prototype. There is a live Javascript demo in `layout/layouter2.html`. There's an older python version too. They are both still in development.
-This project could also be called commutative GUIs the ordering of rule statements does not matter.
+This project could also be called commutative GUIs because the ordering of rule statements does not matter.
 
 
 ## declarative layouts - build layouts with statements rendering to HTML
@@ -15,6 +15,47 @@ submitTodo rightOf todoField
 ```
 
 This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements and produce a valid output GUI. The UI is changed by adding more rules, it is additive. An online implementation would update in real time after a rule has changed. `layout/layouter2.html` is an online live implementation example.
+
+The live demo also features some interactive features, such as the following:
+
+## Toggles
+
+```
+showButton toggles hiddenItem
+```
+
+**toggles** toggle the visibility of another widget on the screen.
+
+
+
+## Emits/receives
+
+```
+folderList emits emails
+emailList receives emails
+```
+
+**emits**/**receives** controls data flow between widgets on the screen. If a list should control what appears in another widget on the screen, then clicking on the emitter will cause the receiver to change.
+
+## Editable
+
+**editable** enables content editable on a field that is being rendered and enables two way binding of the data
+
+```
+var template = {
+	"predicates": [
+		"dataList mappedBy dataItem",
+		"dataList backedBy data",
+		"dataList key .title",
+		"dataList editable title"
+	],
+	"data": [
+		{"title": "item 1"}	
+	]
+}
+```
+
+# Monotonically increasing statements
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) sets whereby they can be changed independently on different machines and unlike HTML, can be merged safely without conflict. HTML is difficult to diff as it is not line based. I plan to use [Automerge](https://github.com/automerge/automerge) to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
