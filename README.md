@@ -12,7 +12,7 @@ GUIs are buildable through declarative tuples where each statement changes the l
 todoField above todosList
 todosList above todoFilters
 submitTodo rightOf todoField
-```:
+```
 
 This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements and produce a valid output GUI. The UI is changed by adding more rules, it is additive. An online implementation would update in real time after a rule has changed. `layout/layouter2.html` is an online live implementation example.
 
