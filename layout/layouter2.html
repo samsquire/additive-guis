@@ -9,8 +9,8 @@
   <meta name="author" content="">
 
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.10.2/umd/react.development.js"></script>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.10.2/umd/react-dom.development.js" type="text/javascript"></script>
+ <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/react/17.0.1/umd/react.development.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/17.0.1/umd/react-dom.development.js" type="text/javascript"></script>
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
 	<link href="https://getbootstrap.com/docs/4.0/examples/blog/blog.css" rel="stylesheet">
@@ -266,7 +266,7 @@ class Footer extends React.Component {
 	}
 }
 
-var template = {
+var old = {
 	"data": {
 	
 	},
@@ -430,14 +430,55 @@ var template = {
 
 }
 
-var old = {
-	"predicates": [
-		"MenuItem toggles HiddenArea",
-		"Areas hasProperty contenteditable",
-		"HiddenArea is hidden"
-	],
-	"widgets": {}
-};
+var template = {
+    "predicates": [
+		"MenuItem leftOf Areas",
+		"HiddenArea leftOf Areas",
+		"HiddenArea leftOf MenuItem",
+        "MenuItem toggles HiddenArea",
+		"NewItemName leftOf MenuItem",
+        "Areas backedBy areas",
+        "HiddenArea is hidden",
+        "Areas mappedTo area",
+        "Areas key .description",
+		"Areas editable $item.description",
+		"insertButton on:click insert-new-item",
+		"insert-new-item 0.pushes {\"description\": \"$item.NewItem.description\"}",
+		"insert-new-item 0.pushTo $item.areas",
+		"NewItemName backedBy NewItem",
+		"NewItemName mappedTo editBox",
+		"NewItemName editable $item.description",
+		"NewItemName key .description"
+    ],
+    "widgets": {
+        "area": {
+            "predicates": [
+                "label hasContent .description"
+            ]
+        },
+		"editBox": {
+			"predicates": [
+				"NewItemField hasContent .description"
+			]
+		}
+    },
+    "data": {
+		"NewItem": {
+			"description": "Hello world"
+		},
+        "areas": [
+            {
+                "description": "one"
+            },
+            {
+                "description": "two"
+            },
+            {
+                "description": "three"
+            }
+        ]
+    }
+}
 
 class AboutTextComponent extends React.Component {
 	constructor(props) {
@@ -950,7 +991,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			
 		} else {
 			if (components[0] == "siblings") { continue }
-			
+			if (components[1].indexOf("pushes") != -1) { continue }
+			if (components[1].indexOf("pushTo") != -1) { continue }
 			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
 			if (components[0] == "set") { continue }
 			if (components[1] == "hasSize") { continue }
@@ -967,7 +1009,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			if (components[1] == "emits") { continue }
 			if (components[1] == "hasContent") { continue }
 			if (components[1] == "hasProperty") { continue }
-		
+			if (components[1] == "editable") { continue }
+			if (components[1] == "on:click") { continue }
+			
 			if (!problem.lookup.hasOwnProperty(components[2])) { problem.addDeclaration(components[2]); }
 			
 		}
@@ -1327,15 +1371,50 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			if (components[1] === "hasProperty") {
 				problem.addProperty("hasProperty", components[0], components[2]);
 			}
+			if (components[1] === "editable") {
+				problem.addProperty("editable", components[0], components[2]);
+			}
+			if (components[1] === "on:click") {
+				problem.addProperty("on:click", components[0], components[2]);
+				if (!problem.hasProperty(components[2])) {
+					problem.properties[components[2]] = [];
+				}
+				
+			}
+			if (components[1].indexOf("pushes") != -1) {
+				var index = parseInt(components[1].split(".")[0]);
+				if (!problem.hasProperty(components[0])) {
+					problem.properties[components[0]] = [];
+				}
+				
+				if (problem.properties[components[0]].length <= index) {
+					problem.properties[components[0]][index] = {};
+				}
+				problem.properties[components[0]][index].pushes = components.slice(2).join(" ");
+				
+			}
+			if (components[1].indexOf("pushTo") != -1) {
+				var index = parseInt(components[1].split(".")[0]);
+				if (!problem.hasProperty(components[0])) {
+					problem.properties[components[0]] = [];
+				}
+				
+				if (problem.properties[components[0]].length <= index) {
+					problem.properties[components[0]][index] = {};
+				}
+				problem.properties[components[0]][index].pushTo = components.slice(2).join(" ");
+				
+			}
+			
 		
 	}
 	var ordered = problem.solve();
 	console.log("others", others);
 	
-	return [ordered, problem, values, keyPostfix, classes, parentConfiguration];
+	return [ordered, problem, values, keyPostfix, classes, parentConfiguration, data];
 	}
 	
-	function render(inputs) {
+	function render(inputs, editable) {
 		var ordered = inputs[0];
 		var problem = inputs[1];
 		var values = inputs[2];
@@ -1343,7 +1422,9 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 		var classes = inputs[4];
 		var parentConfiguration = inputs[5];
 		var grouped = groupBy(ordered, 'y');
-	
+		var data = inputs[6];
+		console.log("editable", editable);
+		
 	
 	
 	var rows = Object.keys(grouped).sort(function (a, b) { return Number(a) < Number(b) ? -1 : 1 }).map(function (item) {
@@ -1365,7 +1446,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			attr["className"] += " col-md-" + size;
 			
 			attr["onContextMenu"] = function (event) {
-				// event.preventDefault();
+				event.preventDefault();
 				console.log("Field", cell.name, "Being imported from", data, "can use data", values);
 			}
 			
@@ -1379,6 +1460,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			// console.log(cell.name);
 			console.log("cell name", cell.name);
 			if (problem.hasProperty(cell.name)) {
+			
+				
 			
 				if (problem.properties[cell.name].hasOwnProperty("is")) {
 					
@@ -1424,6 +1507,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				
 				if (problem.properties[cell.name].hasOwnProperty("mappedTo") && (problem.properties[cell.name].hasOwnProperty("backedBy") ||  (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")))) {
 					console.log("Can map");
+					debugger
 					var dataSource;
 					if (environment.hasProperty(cell.name) && environment.properties[cell.name].hasOwnProperty("receives")) {
 						console.log("Mapping", cell.name, environment.data);
@@ -1441,11 +1525,17 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					if (Array.isArray(dataSource)) {
 						var screenItems = dataSource.map(function (dataItem) {
 							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
-							
+							console.log("keypostfix", keyPostfix);
 							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
-							
 					
-							return render(contents);
+							
+							console.log("array editable", problem.properties[cell.name]);
+							if (problem.properties[cell.name].hasOwnProperty("editable")) {
+								editable = problem.properties[cell.name].editable;
+								console.log("Editable is ", editable);
+							}
+							
+							return render(contents, editable);
 					});
 					
 					
@@ -1457,16 +1547,59 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 						if (dataItem != undefined) {
 							var keyPostfix = dataItem[problem.properties[cell.name].key.replace(".", "")];
 							
-							
+							console.log("keypostfix is", keyPostfix);
 							var contents = layout_page(environment, dataItem, template, problem.properties[cell.name]["mappedTo"]["predicates"], classes, keyPostfix, template.widgets[cell.name]);
 							attr["key"] = cell.name;
 					
 							
+							if (problem.properties[cell.name].hasOwnProperty("editable")) {
+								editable = problem.properties[cell.name].editable;
+							}
 							
-							return React.createElement("div", attr, render(contents));
+							return React.createElement("div", attr, render(contents, editable));
 						}
 					}
 				
+				}
+				
+				
+				if (problem.properties[cell.name].hasOwnProperty("on:click")) {
+					attr["onClick"] = function() {
+						
+						var exercises = problem.properties[problem.properties[cell.name]["on:click"]];
+						console.log(exercises);
+						exercises.forEach(function (item) {
+							if (item.hasOwnProperty("pushes")) {
+								var output = JSON.parse(item.pushes);
+								console.log(output);
+								
+								
+								for (var key of Object.keys(output)) {
+									var outputValue = output[key].split(".").reduce(function (previous, current) {
+										if (current == "$item") {
+											return previous;
+										}
+										return previous[current];
+									}, values);
+									console.log("output", outputValue);
+									output[key] = outputValue;
+								}
+								
+								var targetDestination = item.pushTo.split(".").reduce(function (previous, current) {
+									if (current == "$item") {
+											return previous;
+									}
+									return previous[current];
+								}, values);
+								console.log(targetDestination);
+								targetDestination.push(output);
+								
+								
+								rerender();
+							}
+						});
+					}
+					
 				}
 				
 				if (problem.properties[cell.name].hasOwnProperty("emits") || environment.properties.hasOwnProperty(cell.name)) {
@@ -1495,6 +1628,10 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 									environment.registerData(selection, toRender);
 								}
 							}
+							
+							
+							
+							
 							rerender();
 						}
 					}(problem, environment, cell);
@@ -1503,17 +1640,46 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 					
 					var contentSpecifier = problem.properties[cell.name]["hasContent"];
 					var content;
-					if (contentSpecifier.indexOf(".") != -1) {
+					
+					if (contentSpecifier === ".") {
+						console.log("Content is values");
+						content = values;
+					} else if (contentSpecifier.indexOf(".") != -1) {
+						
 						content = values[contentSpecifier.replace(".", "")];
+						console.log("Setting value", contentSpecifier.replace(".", ""), content);
 					} else {
 						content = contentSpecifier;
 					}
 					
 					attr["key"] = content;
+					
+					console.log(content);
+					
 					/* attr["dangerouslySetInnerHTML"] = {
 						"__html": 
 					}*/
-					return React.createElement("div", attr, content);
+				
+					if (editable) {
+						
+						attr["contentEditable"] = "true";
+						attr["suppressContentEditableWarning"] = "true";
+						attr["onBlur"] = function (target) {
+							
+							if (editable.indexOf("$item") != -1) {
+								values[editable.replace("$item.", "")] = target.target.innerHTML;
+							}
+							rerender();
+						}
+					}
+					console.log("Content is ", content);
+					
+					var createdElement = React.createElement("div", attr, content);
+					
+					
+					
+					return createdElement;
+					
 					
 				}
 				
@@ -1560,7 +1726,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				
 				contents = layout_page(environment, values, template, renderData["predicates"], classes, cell.name, template.widgets[cell.name]);
 				
-				return React.createElement("div", attr, render(contents));
+				return React.createElement("div", attr, render(contents, editable));
 				
 			}
 			
@@ -1574,7 +1740,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 		return React.createElement("div", {key: item.key, className: gridStyles}, colChildren);
 		
 	})
-	
+	console.log("rows is ", rows);
 	var container = React.createElement('div', {key: keyPostfix, className: "container " + classes }, rows);
 	return container;
 }
