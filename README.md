@@ -6,7 +6,15 @@ This project should probably be called commutative GUIs as the goal is for the o
 
 ## declarative layouts - build layouts with statements rendering to HTML
 
-GUIs are buildable through declarative tuples where each statement changes the layout of an application. This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements and produce a valid output GUI. The UI is changed by adding more rules, it is additive. This repository has an example offline implementation that renders a bootstrap grid discussed below. An online implementation would update in real time after a rule has changed. `layout/layouter2.html` is an online live implementation example.
+GUIs are buildable through declarative tuples where each statement changes the layout of an application.  Rules in additive GUIs look like this - you describe the propositions of each widget on the screen and let the computer generate the layout.
+
+```
+todoField above todosList
+todosList above todoFilters
+submitTodo rightOf todoField
+```:
+
+This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements and produce a valid output GUI. The UI is changed by adding more rules, it is additive. An online implementation would update in real time after a rule has changed. `layout/layouter2.html` is an online live implementation example.
 
 Why is it important that the tuples are monotonically increasing? This is due to a property of [CRDT](https://en.wikipedia.org/wiki/Conflict-free_replicated_data_type) sets whereby they can be changed independently on different machines and unlike HTML, can be merged safely without conflict. HTML is difficult to diff as it is not line based. I plan to use [Automerge](https://github.com/automerge/automerge) to turn the additive GUI data structure into a CRDT that people can modify in parallel and still produce valid GUIs. This will let developers merge GUIs at run time.
 
@@ -315,15 +323,8 @@ This data produces an email viewer whereby you can select folders and select ema
 Changing the layout is accomplished by adding statements or removing statements.
  
 
-## Quickstart - predicates
+## Summary
 
-Rules in additive GUIs look like this - you describe the propositions of each widget on the screen and let the computer generate the layout.
-
-```
-todoField above todosList
-todosList above todoFilters
-submitTodo rightOf todoField
-```
 
 * **Each rule is relative to every other rule simultaneously**
 * Predicates are currently three words long. These are are subject predicate object. A widget is created by mentioning it and defined further in the `widgets` key below.
