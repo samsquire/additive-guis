@@ -1,0 +1,43 @@
+{
+	"predicates": [
+		"todos mappedBy todoItem",
+		"todos backedBy todos"
+		"completeds backedBy completeds",
+		"completeds mappedBy completeds",
+		"todos joinField .id",
+		"completeds joinField .id",
+		"todos,completeds join joined"
+	],
+	"widgets": {
+		"completeds": {
+			"predicates": [
+				"tick showIf .completed"
+			]
+		},
+		"todoItem": {
+			"predicates": [
+				"description leftOf id",
+				"id hasContent .id",
+				"description hasContent .description"
+			]
+		},
+		"joined": {
+			"predicates": [
+				"tick rightOf description"
+			]
+		}
+	},
+	"data": {
+		"completeds": [
+			{ "id": 1, "completed": false },
+			{ "id": 2, "completed": true },
+			{ "id": 3, "completed": false }
+		],
+		"todos": [
+			{ "id": 1, "description": "work item 1" },
+			{ "id": 2, "description": "work item 2" }
+			{ "id": 3, "description": "work item 3" }
+		]
+	},
+	
+}

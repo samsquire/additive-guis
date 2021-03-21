@@ -432,26 +432,22 @@ var old = {
 
 var template = {
     "predicates": [
-		"MenuItem leftOf Areas",
-		"HiddenArea leftOf Areas",
-		"HiddenArea leftOf MenuItem",
-        "MenuItem toggles HiddenArea",
-		"NewItemName leftOf MenuItem",
-        "Areas backedBy areas",
-        "HiddenArea is hidden",
-        "Areas mappedTo area",
-        "Areas key .description",
-		"Areas editable $item.description",
+		"NewTodo leftOf insertButton",
+		"Todos below insertButton",
+        "Todos backedBy todos",
+        "Todos mappedTo todos",
+        "Todos key .description",
+		"Todos editable $item.description",
 		"insertButton on:click insert-new-item",
-		"insert-new-item 0.pushes {\"description\": \"$item.NewItem.description\"}",
-		"insert-new-item 0.pushTo $item.areas",
-		"NewItemName backedBy NewItem",
-		"NewItemName mappedTo editBox",
-		"NewItemName editable $item.description",
-		"NewItemName key .description"
+		"insert-new-item 0.pushes {\"description\": \"$item.NewTodo.description\"}",
+		"insert-new-item 0.pushTo $item.todos",
+		"NewTodo backedBy NewTodo",
+		"NewTodo mappedTo editBox",
+		"NewTodo editable $item.description",
+		"NewTodo key .description"
     ],
     "widgets": {
-        "area": {
+        "todos": {
             "predicates": [
                 "label hasContent .description"
             ]
@@ -463,18 +459,18 @@ var template = {
 		}
     },
     "data": {
-		"NewItem": {
+		"NewTodo": {
 			"description": "Hello world"
 		},
-        "areas": [
+        "todos": [
             {
-                "description": "one"
+                "description": "todo one"
             },
             {
-                "description": "two"
+                "description": "todo two"
             },
             {
-                "description": "three"
+                "description": "todo three"
             }
         ]
     }
@@ -991,8 +987,8 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 			
 		} else {
 			if (components[0] == "siblings") { continue }
-			if (components[1].indexOf("pushes") != -1) { continue }
-			if (components[1].indexOf("pushTo") != -1) { continue }
+			if (components.length == 3 && components[1].indexOf("pushes") != -1) { continue }
+			if (components.length == 3 && components[1].indexOf("pushTo") != -1) { continue }
 			if (!problem.lookup.hasOwnProperty(components[0])) { problem.addDeclaration(components[0]); }
 			if (components[0] == "set") { continue }
 			if (components[1] == "hasSize") { continue }
@@ -1381,7 +1377,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				}
 				
 			}
-			if (components[1].indexOf("pushes") != -1) {
+			if (components.length == 3 && components[1].indexOf("pushes") != -1) {
 				var index = parseInt(components[1].split(".")[0]);
 				if (!problem.hasProperty(components[0])) {
 					problem.properties[components[0]] = [];
@@ -1393,7 +1389,7 @@ function layout_page(environment, values, template, data, classes, keyPostfix, p
 				problem.properties[components[0]][index].pushes = components.slice(2).join(" ");
 				
 			}
-			if (components[1].indexOf("pushTo") != -1) {
+			if (components.length == 3 && components[1].indexOf("pushTo") != -1) {
 				var index = parseInt(components[1].split(".")[0]);
 				if (!problem.hasProperty(components[0])) {
 					problem.properties[components[0]] = [];
