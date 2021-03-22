@@ -14,6 +14,21 @@ todosList above todoFilters
 submitTodo rightOf todoField
 ```
 
+# The dream - Build GUIs with microblogging (or twitter tweets)
+
+**What you say is what you get** - you make statements about the output of the layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
+* **Update GUIs while they are running** I want to be able to introduce widgets to a running GUI with predicates.
+* **Community written GUIs** I want a community of people updating and customizing GUIs at the same time by lots of people via simple predicates.
+ * Each predicate changes the tree where rendered HTML will be placed.
+ * Widget HTML is produced through mapping and filtering collections as per a React GUI.
+ * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
+ * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join so that your template can render. Each component on the screen is mapping JSON data collection to UI widgets.
+ * **Creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
+ 
+ # GUIs that multiple people can hack on without trampling eachother's changes
+ 
+Changing the layout is accomplished by adding statements or removing statements.
+
 This is an idea inspired by  [RDF N3 triples](https://en.wikipedia.org/wiki/Notation3) and [Bloom lang](http://bloom-lang.net/). I call these additive GUIs because the code that generates the UI is a monotonically increasing set of statements and produce a valid output GUI. The UI is changed by adding more rules, it is additive. An online implementation would update in real time after a rule has changed. `layout/layouter2.html` is an online live implementation example.
 
 The live demo also features some interactive features, such as the following:
@@ -348,20 +363,7 @@ This data produces an email viewer whereby you can select folders and select ema
 ```
 
 
-# The dream - Build GUIs with microblogging (or twitter tweets)
 
-**What you say is what you get** - you make statements about the output of the layout engine that you want to be true. The layout engine tries to sastisfy all your rules.
-* **Update GUIs while they are running** I want to be able to introduce widgets to a running GUI with predicates.
-* **Community written GUIs** I want a community of people updating and customizing GUIs at the same time by lots of people via simple predicates.
- * Each predicate changes the tree where rendered HTML will be placed.
- * Widget HTML is produced through mapping and filtering collections as per a React GUI.
- * **Codeless layout** Stating facts about the layout means you do not need to manually position elements into a layout with code.
- * **Predicate join** Like an SQL join, If someone wants a one piece of data to appear next to another piece of data, from a different collection, there has to be some kind of data join so that your template can render. Each component on the screen is mapping JSON data collection to UI widgets.
- * **Creating new features with statements** It should be possible to add an expression to a running GUI to extend it in ways that the author did not anticipate. This can be done with an interactive predicate join. 
- 
- # GUIs that multiple people can hack on without trampling eachother's changes
- 
-Changing the layout is accomplished by adding statements or removing statements.
  
 
 ## Summary
