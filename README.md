@@ -3,6 +3,54 @@
 This repository renders [Twitter bootstrap grid layouts](https://getbootstrap.com/docs/4.0/layout/grid/) and simple CRUD applications. This is a prototype. There is a live Javascript demo in `layout/layouter2.html`. There's an older python version too. They are both still in development.
 This project could also be called commutative GUIs because the ordering of rule statements does not matter.
 
+This is a very simple todo list that can be updated.
+```
+var template = {
+    "predicates": [
+		"NewTodo leftOf insertButton",
+		"Todos below insertButton",
+                "Todos backedBy todos",
+                "Todos mappedTo todos",
+                "Todos key .description",
+		"Todos editable $item.description",
+		"insertButton on:click insert-new-item",
+		"insert-new-item 0.pushes {\"description\": \"$item.NewTodo.description\"}",
+		"insert-new-item 0.pushTo $item.todos",
+		"NewTodo backedBy NewTodo",
+		"NewTodo mappedTo editBox",
+		"NewTodo editable $item.description",
+		"NewTodo key .description"
+    ],
+    "widgets": {
+        "todos": {
+            "predicates": [
+                "label hasContent .description"
+            ]
+        },
+	"editBox": {
+	     "predicates": [
+	        "NewItemField hasContent .description"
+	     }	
+	}
+    },
+    "data": {
+	"NewTodo": {
+	     "description": "Hello world"
+	},
+        "todos": [
+            {
+                "description": "todo one"
+            },
+            {
+                "description": "todo two"
+            },
+            {
+                "description": "todo three"
+            }
+        ]
+    }
+}
+```
 
 ## declarative layouts - build layouts with statements rendering to HTML
 
