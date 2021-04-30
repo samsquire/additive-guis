@@ -5,13 +5,13 @@ This project could also be called commutative GUIs because the ordering of rule 
 
 This is a very simple todo list that can be updated.
 ```
-var template = {
+{
     "predicates": [
 		"NewTodo leftOf insertButton",
 		"Todos below insertButton",
-                "Todos backedBy todos",
-                "Todos mappedTo todos",
-                "Todos key .description",
+        "Todos backedBy todos",
+        "Todos mappedTo todos",
+        "Todos key .description",
 		"Todos editable $item.description",
 		"insertButton on:click insert-new-item",
 		"insert-new-item 0.pushes {\"description\": \"$item.NewTodo.description\"}",
@@ -27,16 +27,16 @@ var template = {
                 "label hasContent .description"
             ]
         },
-	"editBox": {
-	     "predicates": [
-	        "NewItemField hasContent .description"
-	     }	
-	}
+		"editBox": {
+			"predicates": [
+				"NewItemField hasContent .description"
+			]
+		}
     },
     "data": {
-	"NewTodo": {
-	     "description": "Hello world"
-	},
+		"NewTodo": {
+			"description": "Hello world"
+		},
         "todos": [
             {
                 "description": "todo one"
